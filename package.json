@@ -7,8 +7,9 @@
     "test": "test"
   },
   "scripts": {
+    "watch": "nodemon index.js",
     "test": "npx mocha",
-    "watch": "nodemon index.js"
+    "dev": "npx mocha --watch"
   },
   "keywords": [
     "apex",
