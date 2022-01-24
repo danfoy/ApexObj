@@ -1,0 +1,5 @@
+node_modules/
+Resources/
+
+*.DS_Store
+*.ds_store
