@@ -2,14 +2,8 @@ const { expect } = require('chai');
 const { isDate, parseDate } = require('../util');
 const ApexSeason = require('../classes/ApexSeason');
 
-const seasonData = {
-    id: 11,
-    name: 'Escape',
-    maps: ["Storm Point", "World's Edge"],
-    mapDurations: [90, 60, 60, 120, 90, 120],
-    startTime: "2021-11-02T12:00:00Z",
-    endTime: "2022-02-08T12:00:00Z",
-};
+const season11Data = require('../data/seasons.json').seasons[0];
+const season11 = new ApexSeason(season11Data);
 
 describe('@ApexSeason', function() {
 
@@ -33,39 +27,39 @@ describe('@ApexSeason', function() {
     //         .to.be.gt(0);
     // });
 
-    describe('.id', function() {
+    describe('.id property', function() {
         it('returns the season id as a Number', function() {
-            expect(new ApexSeason(seasonData).id).to.eql(11);
+            expect(season11.id).to.eql(11);
         });
     });
 
-    describe('.maps', function() {
-        it("returns an Array of this season's maps", function() {
-            expect(new ApexSeason(seasonData).maps).to.eql(["Storm Point", "World's Edge"]);
-        });
-    });
-
-    describe('.mapDurations', function() {
-        it("returns an Array of this season's map durations", function() {
-            expect(new ApexSeason(seasonData).mapDurations).to.eql([90, 60, 60, 120, 90, 120]);
-        });
+    describe('.name property', function() {
+        it('returns the name of the season', function() {
+            expect(season11.name).to.equal('Escape');
+        })
     });
 
     describe('.startTime', function() {
         it('returns a Date', function() {
-            expect(isDate(new ApexSeason(seasonData).startTime)).to.be.true;
+            expect(isDate(season11.startTime)).to.be.true;
         });
     });
 
     describe('.endTime', function() {
         it('returns a Date', function() {
-            expect(isDate(new ApexSeason(seasonData).endTime)).to.be.true;
+            expect(isDate(season11.endTime)).to.be.true;
         });
     });
 
-    describe('.playlist', function() {
+    describe('.playlists', function() {
+        it('returns an Array', function() {
+            expect(season11.playlists).to.be.an('array');
+        });
+    });
+
+    describe('.playlists.rotations', function() {
         it('returns an array', function() {
-            expect(new ApexSeason(seasonData).playlist)
+            expect(season11.playlists[0].rotations)
                 .to.be.an('array');
         });
     });
@@ -73,13 +67,13 @@ describe('@ApexSeason', function() {
     describe('.queryDate', function() {
         it('accepts a date passed as an argument', function() {
             const targetDate = new Date('2022-01-20T03:00:00Z');
-            expect(new ApexSeason(seasonData, targetDate).queryDate)
+            expect(new ApexSeason(season11Data, targetDate).queryDate)
                 .to.eql(targetDate);
         });
 
         it('accepts an ISO date string passed as an argument', function() {
             const targetDate =new Date('2022-01-20T03:00:00Z');
-            expect(new ApexSeason(seasonData, '2022-01-20T03:00:00Z').queryDate)
+            expect(new ApexSeason(season11Data, '2022-01-20T03:00:00Z').queryDate)
                 .to.eql(targetDate);
         })
 
@@ -87,41 +81,15 @@ describe('@ApexSeason', function() {
             // Allowing some time either side for test processing
             const lowerLimit = new Date().valueOf() - 50;
             const upperLimit = new Date().valueOf() + 50;
-            const queryDateResult = new Date(new ApexSeason(seasonData).queryDate).valueOf();
+            const queryDateResult = new Date(season11.queryDate).valueOf();
             expect(queryDateResult).to.be.gt(lowerLimit).and.lt(upperLimit);
         });
     });
 
-    it("provides correct values for Season 11 'Escape'", function() {
-
-        const seasonData = {
-            id: 11,
-            name: 'Escape',
-            maps: ["Storm Point", "World's Edge"],
-            mapDurations: [90, 60, 60, 120, 90, 120],
-            startTime: "2021-11-02T12:00:00Z",
-            endTime: "2022-02-08T12:00:00Z",
-        };
-
-        function check(_date, _map, _duration) {
-            return expect(new ApexSeason(seasonData, parseDate(_date)).currentMap)
-                .to.include({map: _map, duration: _duration});
-        };
-
-        check('2022-01-11T12:00:00Z', "World's Edge", 60)
-        check('2022-01-11T13:00:00Z', "Storm Point", 120)
-        check('2022-01-11T15:00:00Z', "World's Edge", 120)
-        check('2022-01-11T17:00:00Z', "Storm Point", 90)
-        check('2022-01-11T18:30:00Z', "World's Edge", 90)
-        check('2022-01-11T20:00:00Z', "Storm Point", 120)
-        check('2022-01-11T22:00:00Z', "World's Edge", 120)
-        check('2022-01-12T00:00:00Z', "Storm Point", 90)
-        check('2022-01-11T01:30:00Z', "World's Edge", 90)
-        check('2022-01-12T03:00:00Z', "Storm Point", 60)
-        check('2022-01-12T04:00:00Z', "World's Edge", 60)
-
-        // Half an hour into a map rotation
-        check('2022-01-11T12:30:00Z', "World's Edge", 60)
+    describe('.unranked.battleRoyale', function() {
+        it('is an alias for unranked Battle Royale mode', function() {
+            expect(season11.unranked.battleRoyale).to.eql(season11.playlists[0]);
+        });
     });
 
 });

@@ -1,4 +1,7 @@
 const ApexSeason = require('./classes/ApexSeason');
 const seasonData = require('./data/seasons.json').seasons[0];
 
-console.log(new ApexSeason(seasonData));
+const testApexObj = new ApexSeason(seasonData);
+
+console.log('Season:', testApexObj);
+console.log('Playlist 1:', testApexObj.playlists[0]);
