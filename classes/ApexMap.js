@@ -7,7 +7,7 @@ class ApexMap {
 
         this.map = map;
         this.duration = duration;
-        this.timeRemaining = timeRemaining ?? undefined;
+        if (timeRemaining) this.timeRemaining = timeRemaining;
     };
 };
 

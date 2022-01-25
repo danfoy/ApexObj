@@ -26,8 +26,8 @@ describe('@ApexMap', function() {
             expect(new ApexMap('we', 30, 20).timeRemaining).to.equal(20);
         });
 
-        it('is undefined if not provided', function() {
-            expect(new ApexMap('we', 20).timeRemaining).to.be.undefined;
+        it('should be absent if not available', function() {
+            expect(new ApexMap('we', 20)).to.not.have.property('timeRemaining');
         });
     });
 });
