@@ -1,20 +1,20 @@
 const { expect } = require('chai');
-const ApexSeason = require('../classes/ApexSeason');
-const ApexPlaylist = require('../classes/ApexPlaylist');
+const Season = require('../classes/Season');
+const Playlist = require('../classes/Playlist');
 
 describe('@ApexPlaylist', function() {
 
     const apexData = require('../data/seasons.json');
     const season11PlaylistData = apexData.seasons[0].playlists[0];
-    const season11 = new ApexSeason(apexData.seasons[0], '2022-01-24T02:00:00Z');
-    const season11Playlist = new ApexPlaylist(season11PlaylistData, season11);
+    const season11 = new Season(apexData.seasons[0], '2022-01-24T02:00:00Z');
+    const season11Playlist = new Playlist(season11PlaylistData, season11);
 
     function getPlaylist(data, date) {
-        return new ApexPlaylist(data, new ApexSeason(apexData.seasons[0], date));
+        return new Playlist(data, new Season(apexData.seasons[0], date));
     };
 
     it('throws if not provided with required ApexSeason properties', function() {
-        expect(()=>new ApexPlaylist({})).to.throw
+        expect(()=>new Playlist({})).to.throw
     });
 
     describe('.mode property', function() {
@@ -123,7 +123,7 @@ describe('@ApexPlaylist', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, map, duration) {
-                return expect(new ApexPlaylist(season11PlaylistData, new ApexSeason(apexData.seasons[0], date)).nextMap)
+                return expect(new Playlist(season11PlaylistData, new Season(apexData.seasons[0], date)).nextMap)
                     .to.include({map: map, duration: duration});
             };
 

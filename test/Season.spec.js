@@ -1,31 +1,11 @@
 const { expect } = require('chai');
-const { isDate, parseDate } = require('../util');
-const ApexSeason = require('../classes/ApexSeason');
+const { isDate } = require('../util');
+const Season = require('../classes/Season');
 
 const season11Data = require('../data/seasons.json').seasons[0];
-const season11 = new ApexSeason(season11Data);
+const season11 = new Season(season11Data);
 
 describe('@ApexSeason', function() {
-
-    // This entry was reporting -972 minutes remaining
-    // The offset is 960. Appears to be a bug with currentMap() getter.
-    // Will need to build a schedule array that includes timeRemaining to test.
-    // I believe the actual fix is for timeRemaining to be calculated by
-    // subtracting the offset from the playlist total duration if the current
-    // implementation is less than 0/it is the last index in playlist.
-    // it('this unknown error', function() {
-    //     const seasonData = {
-    //         id: 11,
-    //         name: 'Escape',
-    //         maps: ["Storm Point", "World's Edge"],
-    //         mapDurations: [90, 60, 60, 120, 90, 120],
-    //         startTime: "2021-11-02T12:00:00Z",
-    //         endTime: "2022-02-08T12:00:00Z",
-    //     };
-    //     console.log(new ApexSeason(seasonData).getMapByDate(new Date('2022-01-17T04:12:00Z')));
-    //     expect(new ApexSeason(seasonData).getMapByDate(new Date('2022-01-17T04:12:00Z')).timeRemaining)
-    //         .to.be.gt(0);
-    // });
 
     describe('.id property', function() {
         it('returns the season id as a Number', function() {
@@ -67,13 +47,13 @@ describe('@ApexSeason', function() {
     describe('.queryDate', function() {
         it('accepts a date passed as an argument', function() {
             const targetDate = new Date('2022-01-20T03:00:00Z');
-            expect(new ApexSeason(season11Data, targetDate).queryDate)
+            expect(new Season(season11Data, targetDate).queryDate)
                 .to.eql(targetDate);
         });
 
         it('accepts an ISO date string passed as an argument', function() {
             const targetDate =new Date('2022-01-20T03:00:00Z');
-            expect(new ApexSeason(season11Data, '2022-01-20T03:00:00Z').queryDate)
+            expect(new Season(season11Data, '2022-01-20T03:00:00Z').queryDate)
                 .to.eql(targetDate);
         })
 

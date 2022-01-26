@@ -1,5 +1,5 @@
 const {isParseableDate, parseDate } = require('../util');
-const ApexMap = require('./ApexMap');
+const PlaylistItem = require('./PlaylistItem');
 
 /**
  * Generates an array of ApexMaps
@@ -23,7 +23,7 @@ class ApexPlaylist {
         this.mapDurations = playlistData.mapDurations;
         this.rotations = Array.from(this.mapDurations,
             duration => Array.from(this.maps,
-                map => new ApexMap(map, duration))
+                map => new PlaylistItem(map, duration))
             ).flat();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
@@ -64,7 +64,7 @@ class ApexPlaylist {
     get nextMap() {
         // Indexes need to loop if we're at the end of the playlist
         const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
-        return new ApexMap(next.map, next.duration);
+        return new PlaylistItem(next.map, next.duration);
     };
 
     getIndexByOffset(offset) {

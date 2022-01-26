@@ -1,4 +1,4 @@
-class ApexMap {
+class PlaylistItem {
     constructor(map, duration, timeRemaining) {
         if (typeof map !== 'string' || map == '') throw new Error('Map name required and not provided');
         if (typeof duration !== 'number') throw new Error('Map duration required and not provided');
@@ -11,4 +11,4 @@ class ApexMap {
     };
 };
 
-module.exports = ApexMap;
+module.exports = PlaylistItem;

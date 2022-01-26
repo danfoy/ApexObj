@@ -1,4 +1,4 @@
-const ApexSeason = require('./classes/ApexSeason');
+const ApexSeason = require('./classes/Season');
 const seasonData = require('./data/seasons.json').seasons[0];
 
 const testApexObj = new ApexSeason(seasonData);

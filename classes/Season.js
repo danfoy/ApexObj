@@ -1,14 +1,14 @@
 const { isParseableDate, parseDate } = require('../util');
-const ApexPlaylist = require('./ApexPlaylist');
+const Playlist = require('./Playlist');
 
-module.exports = class ApexSeason {
+class Season {
     constructor (seasonData, queryDate) {
         this.id = seasonData.id;
         this.name = seasonData.name;
         this.queryDate = isParseableDate(queryDate) ? parseDate(queryDate) : new Date();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
-        this.playlists = Array.from(seasonData.playlists, playlistData => new ApexPlaylist(playlistData, this));
+        this.playlists = Array.from(seasonData.playlists, playlistData => new Playlist(playlistData, this));
     };
 
     get unranked() {
@@ -20,3 +20,5 @@ module.exports = class ApexSeason {
         };
     };
 };
+
+module.exports = Season;
