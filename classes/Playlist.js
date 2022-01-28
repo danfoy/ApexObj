@@ -27,7 +27,6 @@ class ApexPlaylist {
             ).flat();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
-        this.queryDate = isParseableDate(seasonData.queryDate) ? parseDate(seasonData.queryDate) : new Date();
     };
 
     get playlistRotationsDuration() {
@@ -36,24 +35,15 @@ class ApexPlaylist {
         }, 0);
     };
 
-    get currentPlaylistTimeElapsed() {
-        // times are converted to minutes
-        const targetTime = (this.queryDate.getTime() / 1000 / 60);
-        const startTime = (this.startTime.getTime() / 1000 / 60);
-        const offset = Math.floor(( ( targetTime - startTime ) % this.playlistRotationsDuration ));
-        if (Number.isNaN(offset)) throw new Error(`Unable to get requested offset; got '${offset}'`);
-        return offset;
-    };
-
     get currentIndex() {
-        return this.getIndexByOffset(this.currentPlaylistTimeElapsed);
+        return this.getIndexByOffset(this.getPlaylistTimeElapsed());
     };
 
     get currentMap() {
         const thisRotation = this.rotations[this.currentIndex];
         const nextOffset = this.normaliseIndex(this.currentIndex + 1) !== 0
-            ? this.getOffsetByIndex(this.currentIndex + 1) - this.currentPlaylistTimeElapsed
-            : this.playlistRotationsDuration - this.currentPlaylistTimeElapsed;
+            ? this.getOffsetByIndex(this.currentIndex + 1) - this.getPlaylistTimeElapsed()
+            : this.playlistRotationsDuration - this.getPlaylistTimeElapsed();
         return {
             map: thisRotation.map,
             duration: thisRotation.duration,
@@ -90,6 +80,22 @@ class ApexPlaylist {
     normaliseIndex(target) {
         if (target < this.rotations.length) return target;
         return target % this.rotations.length;
+    };
+
+    getPlaylistTimeElapsed(date) {
+        if (date && !isParseableDate(date))
+            throw new Error(`Unable to parse '${date}' to a Date`);
+
+            const startDate = (this.startTime.getTime() / 1000 / 60);
+            const targetDate = date
+            ? (parseDate(date).getTime() / 1000 / 60)
+            : (new Date().getTime() / 1000 / 60);
+
+        const offset = Math.floor((targetDate - startDate) % this.playlistRotationsDuration);
+        if (Number.isNaN(offset))
+            throw new Error(`Unable to get requested offset; got '${offset}'`);
+
+        return offset;
     };
 };
 

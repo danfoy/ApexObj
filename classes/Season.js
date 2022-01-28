@@ -5,7 +5,6 @@ class Season {
     constructor (seasonData, queryDate) {
         this.id = seasonData.id;
         this.name = seasonData.name;
-        this.queryDate = isParseableDate(queryDate) ? parseDate(queryDate) : new Date();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
         this.playlists = Array.from(seasonData.playlists, playlistData => new Playlist(playlistData, this));
