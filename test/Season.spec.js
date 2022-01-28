@@ -1,11 +1,12 @@
 const { expect } = require('chai');
+const MockDate = require('mockdate');
 const { isDate } = require('../util');
 const Season = require('../classes/Season');
 
 const season11Data = require('../data/seasons.json').seasons[0];
 const season11 = new Season(season11Data);
 
-describe('@ApexSeason', function() {
+describe('@Season', function() {
 
     describe('.id property', function() {
         it('returns the season id as a Number', function() {
@@ -41,28 +42,6 @@ describe('@ApexSeason', function() {
         it('returns an array', function() {
             expect(season11.playlists[0].rotations)
                 .to.be.an('array');
-        });
-    });
-
-    describe('.queryDate', function() {
-        it('accepts a date passed as an argument', function() {
-            const targetDate = new Date('2022-01-20T03:00:00Z');
-            expect(new Season(season11Data, targetDate).queryDate)
-                .to.eql(targetDate);
-        });
-
-        it('accepts an ISO date string passed as an argument', function() {
-            const targetDate =new Date('2022-01-20T03:00:00Z');
-            expect(new Season(season11Data, '2022-01-20T03:00:00Z').queryDate)
-                .to.eql(targetDate);
-        })
-
-        it('is the current date by default', function() {
-            // Allowing some time either side for test processing
-            const lowerLimit = new Date().valueOf() - 50;
-            const upperLimit = new Date().valueOf() + 50;
-            const queryDateResult = new Date(season11.queryDate).valueOf();
-            expect(queryDateResult).to.be.gt(lowerLimit).and.lt(upperLimit);
         });
     });
 

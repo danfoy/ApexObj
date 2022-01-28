@@ -1,7 +1,7 @@
 const { expect } = require('chai');
 const PlaylistItem = require('../classes/PlaylistItem');
 
-describe('@ApexMap', function() {
+describe('@Map', function() {
     it('returns an object', function() {
         expect(new PlaylistItem('we', 30))
             .to.include({map: 'we', duration: 30});

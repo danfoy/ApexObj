@@ -1,8 +1,9 @@
 const { expect } = require('chai');
+const MockDate = require('mockdate');
 const Season = require('../classes/Season');
 const Playlist = require('../classes/Playlist');
 
-describe('@ApexPlaylist', function() {
+describe('@Playlist', function() {
 
     const apexData = require('../data/seasons.json');
     const season11PlaylistData = apexData.seasons[0].playlists[0];
@@ -54,17 +55,13 @@ describe('@ApexPlaylist', function() {
         });
     });
 
-    describe('.timeElapsed getter', function() {
-        it('returns the time elapsed since the start of the current playlist rotation', function() {
-            expect(season11Playlist.currentPlaylistTimeElapsed).to.equal(120);
-        });
-    });
-
     describe('.currentIndex getter', function() {
 
         function check(date, index) {
-            return expect(getPlaylist(season11PlaylistData, date).currentIndex)
+            MockDate.set(date);
+            expect(getPlaylist(season11PlaylistData).currentIndex)
             .to.equal(index);
+            MockDate.reset();
         };
 
         it('returns the current playlist index', function() {
@@ -92,8 +89,10 @@ describe('@ApexPlaylist', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, map, duration) {
-                return expect(getPlaylist(season11PlaylistData, date).currentMap)
+                MockDate.set(date);
+                expect(getPlaylist(season11PlaylistData).currentMap)
                     .to.include({map: map, duration: duration, timeRemaining: duration});
+                MockDate.reset();
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
@@ -123,8 +122,10 @@ describe('@ApexPlaylist', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, map, duration) {
-                return expect(new Playlist(season11PlaylistData, new Season(apexData.seasons[0], date)).nextMap)
+                MockDate.set(date);
+                expect(new Playlist(season11PlaylistData, new Season(apexData.seasons[0])).nextMap)
                     .to.include({map: map, duration: duration});
+                MockDate.reset();
             };
 
             check('2022-01-11T12:00:00Z',   "Storm Point",  120 )
@@ -190,6 +191,13 @@ describe('@ApexPlaylist', function() {
             check(12, 0);
             check(13, 1);
             check(24, 0);
+        });
+    });
+
+    describe('.getPlaylistTimeElapsed(date) method', function() {
+        it('returns the time elapsed since the start of the current playlist rotation', function() {
+            expect(season11Playlist.getPlaylistTimeElapsed('2022-01-24T02:00:00Z'))
+                .to.equal(120);
         });
     });
 });
