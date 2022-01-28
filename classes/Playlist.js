@@ -1,5 +1,6 @@
 const {isParseableDate, parseDate } = require('../util');
 const PlaylistItem = require('./PlaylistItem');
+const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
 
 /**
  * Generates an array of ApexMaps
@@ -20,7 +21,7 @@ class ApexPlaylist {
         this.mode = playlistData.mode;
         this.ranked = playlistData.ranked;
         this.maps = playlistData.maps;
-        this.mapDurations = playlistData.mapDurations;
+        this.mapDurations = playlistData.mapDurations.map(duration => duration * 60);
         this.rotations = Array.from(this.mapDurations,
             duration => Array.from(this.maps,
                 map => new PlaylistItem(map, duration))
@@ -40,15 +41,7 @@ class ApexPlaylist {
     };
 
     get currentMap() {
-        const thisRotation = this.rotations[this.currentIndex];
-        const nextOffset = this.normaliseIndex(this.currentIndex + 1) !== 0
-            ? this.getOffsetByIndex(this.currentIndex + 1) - this.getPlaylistTimeElapsed()
-            : this.playlistRotationsDuration - this.getPlaylistTimeElapsed();
-        return {
-            map: thisRotation.map,
-            duration: thisRotation.duration,
-            timeRemaining: nextOffset,
-        };
+        return this.getMapByDate();
     };
 
     get nextMap() {
@@ -86,16 +79,35 @@ class ApexPlaylist {
         if (date && !isParseableDate(date))
             throw new Error(`Unable to parse '${date}' to a Date`);
 
-            const startDate = (this.startTime.getTime() / 1000 / 60);
+            const startDate = (this.startTime.getTime() / 1000);
             const targetDate = date
-                ? (parseDate(date).getTime() / 1000 / 60)
-                : (new Date().getTime() / 1000 / 60);
+                ? (parseDate(date).getTime() / 1000)
+                : (new Date().getTime() / 1000);
 
         const offset = Math.floor((targetDate - startDate) % this.playlistRotationsDuration);
         if (Number.isNaN(offset))
             throw new Error(`Unable to get requested offset; got '${offset}'`);
 
         return offset;
+    };
+
+    getMapByDate(date) {
+        if (date && !isParseableDate(date))
+            throw new Error(`Couldn't parse ${date} into a Date`);
+
+        const targetDate = date ? parseDate(date) : new Date();
+        const targetIndex = this.getIndexByOffset(this.getPlaylistTimeElapsed(targetDate));
+        const targetRotation = this.rotations[targetIndex];
+        const mapTimeElapsed = 60 * 1000 * (this.getPlaylistTimeElapsed(targetDate) - this.getOffsetByIndex(targetIndex));
+        const targetStartTime = new Date(targetDate - mapTimeElapsed);
+        const targetEndTime = new Date(targetStartTime.getTime() + ((targetRotation.duration * 1000) - 1));
+
+        return new ScheduledPlaylistItem(
+            targetRotation.map,
+            targetRotation.duration,
+            targetStartTime,
+            targetEndTime,
+        );
     };
 };
 

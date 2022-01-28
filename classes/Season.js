@@ -2,7 +2,7 @@ const { isParseableDate, parseDate } = require('../util');
 const Playlist = require('./Playlist');
 
 class Season {
-    constructor (seasonData, queryDate) {
+    constructor (seasonData) {
         this.id = seasonData.id;
         this.name = seasonData.name;
         this.startTime = parseDate(seasonData.startTime);

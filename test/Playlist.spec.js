@@ -2,16 +2,17 @@ const { expect } = require('chai');
 const MockDate = require('mockdate');
 const Season = require('../classes/Season');
 const Playlist = require('../classes/Playlist');
+const { parseDate } = require('../util');
 
 describe('@Playlist', function() {
 
     const apexData = require('../data/seasons.json');
     const season11PlaylistData = apexData.seasons[0].playlists[0];
-    const season11 = new Season(apexData.seasons[0], '2022-01-24T02:00:00Z');
+    const season11 = new Season(apexData.seasons[0]);
     const season11Playlist = new Playlist(season11PlaylistData, season11);
 
-    function getPlaylist(data, date) {
-        return new Playlist(data, new Season(apexData.seasons[0], date));
+    function getPlaylist(data) {
+        return new Playlist(data, new Season(apexData.seasons[0], season11));
     };
 
     it('throws if not provided with required ApexSeason properties', function() {
@@ -37,8 +38,9 @@ describe('@Playlist', function() {
     });
 
     describe('.mapDurations property', function() {
-        it("returns an Array of this season's map durations", function() {
-            expect(season11Playlist.mapDurations).to.eql([90, 60, 60, 120, 90, 120]);
+        it("returns an Array of this season's map durations converted to seconds", function() {
+            const offsetsInSeconds = [90, 60, 60, 120, 90, 120].map(offset => offset * 60);
+            expect(season11Playlist.mapDurations).to.eql(offsetsInSeconds);
         });
     });
 
@@ -51,7 +53,7 @@ describe('@Playlist', function() {
 
     describe('.totalDuration getter', function() {
         it('returns the total playlist duration', function() {
-            expect(season11Playlist.playlistRotationsDuration).to.equal(1080);
+            expect(season11Playlist.playlistRotationsDuration).to.equal(1080 * 60);
         });
     });
 
@@ -59,7 +61,7 @@ describe('@Playlist', function() {
 
         function check(date, index) {
             MockDate.set(date);
-            expect(getPlaylist(season11PlaylistData).currentIndex)
+            expect(season11Playlist.currentIndex)
             .to.equal(index);
             MockDate.reset();
         };
@@ -88,10 +90,25 @@ describe('@Playlist', function() {
     describe('.currentMap getter', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
-            function check(date, map, duration) {
+            function check(date, mapName, duration) {
                 MockDate.set(date);
-                expect(getPlaylist(season11PlaylistData).currentMap)
-                    .to.include({map: map, duration: duration, timeRemaining: duration});
+                const testMap = season11Playlist.currentMap;
+                const testStartTime = new Date(date);
+                const testEndTime = new Date( new Date(date).getTime() + ((duration * 60 * 1000) - 1));
+
+                // Map and duration properties can be tested simply
+                expect(testMap).to.include({
+                    map: mapName,
+                    duration: duration * 60,
+                });
+
+                console.log(`Map data for ${date}:`, testMap);
+                console.log(`Time remaining:`, testMap.timeRemaining);
+
+                // Dates must be compared using strict equality
+                expect(testMap.startTime).to.eql(testStartTime);
+                expect(testMap.endTime).to.eql(testEndTime);
+
                 MockDate.reset();
             };
 
@@ -106,25 +123,19 @@ describe('@Playlist', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
-
             // Half an hour into a map rotation
             // check('2022-01-11T12:30:00Z', "World's Edge", 60)
-        });
-
-        it('does not return negative values', function() {
-            // Regression test for known example where .timeRemaining was negative
-            const testPlaylist = getPlaylist(season11PlaylistData, '2022-01-17T04:12:00Z').currentMap;
-            expect(testPlaylist.timeRemaining).to.be.gt(0);
         });
     });
 
     describe('.nextMap getter', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
-            function check(date, map, duration) {
+            function check(date, mapName, duration) {
+                const durationInSeconds = duration * 60;
                 MockDate.set(date);
                 expect(new Playlist(season11PlaylistData, new Season(apexData.seasons[0])).nextMap)
-                    .to.include({map: map, duration: duration});
+                    .to.include({map: mapName, duration: durationInSeconds});
                 MockDate.reset();
             };
 
@@ -145,7 +156,8 @@ describe('@Playlist', function() {
     describe('.getIndexByOffset(minutes) method', function() {
         it('gets the rotation index by the given time offset', function() {
             function check(offset, index) {
-                return expect(season11Playlist.getIndexByOffset(offset)).to.equal(index);
+                const offsetInSeconds = offset * 60;
+                return expect(season11Playlist.getIndexByOffset(offsetInSeconds)).to.equal(index);
             };
 
             check(0,    0   );
@@ -166,7 +178,8 @@ describe('@Playlist', function() {
     describe('.getOffsetByIndex(index) method', function() {
         it('gets the minutes offset from the playlist start for the map at the given index', function() {
             function check(index, offset) {
-                return expect(season11Playlist.getOffsetByIndex(index)).to.equal(offset);
+                const offsetInSeconds = offset * 60;
+                return expect(season11Playlist.getOffsetByIndex(index)).to.equal(offsetInSeconds);
             };
 
             check(0, 0);
@@ -195,9 +208,59 @@ describe('@Playlist', function() {
     });
 
     describe('.getPlaylistTimeElapsed(date) method', function() {
-        it('returns the time elapsed since the start of the current playlist rotation', function() {
+        it('returns the time elapsed in this playlist rotation', function() {
             expect(season11Playlist.getPlaylistTimeElapsed('2022-01-24T02:00:00Z'))
-                .to.equal(120);
+                .to.equal(120 * 60);
+        });
+    });
+
+    describe('.getMapByDate(date) method', function() {
+
+        it('throws if the provided date is invalid', function() {
+            expect(()=>season11Playlist.getMapByDate('zzz')).to.throw()
+            expect(()=>season11Playlist.getMapByDate('2022-01-28T03:00:00Z'))
+                .to.not.throw();
+        });
+
+        it('uses the current date if none provided', function() {
+            MockDate.set('2022-01-11T12:00:00Z');
+            expect(new Playlist(
+                season11PlaylistData,
+                new Season(apexData.seasons[0]))
+                    .getMapByDate())
+                    .to.include({map: "World's Edge", duration: 60 * 60});
+            MockDate.reset();
+        });
+
+        it('returns correct maps for Season 11', function() {
+
+            function check(date, mapName, duration) {
+                const testPlaylist = new Playlist(season11PlaylistData, new Season(apexData.seasons[0])).getMapByDate(date);
+                const testStartTime = new Date(date);
+                const testEndTime = new Date( new Date(date).getTime() + ((duration * 60 * 1000) - 1));
+
+                // Map and duration properties can be tested simply
+                expect(testPlaylist).to.include({
+                    map: mapName,
+                    duration: duration * 60,
+                });
+
+                // Dates must be compared using strict equality
+                expect(testPlaylist.startTime).to.eql(testStartTime);
+                expect(testPlaylist.endTime).to.eql(testEndTime);
+            };
+
+            check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
+            check('2022-01-11T13:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T15:00:00Z',   "World's Edge", 120 )
+            check('2022-01-11T17:00:00Z',   "Storm Point",  90  )
+            check('2022-01-11T18:30:00Z',   "World's Edge", 90  )
+            check('2022-01-11T20:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T22:00:00Z',   "World's Edge", 120 )
+            check('2022-01-12T00:00:00Z',   "Storm Point",  90  )
+            check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
+            check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
+            check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
         });
     });
 });
