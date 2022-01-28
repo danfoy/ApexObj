@@ -88,8 +88,8 @@ class ApexPlaylist {
 
             const startDate = (this.startTime.getTime() / 1000 / 60);
             const targetDate = date
-            ? (parseDate(date).getTime() / 1000 / 60)
-            : (new Date().getTime() / 1000 / 60);
+                ? (parseDate(date).getTime() / 1000 / 60)
+                : (new Date().getTime() / 1000 / 60);
 
         const offset = Math.floor((targetDate - startDate) % this.playlistRotationsDuration);
         if (Number.isNaN(offset))
