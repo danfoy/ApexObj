@@ -3,7 +3,7 @@ const PlaylistItem = require('../classes/PlaylistItem');
 
 describe('@PlaylistItem', function() {
     it('returns an object', function() {
-        expect(new PlaylistItem('we', 30))
+        expect(new PlaylistItem({mapName:'we', mapDuration: 30}))
             .to.include({map: 'we', duration: 30});
     });
 

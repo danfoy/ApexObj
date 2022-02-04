@@ -24,7 +24,7 @@ class ApexPlaylist {
         this.mapDurations = playlistData.mapDurations.map(duration => duration * 60);
         this.rotations = Array.from(this.mapDurations,
             duration => Array.from(this.maps,
-                map => new PlaylistItem(map, duration))
+                map => new PlaylistItem({mapName: map, mapDuration: duration}))
             ).flat();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
@@ -45,14 +45,23 @@ class ApexPlaylist {
     };
 
     get nextMap() {
+        // Null if after season ends
         if (new Date() > this.endTime) return null;
-        console.log('duration:', this.currentMap.duration);
+
+        // if (new Date() < this.startTime) return new ScheduledPlaylistItem(
+        //     this.rotations[0].map,
+        //     this.rotations[0].duration,
+        //     this.startTime,
+        //     new Date(this.startTime + ((this.rotations[0].duration * 1000))),
+        // );
+
+        // Null if last rotation of season
         if ((new Date().getTime() + (this.currentMap.duration * 1000)) > this.endTime.getTime())
             return null;
 
         // Indexes need to loop if we're at the end of the playlist
         const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
-        return new PlaylistItem(next.map, next.duration);
+        return new PlaylistItem({mapName: next.map, mapDuration: next.duration});
     };
 
     getIndexByOffset(offset) {
@@ -110,14 +119,12 @@ class ApexPlaylist {
         const targetRotation = this.rotations[targetIndex];
         const mapTimeElapsed = 60 * 1000 * (this.getPlaylistTimeElapsed(targetDate) - this.getOffsetByIndex(targetIndex));
         const targetStartTime = new Date(targetDate - mapTimeElapsed);
-        const targetEndTime = new Date(targetStartTime.getTime() + ((targetRotation.duration * 1000) - 1));
 
-        return new ScheduledPlaylistItem(
-            targetRotation.map,
-            targetRotation.duration,
-            targetStartTime,
-            targetEndTime,
-        );
+        return new ScheduledPlaylistItem({
+            mapName: targetRotation.map,
+            mapDuration: targetRotation.duration,
+            startTime: targetStartTime,
+        });
     };
 };
 

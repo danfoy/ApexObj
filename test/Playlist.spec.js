@@ -155,6 +155,12 @@ describe('@Playlist', function() {
             MockDate.reset();
         });
 
+        // it('returns the first rotation if before season start', function() {
+        //     MockDate.set(season11Playlist.startTime.getTime() - 100000);
+        //     expect(season11Playlist.nextMap).to.eql(season11Playlist.getMapByDate(season11Playlist.startTime));
+        //     MockDate.reset()
+        // });
+
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration) {

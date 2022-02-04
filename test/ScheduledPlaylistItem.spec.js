@@ -9,17 +9,16 @@ const seasonData = require('../data/seasons.json').seasons[0];
 describe('@ScheduledPlaylistItem', function() {
     it('returns a superset of PlaylistItem', function() {
         const testStartTime = new Date();
-        const testEndTime = new Date(testStartTime + 20);
-        const testPlaylistItem = new PlaylistItem('we', 60, testStartTime, testEndTime);
-        expect(new ScheduledPlaylistItem('we', 60, new Date(), new Date() + 20))
+        const testPlaylistItem = new PlaylistItem({mapName: 'we', mapDuration: 60, startTime: testStartTime});
+        expect(new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}))
             .to.include(testPlaylistItem);
     });
 
     it('throws if startTime is invalid', function() {
-        expect(()=> new ScheduledPlaylistItem('we', 60, 'zzz', new Date()))
+        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: 'zzz'}))
             .to.throw();
 
-        expect(()=> new ScheduledPlaylistItem('we', 60, new Date(), new Date() + 20))
+        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}))
             .to.not.throw();
     });
 
