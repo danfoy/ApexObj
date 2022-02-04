@@ -88,6 +88,17 @@ describe('@Playlist', function() {
     });
 
     describe('.currentMap getter', function() {
+
+        it('returns null when out of season', function() {
+            MockDate.set(new Date(season11Playlist.startTime.getTime() - 1000));
+            expect(season11Playlist.currentMap).to.be.null;
+            MockDate.reset();
+
+            MockDate.set(new Date(season11Playlist.endTime.getTime() + 1000));
+            expect(season11Playlist.currentMap).to.be.null;
+            MockDate.reset();
+        });
+
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration) {
@@ -129,6 +140,21 @@ describe('@Playlist', function() {
     });
 
     describe('.nextMap getter', function() {
+
+        it('returns null if after season end', function() {
+            // After season ends
+            const afterSeason = new Date(season11Playlist.endTime.getTime() + 1000);
+            MockDate.set(afterSeason);
+            expect(season11Playlist.nextMap).to.be.null;
+            MockDate.reset();
+
+            // during the last season rotation
+            const duringLastRotation = new Date(season11Playlist.endTime.getTime() - (1000 * 60 * 30));
+            MockDate.set(duringLastRotation);
+            expect(season11Playlist.nextMap).to.be.null;
+            MockDate.reset();
+        });
+
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration) {
@@ -230,6 +256,13 @@ describe('@Playlist', function() {
                     .getMapByDate())
                     .to.include({map: "World's Edge", duration: 60 * 60});
             MockDate.reset();
+        });
+
+        it('returns null if date out of bounds', function() {
+            const beforeSeason = new Date(season11Playlist.startTime.getTime() - 1000);
+            const afterSeason = new Date(season11Playlist.endTime.getTime() + 1000);
+            expect(season11Playlist.getMapByDate(beforeSeason)).to.be.null;
+            expect(season11Playlist.getMapByDate(afterSeason)).to.be.null;
         });
 
         it('returns correct maps for Season 11', function() {

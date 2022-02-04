@@ -45,6 +45,11 @@ class ApexPlaylist {
     };
 
     get nextMap() {
+        if (new Date() > this.endTime) return null;
+        console.log('duration:', this.currentMap.duration);
+        if ((new Date().getTime() + (this.currentMap.duration * 1000)) > this.endTime.getTime())
+            return null;
+
         // Indexes need to loop if we're at the end of the playlist
         const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
         return new PlaylistItem(next.map, next.duration);
@@ -96,6 +101,11 @@ class ApexPlaylist {
             throw new Error(`Couldn't parse ${date} into a Date`);
 
         const targetDate = date ? parseDate(date) : new Date();
+
+        // Only return dates within season bounds
+        if(targetDate < this.startTime) return null;
+        if(targetDate > this.endTime) return null;
+
         const targetIndex = this.getIndexByOffset(this.getPlaylistTimeElapsed(targetDate));
         const targetRotation = this.rotations[targetIndex];
         const mapTimeElapsed = 60 * 1000 * (this.getPlaylistTimeElapsed(targetDate) - this.getOffsetByIndex(targetIndex));
