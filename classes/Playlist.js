@@ -24,7 +24,7 @@ class ApexPlaylist {
         this.mapDurations = playlistData.mapDurations.map(duration => duration * 60);
         this.rotations = Array.from(this.mapDurations,
             duration => Array.from(this.maps,
-                map => new PlaylistItem({mapName: map, mapDuration: duration}))
+                map => new PlaylistItem({mapName: map, mapDuration: duration}, this))
             ).flat();
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
@@ -61,7 +61,7 @@ class ApexPlaylist {
 
         // Indexes need to loop if we're at the end of the playlist
         const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
-        return new PlaylistItem({mapName: next.map, mapDuration: next.duration});
+        return new PlaylistItem({mapName: next.map, mapDuration: next.duration}, this);
     };
 
     getIndexByOffset(offset) {
@@ -124,7 +124,7 @@ class ApexPlaylist {
             mapName: targetRotation.map,
             mapDuration: targetRotation.duration,
             startTime: targetStartTime,
-        });
+        }, this);
     };
 };
 

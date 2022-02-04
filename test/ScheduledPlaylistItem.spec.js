@@ -4,21 +4,22 @@ const Playlist = require('../classes/Playlist');
 const PlaylistItem = require('../classes/PlaylistItem');
 const ScheduledPlaylistItem = require('../classes/ScheduledPlaylistItem');
 const seasonData = require('../data/seasons.json').seasons[0];
+const mockSeasonObj = {mode: 'br', ranked: false};
 
 
 describe('@ScheduledPlaylistItem', function() {
     it('returns a superset of PlaylistItem', function() {
         const testStartTime = new Date();
-        const testPlaylistItem = new PlaylistItem({mapName: 'we', mapDuration: 60, startTime: testStartTime});
-        expect(new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}))
+        const testPlaylistItem = new PlaylistItem({mapName: 'we', mapDuration: 60, startTime: testStartTime}, mockSeasonObj);
+        expect(new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}, mockSeasonObj))
             .to.include(testPlaylistItem);
     });
 
     it('throws if startTime is invalid', function() {
-        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: 'zzz'}))
+        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: 'zzz'}, mockSeasonObj))
             .to.throw();
 
-        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}))
+        expect(()=> new ScheduledPlaylistItem({mapName: 'we', mapDuration: 60, startTime: new Date()}, mockSeasonObj))
             .to.not.throw();
     });
 
