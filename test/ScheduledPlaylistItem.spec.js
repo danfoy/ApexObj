@@ -23,13 +23,6 @@ describe('@ScheduledPlaylistItem', function() {
             .to.not.throw();
     });
 
-    it('throws if endTime is invalid', function() {
-        expect(()=> new ScheduledPlaylistItem('we', 60, new Date(), 'zzz'))
-            .to.throw();
-
-        expect(()=> new ScheduledPlaylistItem('we', 60, new Date(), new Date() + 20))
-            .to.not.throw();
-    });
 
     describe('.timeRemaining getter', function() {
         it('returns known correct values from season 11', function() {
