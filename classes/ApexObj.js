@@ -19,6 +19,15 @@ class ApexObj {
             season.endTime > targetDate
         ) || null;
     };
+
+    getMapsByDate(date) {
+        if (date && !isParseableDate(date))
+            throw new Error(`Couldn't parse ${date} into a Date`);
+
+        const targetDate = date ? parseDate(date) : new Date();
+        const targetSeason = this.getSeasonByDate(targetDate);
+        return targetSeason.getMapsByDate(targetDate);
+    };
 };
 
 module.exports = ApexObj;

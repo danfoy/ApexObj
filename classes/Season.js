@@ -20,7 +20,11 @@ class Season {
     };
 
     get currentMaps() {
-        return [...this.playlists.map(playlist => playlist.currentMap)];
+        return this.playlists.map(playlist => playlist.currentMap);
+    };
+
+    getMapsByDate(date) {
+        return this.playlists.map(playlist => playlist.getMapByDate(date));
     };
 };
 
