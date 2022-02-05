@@ -1,45 +1,13 @@
 const { expect } = require('chai');
 const ApexObj = require('../classes/ApexObj');
 const apexData = require('../data/seasons.json');
+const testData = apexData;
 
 describe('@ApexObj', function() {
 
     it('throws if season data not provided', function() {
         expect(()=>new ApexObj()).to.throw();
     });
-
-    const testData = {
-        seasons: [
-            {
-                id: 11,
-                name: "Escape",
-                playlists: [
-                    {
-                        mode: "Battle Royale",
-                        ranked: false,
-                        maps: ["Storm Point", "World's Edge"],
-                        mapDurations: [90, 60, 60, 120, 90, 120]
-                    }
-                ],
-                startTime: "2021-11-02T12:00:00Z",
-                endTime: "2022-02-08T12:00:00Z"
-            },
-            {
-                id: 12,
-                name: "Defiance",
-                playlists: [
-                    {
-                        mode: "Battle Royale",
-                        ranked: false,
-                        maps: ["Storm Point", "World's Edge", "Olympus"],
-                        mapDurations: [90, 60, 60, 120, 90, 120]
-                    }
-                ],
-                startTime: "2022-02-08T12:00:00Z",
-                endTime: "2022-05-03T12:00:00Z"
-            }
-        ]
-    }
 
     describe('.seasons', function() {
         const testObj = new ApexObj(testData);
