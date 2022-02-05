@@ -51,6 +51,12 @@ describe('@Playlist', function() {
         });
     });
 
+    describe('.rotationBaseDate getter', function() {
+        it('returns a date object set to midday', function() {
+            expect(season11Playlist.rotationBaseTime.getUTCHours()).to.equal(12);
+        });
+    });
+
     describe('.totalDuration getter', function() {
         it('returns the total playlist duration', function() {
             expect(season11Playlist.playlistRotationsDuration).to.equal(1080 * 60);

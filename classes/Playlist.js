@@ -30,6 +30,12 @@ class ApexPlaylist {
         this.endTime = parseDate(seasonData.endTime);
     };
 
+    get rotationBaseTime() {
+        const baseDate = new Date(+this.startTime);
+        baseDate.setUTCHours(12);
+        return baseDate;
+    };
+
     get playlistRotationsDuration() {
         return this.rotations.reduce( (accumulator, currentItem) => {
             return accumulator + currentItem.duration;
@@ -86,7 +92,7 @@ class ApexPlaylist {
         if (date && !isParseableDate(date))
             throw new Error(`Unable to parse '${date}' to a Date`);
 
-            const startDate = (this.startTime.getTime() / 1000);
+            const startDate = (this.rotationBaseTime.getTime() / 1000);
             const targetDate = date
                 ? (parseDate(date).getTime() / 1000)
                 : (new Date().getTime() / 1000);
