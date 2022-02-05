@@ -18,6 +18,10 @@ class Season {
                 [0],
         };
     };
+
+    get currentMaps() {
+        return [...this.playlists.map(playlist => playlist.currentMap)];
+    };
 };
 
 module.exports = Season;

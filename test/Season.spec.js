@@ -45,9 +45,40 @@ describe('@Season', function() {
         });
     });
 
-    describe('.unranked.battleRoyale', function() {
+    describe('.unranked.battleRoyale getter', function() {
         it('is an alias for unranked Battle Royale mode', function() {
             expect(season11.unranked.battleRoyale).to.eql(season11.playlists[0]);
+        });
+    });
+
+    describe('.currentMaps getter', function() {
+        it('returns an array', function() {
+            MockDate.set('2022-02-04T12:44:00Z');
+            console.log(season11.currentMaps);
+            expect(season11.currentMaps).to.be.an('array');
+            MockDate.reset();
+        });
+
+        it('returns correct results for Season 11', function() {
+
+            function check(date, map, duration) {
+                MockDate.set(date);
+                expect(season11.currentMaps[0])
+                    .to.include({map: map, duration: duration * 60});
+                MockDate.reset();
+            };
+
+            check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
+            check('2022-01-11T13:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T15:00:00Z',   "World's Edge", 120 )
+            check('2022-01-11T17:00:00Z',   "Storm Point",  90  )
+            check('2022-01-11T18:30:00Z',   "World's Edge", 90  )
+            check('2022-01-11T20:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T22:00:00Z',   "World's Edge", 120 )
+            check('2022-01-12T00:00:00Z',   "Storm Point",  90  )
+            check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
+            check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
+            check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
         });
     });
 
