@@ -48,13 +48,6 @@ class ApexPlaylist {
         // Null if after season ends
         if (new Date() > this.endTime) return null;
 
-        // if (new Date() < this.startTime) return new ScheduledPlaylistItem(
-        //     this.rotations[0].map,
-        //     this.rotations[0].duration,
-        //     this.startTime,
-        //     new Date(this.startTime + ((this.rotations[0].duration * 1000))),
-        // );
-
         // Null if last rotation of season
         if ((new Date().getTime() + (this.currentMap.duration * 1000)) > this.endTime.getTime())
             return null;
