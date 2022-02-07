@@ -1,4 +1,4 @@
-const {isParseableDate, parseDate } = require('../util');
+const { isParseableDate, parseDate } = require('../util');
 const PlaylistItem = require('./PlaylistItem');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
 
