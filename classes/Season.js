@@ -1,5 +1,6 @@
 const { isParseableDate, parseDate } = require('../util');
-const Playlist = require('./Playlist');
+const RotatingPlaylist = require('./RotatingPlaylist');
+const SplitPlaylist = require('./SplitPlaylist');
 
 class Season {
     constructor (seasonData) {
@@ -7,7 +8,11 @@ class Season {
         this.name = seasonData.name;
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
-        this.playlists = Array.from(seasonData.playlists, playlistData => new Playlist(playlistData, this));
+        this.playlists = Array.from(seasonData.playlists, playlist => {
+            console.log(playlist);
+            if (playlist.ranked) return new SplitPlaylist(playlist, this);
+            return new RotatingPlaylist(playlist, this);
+        });
     };
 
     get unranked() {

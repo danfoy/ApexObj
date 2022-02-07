@@ -1,6 +1,6 @@
 const { expect } = require('chai');
 const MockDate = require('mockdate');
-const Playlist = require('../classes/Playlist');
+const RotatingPlaylist = require('../classes/RotatingPlaylist');
 const PlaylistItem = require('../classes/PlaylistItem');
 const ScheduledPlaylistItem = require('../classes/ScheduledPlaylistItem');
 const seasonData = require('../data/seasons.json').seasons[0];
@@ -29,7 +29,7 @@ describe('@ScheduledPlaylistItem', function() {
 
             function check(date, mapDuration) {
                 MockDate.set(date);
-                const playlist = new Playlist(seasonData.playlists[0], seasonData);
+                const playlist = new RotatingPlaylist(seasonData.playlists[0], seasonData);
                 const timeRemaining = Math.floor(playlist.currentMap.timeRemaining);
                 expect(timeRemaining).to.equal(mapDuration - 1)
                 MockDate.reset();

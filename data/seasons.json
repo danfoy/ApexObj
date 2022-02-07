@@ -9,6 +9,12 @@
                     "ranked": false,
                     "maps": ["Storm Point", "World's Edge"],
                     "mapDurations": [90, 60, 60, 120, 90, 120]
+                },
+                {
+                    "mode": "Battle Royale",
+                    "ranked": true,
+                    "maps": ["Storm Point", "World's Edge"],
+                    "splitTime": "2021-12-21T18:00:00Z"
                 }
             ],
             "startTime": "2021-11-02T18:00:00Z",
