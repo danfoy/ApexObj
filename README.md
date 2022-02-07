@@ -19,5 +19,5 @@ npm install --save ApexObj
 Use as a nodejs module
 
 ```js
-const Apex = require('ApexObj')
+const Apex = require('apexobj')
 ```

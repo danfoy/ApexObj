@@ -1,5 +1,5 @@
 {
-  "name": "ApexObj",
+  "name": "apexobj",
   "version": "0.4.0",
   "description": "Apex Legends data in Object form",
   "main": "index.js",
