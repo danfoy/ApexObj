@@ -54,10 +54,15 @@ describe('@Season', function() {
         });
     });
 
+    describe('.ranked.battleRoyale getter', function() {
+        it('is an alias for ranked Battle Royale mode', function() {
+            expect(season11.ranked.battleRoyale).to.eql(season11.playlists[1]);
+        });
+    });
+
     describe('.currentMaps getter', function() {
         it('returns an array', function() {
             MockDate.set('2022-02-04T12:44:00Z');
-            console.log(season11.currentMaps);
             expect(season11.currentMaps).to.be.an('array');
             MockDate.reset();
         });

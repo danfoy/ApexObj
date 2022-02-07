@@ -9,7 +9,6 @@ class Season {
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
         this.playlists = Array.from(seasonData.playlists, playlist => {
-            console.log(playlist);
             if (playlist.ranked) return new SplitPlaylist(playlist, this);
             return new RotatingPlaylist(playlist, this);
         });
@@ -23,6 +22,15 @@ class Season {
                 [0],
         };
     };
+
+    get ranked() {
+        return {
+            battleRoyale: this.playlists
+                .filter(playlist => playlist.ranked == true)
+                .filter(playlist => playlist.mode == "Battle Royale")
+                [0],
+        };
+    }
 
     get currentMaps() {
         return this.playlists.map(playlist => playlist.currentMap);
