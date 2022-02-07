@@ -1,5 +1,5 @@
 {
-  "name": "apexobj",
+  "name": "ApexObj",
   "version": "0.4.0",
   "description": "Apex Legends data in Object form",
   "main": "index.js",
@@ -17,6 +17,10 @@
   ],
   "author": "Dan Foy",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danfoy/ApexObj.git"
+  },
   "devDependencies": {
     "chai": "^4.3.4",
     "chai-like": "^1.1.1",
