@@ -2,18 +2,7 @@ const { isParseableDate, parseDate } = require('../util');
 const PlaylistItem = require('./PlaylistItem');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
 
-/**
- * Generates an array of ApexMaps
- *
- * @class RotationsList
- */
 class ApexPlaylist {
-    /**
-     *Creates an instance of RotationsList.
-     * @param {array} maps
-     * @param {array} durations
-     * @memberof RotationsList
-     */
     constructor(playlistData, seasonData) {
         if(!playlistData.maps && !playlistData.mapDurations)
             throw new Error('Requires maps and mapDurations properties from ApexSeason');
