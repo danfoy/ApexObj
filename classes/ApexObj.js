@@ -9,6 +9,17 @@ class ApexObj {
         this.seasons = seasons.map(season => new Season(season));
     };
 
+    get currentSeason() {
+        if (new Date() < this.seasons[0].startTime) return null;
+        if (new Date() > [...this.seasons].pop().endTime) return null;
+        return this.getSeasonByDate();
+    };
+
+    get currentMaps() {
+        if (!this.currentSeason) return null;
+        return this.currentSeason.currentMaps;
+    };
+
     getSeasonByDate(date) {
         if (date && !isParseableDate(date))
             throw new Error(`Couldn't parse ${date} into a Date`);
@@ -26,6 +37,7 @@ class ApexObj {
 
         const targetDate = date ? parseDate(date) : new Date();
         const targetSeason = this.getSeasonByDate(targetDate);
+        if (!targetSeason) return null;
         return targetSeason.getMapsByDate(targetDate);
     };
 };

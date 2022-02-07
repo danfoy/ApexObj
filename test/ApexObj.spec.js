@@ -34,6 +34,65 @@ describe('@ApexObj', function() {
 
     });
 
+    describe('.currentSeason', function() {
+        it('returns null if no season currently active', function() {
+            function check(date) {
+                MockDate.set(date);
+                expect(testObj.currentSeason).to.be.null;
+                MockDate.reset();
+            };
+
+            check('2018-01-01T00:00:00Z');
+            check('2100-01-01T00:00:00Z');
+        });
+
+        it('returns the current season', function() {
+            function check(date, name) {
+                MockDate.set(date);
+                console.log(testObj.currentSeason);
+                expect(testObj.currentSeason.name).to.equal(name);
+                MockDate.reset();
+            };
+
+            check('2021-11-10T00:00:00Z', 'Escape');
+            check('2022-02-10T00:00:00Z', 'Defiance');
+        });
+    });
+
+    describe('.currentMaps getter', function() {
+        it('returns null if no season currently active', function() {
+            function check(date) {
+                MockDate.set(date);
+                expect(testObj.currentMaps).to.be.null;
+                MockDate.reset();
+            };
+
+            check('2018-01-01T00:00:00Z');
+            check('2100-01-01T00:00:00Z');
+        });
+
+        it('provides correct values for Season 11', function() {
+            function check(date, map, duration) {
+                MockDate.set(date);
+                expect(testObj.currentMaps)
+                    .to.contain.something.like({map: map, duration: duration * 60});
+                MockDate.reset();
+            };
+
+            check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
+            check('2022-01-11T13:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T15:00:00Z',   "World's Edge", 120 )
+            check('2022-01-11T17:00:00Z',   "Storm Point",  90  )
+            check('2022-01-11T18:30:00Z',   "World's Edge", 90  )
+            check('2022-01-11T20:00:00Z',   "Storm Point",  120 )
+            check('2022-01-11T22:00:00Z',   "World's Edge", 120 )
+            check('2022-01-12T00:00:00Z',   "Storm Point",  90  )
+            check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
+            check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
+            check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+    });
+
     describe('.getSeasonByDate() method', function() {
         it('returns null if no season found', function() {
             expect(testObj.getSeasonByDate('2000-01-01T00:00:00Z')).to.be.null;
