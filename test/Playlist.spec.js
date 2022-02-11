@@ -13,6 +13,12 @@ describe('@Playlist', function() {
         expect(()=>new RotatingPlaylist({})).to.throw
     });
 
+    describe('.maps property', function() {
+        it("returns an Array of this season's maps", function() {
+            expect(season11BR.maps).to.eql(["Storm Point", "World's Edge"]);
+        });
+    });
+
     describe('.mode property', function() {
         it('returns the mode', function() {
             expect(season11BR.mode).to.equal("Battle Royale");

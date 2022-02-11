@@ -4,6 +4,7 @@ class Playlist {
 
         this.mode = playlistData.mode;
         this.ranked = playlistData.ranked;
+        this.maps = playlistData.maps;
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
     };

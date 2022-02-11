@@ -10,7 +10,6 @@ class RotatingPlaylist extends Playlist {
         if(!playlistData.maps || !playlistData.mapDurations)
             throw new Error('Requires maps and durations from season data');
 
-        this.maps = playlistData.maps;
         this.mapDurations = playlistData.mapDurations
             ? playlistData.mapDurations.map(duration => duration * 60 * 1000)
             : [];
