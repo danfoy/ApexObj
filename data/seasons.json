@@ -29,6 +29,30 @@
                     "ranked": false,
                     "maps": ["Storm Point", "World's Edge", "King's Canyon"],
                     "mapDurations": [90, 60, 60, 120, 90, 120]
+                },
+                {
+                    "mode":"Battle Royale",
+                    "ranked": true,
+                    "maps": ["Olympus", "King's Canyon"],
+                    "splitTime": "2022-04-05T18:00:00Z"
+                }
+            ],
+            "LTMs": [
+                {
+                    "mode": "Olympus 24/7",
+                    "takeover": true,
+                    "replaces": "Battle Royale",
+                    "maps": ["Olympus"],
+                    "startTime": "2022-02-08T18:00:00Z",
+                    "endTime": "2022-02-15T18:00:00Z"
+                },
+                {
+                    "mode": "Control",
+                    "takeover": false,
+                    "maps": ["Olympus (Hammond Labs)", "Storm Point (Barometer)"],
+                    "mapDurations": [30],
+                    "startTime": "2022-02-08T18:00:00Z",
+                    "endTime": "2022-03-01T18:00:00Z"
                 }
             ],
             "startTime": "2022-02-08T18:00:00Z",
