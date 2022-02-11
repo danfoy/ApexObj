@@ -49,7 +49,6 @@ describe('@ApexObj', function() {
         it('returns the current season', function() {
             function check(date, name) {
                 MockDate.set(date);
-                console.log(testObj.currentSeason);
                 expect(testObj.currentSeason.name).to.equal(name);
                 MockDate.reset();
             };
@@ -75,7 +74,7 @@ describe('@ApexObj', function() {
             function check(date, map, duration) {
                 MockDate.set(date);
                 expect(testObj.currentMaps)
-                    .to.contain.something.like({map: map, duration: duration * 60});
+                    .to.contain.something.like({map: map, duration: duration * 60 * 1000});
                 MockDate.reset();
             };
 
@@ -115,7 +114,7 @@ describe('@ApexObj', function() {
 
             function check(date, map, duration) {
                 return expect(testObj.getMapsByDate(date))
-                    .to.contain.something.like({map: map, duration: duration * 60})
+                    .to.contain.something.like({map: map, duration: duration * 60 * 1000})
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )

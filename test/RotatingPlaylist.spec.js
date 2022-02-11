@@ -2,6 +2,7 @@ const { expect } = require('chai');
 const MockDate = require('mockdate');
 const Season = require('../classes/Season');
 const RotatingPlaylist = require('../classes/RotatingPlaylist');
+const ApexObj = require('../classes/ApexObj');
 
 
 describe('@RotatingPlaylist', function() {
@@ -19,7 +20,7 @@ describe('@RotatingPlaylist', function() {
 
     describe('.mapDurations property', function() {
         it("returns an Array of this season's map durations converted to seconds", function() {
-            const offsetsInSeconds = [90, 60, 60, 120, 90, 120].map(offset => offset * 60);
+            const offsetsInSeconds = [90, 60, 60, 120, 90, 120].map(offset => offset * 60 * 1000);
             expect(season11BR.mapDurations).to.eql(offsetsInSeconds);
         });
     });
@@ -39,7 +40,7 @@ describe('@RotatingPlaylist', function() {
 
     describe('.totalDuration getter', function() {
         it('returns the total playlist duration', function() {
-            expect(season11BR.playlistRotationsDuration).to.equal(1080 * 60);
+            expect(season11BR.playlistRotationsDuration).to.equal(1080 * 60 * 1000);
         });
     });
 
@@ -87,20 +88,18 @@ describe('@RotatingPlaylist', function() {
 
         it("provides correct values for Season 11 'Escape'", function() {
 
-            function check(date, mapName, duration) {
+            function check(date, mapName, duration, startOverride) {
+                const startDate = startOverride ?? date;
                 MockDate.set(date);
                 const testMap = season11BR.currentMap;
-                const testStartTime = new Date(date);
-                const testEndTime = new Date( new Date(date).getTime() + ((duration * 60 * 1000) - 1));
+                const testStartTime = new Date(startDate);
+                const testEndTime = new Date( new Date(startDate).getTime() + ((duration * 60 * 1000) - 1));
 
                 // Map and duration properties can be tested simply
                 expect(testMap).to.include({
                     map: mapName,
-                    duration: duration * 60,
+                    duration: duration * 60 * 1000,
                 });
-
-                console.log(`Map data for ${date}:`, testMap);
-                console.log(`Time remaining:`, testMap.timeRemaining);
 
                 // Dates must be compared using strict equality
                 expect(testMap.startTime).to.eql(testStartTime);
@@ -120,8 +119,9 @@ describe('@RotatingPlaylist', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+
             // Half an hour into a map rotation
-            // check('2022-01-11T12:30:00Z', "World's Edge", 60)
+            check('2022-01-11T12:30:00Z', "World's Edge", 60, '2022-01-11T12:00:00Z');
         });
     });
 
@@ -151,7 +151,7 @@ describe('@RotatingPlaylist', function() {
 
             function check(date, mapName, duration) {
                 MockDate.set(date);
-                expect(season11BR.nextMap).to.include({map: mapName, duration: duration * 60});
+                expect(season11BR.nextMap).to.include({map: mapName, duration: duration * 60 * 1000});
                 MockDate.reset();
             };
 
@@ -172,8 +172,8 @@ describe('@RotatingPlaylist', function() {
     describe('.getIndexByOffset(minutes) method', function() {
         it('gets the rotation index by the given time offset', function() {
             function check(offset, index) {
-                const offsetInSeconds = offset * 60;
-                return expect(season11BR.getIndexByOffset(offsetInSeconds)).to.equal(index);
+                const offsetInMs = offset * 60 * 1000;
+                return expect(season11BR.getIndexByOffset(offsetInMs)).to.equal(index);
             };
 
             check(0,    0   );
@@ -194,8 +194,8 @@ describe('@RotatingPlaylist', function() {
     describe('.getOffsetByIndex(index) method', function() {
         it('gets the minutes offset from the playlist start for the map at the given index', function() {
             function check(index, offset) {
-                const offsetInSeconds = offset * 60;
-                return expect(season11BR.getOffsetByIndex(index)).to.equal(offsetInSeconds);
+                const offsetInMs = offset * 60 * 1000;
+                return expect(season11BR.getOffsetByIndex(index)).to.equal(offsetInMs);
             };
 
             check(0, 0);
@@ -226,7 +226,11 @@ describe('@RotatingPlaylist', function() {
     describe('.getPlaylistTimeElapsed(date) method', function() {
         it('returns the time elapsed in this playlist rotation', function() {
             expect(season11BR.getPlaylistTimeElapsed('2022-01-24T02:00:00Z'))
-                .to.equal(120 * 60);
+                .to.equal(120 * 60 * 1000);
+        });
+        it('passes regression tests', function() {
+            expect(season11BR.getPlaylistTimeElapsed('2022-02-08T00:50:00Z'))
+                .to.equal(50 * 60 * 1000);
         });
     });
 
@@ -240,7 +244,7 @@ describe('@RotatingPlaylist', function() {
 
         it('uses the current date if none provided', function() {
             MockDate.set('2022-01-11T12:00:00Z');
-            expect(season11BR.getMapByDate()).to.include({map: "World's Edge", duration: 60 * 60});
+            expect(season11BR.getMapByDate()).to.include({map: "World's Edge", duration: 60 * 60 * 1000});
             MockDate.reset();
         });
 
@@ -261,7 +265,7 @@ describe('@RotatingPlaylist', function() {
                 // Map and duration properties can be tested simply
                 expect(testMap).to.include({
                     map: mapName,
-                    duration: duration * 60,
+                    duration: duration * 60 * 1000,
                 });
 
                 // Dates must be compared using strict equality
@@ -280,6 +284,13 @@ describe('@RotatingPlaylist', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+
+        it('passes regression tests', function() {
+            MockDate.set('2022-02-08T01:00:00Z')
+            expect(season11BR.getMapByDate().timeRemaining)
+                .to.equal((30 * 60 * 1000) - 1);
+            MockDate.reset();
         });
     });
 });

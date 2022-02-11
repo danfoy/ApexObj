@@ -23,7 +23,6 @@ describe('@SplitPlaylist', function() {
         });
 
         it('returns correct results for Season 11', function() {
-            console.log(season11RankedBR.rotations);
             expect(season11RankedBR.rotations[0].map).to.equal('Storm Point');
             expect(season11RankedBR.rotations[1].map).to.equal("World's Edge");
         });
@@ -102,7 +101,6 @@ describe('@SplitPlaylist', function() {
 
         it('returns correct values for Season 11', function() {
             function check(date, map) {
-                console.log(season11RankedBR.getMapByDate(date));
                 expect(season11RankedBR.getMapByDate(date).map)
                     .to.equal(map);
             };

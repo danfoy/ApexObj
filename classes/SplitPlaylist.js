@@ -14,12 +14,12 @@ class SplitPlaylist extends Playlist {
         this.rotations = [
             new ScheduledPlaylistItem({
                 mapName: this.maps[0],
-                mapDuration: ((this.splitTime - this.startTime) / 1000),
+                mapDuration: ((this.splitTime - this.startTime)),
                 startTime: this.startTime,
             }, this),
             new ScheduledPlaylistItem({
                 mapName: this.maps[1],
-                mapDuration: ((this.endTime - this.splitTime) / 1000),
+                mapDuration: ((this.endTime - this.splitTime)),
                 startTime: this.splitTime,
             }, this),
         ];

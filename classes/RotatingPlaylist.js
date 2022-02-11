@@ -12,7 +12,7 @@ class RotatingPlaylist extends Playlist {
 
         this.maps = playlistData.maps;
         this.mapDurations = playlistData.mapDurations
-            ? playlistData.mapDurations.map(duration => duration * 60)
+            ? playlistData.mapDurations.map(duration => duration * 60 * 1000)
             : [];
 
         this.rotations = Array.from(this.mapDurations,
@@ -22,7 +22,7 @@ class RotatingPlaylist extends Playlist {
     };
 
     get rotationBaseTime() {
-        const baseDate = new Date(+this.startTime);
+        const baseDate = new Date(this.startTime);
         baseDate.setUTCHours(12);
         return baseDate;
     };
@@ -43,7 +43,7 @@ class RotatingPlaylist extends Playlist {
 
     get nextMap() {
         if (new Date() > this.endTime) return null;
-        if ((new Date().getTime() + (this.currentMap.duration * 1000)) > this.endTime.getTime())
+        if ((new Date().getTime() + (this.currentMap.duration)) > this.endTime.getTime())
             return null;
 
         const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
@@ -64,10 +64,10 @@ class RotatingPlaylist extends Playlist {
     getOffsetByIndex(index) {
         const targetIndex = this.normaliseIndex(index);
         if (targetIndex === 0) return 0;
-        return this.rotations
+        return (this.rotations
             .map(rotation => rotation.duration)
             .slice(0, targetIndex)
-            .reduce((acc, current) => current + acc);
+            .reduce((acc, current) => current + acc));
     };
 
     normaliseIndex(target) {
@@ -79,12 +79,12 @@ class RotatingPlaylist extends Playlist {
         if (date && !isParseableDate(date))
             throw new Error(`Unable to parse '${date}' to a Date`);
 
-            const startDate = (this.rotationBaseTime.getTime() / 1000);
+            const startDate = (this.rotationBaseTime.getTime());
             const targetDate = date
-                ? (parseDate(date).getTime() / 1000)
-                : (new Date().getTime() / 1000);
+                ? (parseDate(date).getTime())
+                : (new Date().getTime());
 
-        const offset = Math.floor((targetDate - startDate) % this.playlistRotationsDuration);
+        const offset = (targetDate - startDate) % this.playlistRotationsDuration;
         if (Number.isNaN(offset))
             throw new Error(`Unable to get requested offset; got '${offset}'`);
 
@@ -103,7 +103,7 @@ class RotatingPlaylist extends Playlist {
 
         const targetIndex = this.getIndexByOffset(this.getPlaylistTimeElapsed(targetDate));
         const targetRotation = this.rotations[targetIndex];
-        const mapTimeElapsed = 60 * 1000 * (this.getPlaylistTimeElapsed(targetDate) - this.getOffsetByIndex(targetIndex));
+        const mapTimeElapsed = this.getPlaylistTimeElapsed(targetDate) - this.getOffsetByIndex(targetIndex);
         const targetStartTime = new Date(targetDate - mapTimeElapsed);
 
         return new ScheduledPlaylistItem({

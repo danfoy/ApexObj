@@ -72,7 +72,7 @@ describe('@Season', function() {
             function check(date, map, duration) {
                 MockDate.set(date);
                 expect(season11.currentMaps)
-                    .to.contain.something.like({map: map, duration: duration * 60});
+                    .to.contain.something.like({map: map, duration: duration * 60 * 1000});
                 MockDate.reset();
             };
 
@@ -94,9 +94,8 @@ describe('@Season', function() {
         it('returns correct maps for season 11', function() {
 
             function check(date, map, duration) {
-                console.log(season11.getMapsByDate(date));
                 return expect(season11.getMapsByDate(date))
-                    .to.contain.something.like({map: map, duration: duration * 60});
+                    .to.contain.something.like({map: map, duration: duration * 60 * 1000});
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )

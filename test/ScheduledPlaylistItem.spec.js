@@ -28,10 +28,18 @@ describe('@ScheduledPlaylistItem', function() {
         it('returns known correct values from season 11', function() {
 
             function check(date, mapDuration) {
+
+                // Time remaining at start of rotation
                 MockDate.set(date);
-                const playlist = new RotatingPlaylist(seasonData.playlists[0], seasonData);
-                const timeRemaining = Math.floor(playlist.currentMap.timeRemaining);
-                expect(timeRemaining).to.equal(mapDuration - 1)
+                const timeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
+                expect(timeRemaining).to.equal((mapDuration * 1000 * 60) - 1)
+                MockDate.reset();
+
+                // Time remaining half an hour into rotation
+                const halfHourOffset = new Date(new Date(date).getTime() + (30 * 60 * 1000));
+                MockDate.set(halfHourOffset);
+                const offsetTimeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
+                expect(offsetTimeRemaining).to.equal( ((mapDuration * 1000 * 60) - (30 * 60 * 1000)) - 1);
                 MockDate.reset();
             };
 
@@ -48,18 +56,17 @@ describe('@ScheduledPlaylistItem', function() {
             check('2022-01-12T04:00:00Z', 60  )
         });
 
-        // it('does not return negative values', function() {
-        //     // Regression test for known example where .timeRemaining was negative
-        //     function check(date) {
-        //         MockDate.set(date);
-        //         const testMap = new Playlist(seasonData.playlists[0], seasonData).currentMap;
-        //         console.log(`Map for spoofed ${new Date()}:`,testMap);
-        //         expect(testMap.timeRemaining).to.be.gt(0);
-        //         MockDate.reset();
-        //     }
+        it('does not return negative values', function() {
+            // Regression test for known example where .timeRemaining was negative
+            function check(date) {
+                MockDate.set(date);
+                expect(new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining)
+                    .to.be.gt(0);
+                MockDate.reset();
+            };
 
-        //     check('2022-01-17T04:10:00Z');
-        // });
+            check('2022-01-17T04:10:00Z');
+        });
     });
 
 });
