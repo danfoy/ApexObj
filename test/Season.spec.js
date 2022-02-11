@@ -5,9 +5,16 @@ chai.use(require('chai-things'));
 const MockDate = require('mockdate');
 const { isDate } = require('../util');
 const Season = require('../classes/Season');
+const SplitPlaylist = require('../classes/SplitPlaylist');
+const RotatingPlaylist = require('../classes/RotatingPlaylist');
 
-const season11Data = require('../data/seasons.json').seasons[0];
+const season11Data = require('../data/seasons.json').seasons
+    .find(season => season.id == 11);
 const season11 = new Season(season11Data);
+
+const season12Data = require('../data/seasons.json').seasons
+    .find(season => season.id == 12)
+const season12 = new Season(season12Data);
 
 describe('@Season', function() {
 
@@ -87,6 +94,24 @@ describe('@Season', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+    });
+
+    describe('.parsePlaylist(playlistData) method', function() {
+        it('parses ranked playlists', function() {
+            const rankedPlaylist = season12.parsePlaylist(
+                season12Data.playlists.find(playlist => playlist.ranked === true)
+            );
+            expect(rankedPlaylist instanceof SplitPlaylist).to.be.true;
+            expect(rankedPlaylist instanceof RotatingPlaylist).to.be.false;
+        });
+
+        it('parses unranked playlists', function() {
+            const unrankedPlaylist = season12.parsePlaylist(
+                season12Data.playlists.find(playlist => playlist.ranked === false)
+            );
+            expect(unrankedPlaylist instanceof RotatingPlaylist).to.be.true;
+            expect(unrankedPlaylist instanceof SplitPlaylist).to.be.false;
         });
     });
 

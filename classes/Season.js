@@ -1,4 +1,4 @@
-const { isParseableDate, parseDate } = require('../util');
+const { parseDate } = require('../util');
 const RotatingPlaylist = require('./RotatingPlaylist');
 const SplitPlaylist = require('./SplitPlaylist');
 
@@ -8,10 +8,8 @@ class Season {
         this.name = seasonData.name;
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
-        this.playlists = Array.from(seasonData.playlists, playlist => {
-            if (playlist.ranked) return new SplitPlaylist(playlist, this);
-            return new RotatingPlaylist(playlist, this);
-        });
+        this.playlists = [...seasonData.playlists]
+            .map(playlist => this.parsePlaylist(playlist));
     };
 
     get unranked() {
@@ -34,6 +32,13 @@ class Season {
 
     get currentMaps() {
         return this.playlists.map(playlist => playlist.currentMap);
+    };
+
+    parsePlaylist(playlistData) {
+        if (playlistData.splitTime)
+            return new SplitPlaylist(playlistData, this);
+        if (playlistData.mapDurations)
+            return new RotatingPlaylist(playlistData, this);
     };
 
     getMapsByDate(date) {
