@@ -27,7 +27,7 @@ describe('@Playlist', function() {
 
     describe('.ranked property', function() {
         it('returns whether or not the mode is ranked', function() {
-            expect(season11BR.ranked).to.be.false;
+            expect(season11BR.ranked).to.be.undefined;
         });
     });
 });

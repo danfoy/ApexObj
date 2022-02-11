@@ -15,7 +15,7 @@ class Season {
     get unranked() {
         return {
             battleRoyale: this.playlists
-                .filter(playlist => playlist.ranked == false)
+                .filter(playlist => !playlist.ranked)
                 .filter(playlist => playlist.mode == "Battle Royale")
                 [0],
         };

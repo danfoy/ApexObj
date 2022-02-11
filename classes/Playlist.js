@@ -3,10 +3,17 @@ class Playlist {
     constructor(playlistData, seasonData) {
 
         this.mode = playlistData.mode;
-        this.ranked = playlistData.ranked;
+        this.startTime = isParseableDate(playlistData.startTime)
+            ? parseDate(playlistData.startTime)
+            : parseDate(seasonData.startTime);
+        this.endTime = isParseableDate(playlistData.startTime)
+            ? parseDate(playlistData.startTime)
+            : parseDate(seasonData.endTime);
         this.maps = playlistData.maps;
-        this.startTime = parseDate(seasonData.startTime);
-        this.endTime = parseDate(seasonData.endTime);
+
+        if (playlistData.ranked) this.ranked = playlistData.ranked;
+        if (playlistData.replaces) this.replaces = playlistData.replaces;
+
     };
 
 };
