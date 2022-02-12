@@ -6,13 +6,11 @@
             "playlists": [
                 {
                     "mode": "Play Apex",
-                    "ranked": false,
                     "maps": ["Storm Point", "World's Edge"],
                     "mapDurations": [90, 60, 60, 120, 90, 120]
                 },
                 {
                     "mode": "Ranked Leagues",
-                    "ranked": true,
                     "maps": ["Storm Point", "World's Edge"],
                     "splitTime": "2021-12-21T18:00:00Z"
                 }
@@ -26,13 +24,11 @@
             "playlists": [
                 {
                     "mode": "Play Apex",
-                    "ranked": false,
                     "maps": ["Storm Point", "World's Edge", "King's Canyon"],
                     "mapDurations": [90, 60, 60, 120, 90, 120]
                 },
                 {
                     "mode":"Ranked Leagues",
-                    "ranked": true,
                     "maps": ["Olympus", "King's Canyon"],
                     "splitTime": "2022-04-05T18:00:00Z"
                 }
@@ -40,7 +36,6 @@
             "LTMs": [
                 {
                     "mode": "Olympus 24/7",
-                    "takeover": true,
                     "replaces": "Play Apex",
                     "maps": ["Olympus"],
                     "startTime": "2022-02-08T18:00:00Z",
@@ -48,7 +43,6 @@
                 },
                 {
                     "mode": "Control",
-                    "takeover": false,
                     "maps": ["Olympus (Hammond Labs)", "Storm Point (Barometer)"],
                     "mapDurations": [30],
                     "startTime": "2022-02-08T18:00:00Z",

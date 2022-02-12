@@ -100,7 +100,7 @@ describe('@Season', function() {
     describe('.parsePlaylist(playlistData) method', function() {
         it('parses ranked playlists', function() {
             const rankedPlaylist = season12.parsePlaylist(
-                season12Data.playlists.find(playlist => playlist.ranked === true)
+                season12Data.playlists.find(playlist => playlist.mode === "Ranked Leagues")
             );
             expect(rankedPlaylist instanceof SplitPlaylist).to.be.true;
             expect(rankedPlaylist instanceof RotatingPlaylist).to.be.false;
@@ -108,7 +108,7 @@ describe('@Season', function() {
 
         it('parses unranked playlists', function() {
             const unrankedPlaylist = season12.parsePlaylist(
-                season12Data.playlists.find(playlist => playlist.ranked === false)
+                season12Data.playlists.find(playlist => playlist.mode === "Play Apex")
             );
             expect(unrankedPlaylist instanceof RotatingPlaylist).to.be.true;
             expect(unrankedPlaylist instanceof SplitPlaylist).to.be.false;

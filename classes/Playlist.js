@@ -2,6 +2,7 @@ const { isParseableDate, parseDate } = require('../util');
 class Playlist {
     constructor(playlistData, seasonData) {
 
+        // Required properties
         this.mode = playlistData.mode;
         this.startTime = isParseableDate(playlistData.startTime)
             ? parseDate(playlistData.startTime)
@@ -11,9 +12,10 @@ class Playlist {
             : parseDate(seasonData.endTime);
         this.maps = playlistData.maps;
 
-        if (playlistData.ranked) this.ranked = playlistData.ranked;
+        // Optional/conditional properties
+        if (this.mode.includes("Ranked")) this.ranked = true;
+        if (playlistData.replaces) this.takeover = true;
         if (playlistData.replaces) this.replaces = playlistData.replaces;
-
     };
 
 };
