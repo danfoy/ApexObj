@@ -6,7 +6,7 @@ const apexData = require('../data/seasons.json');
 
 const season11Data = apexData.seasons.find(season => season.id === 11);
 const season11 = new Season(season11Data);
-const season11BR = season11.playlists.find(playlist => playlist.mode === "Battle Royale");
+const season11BR = season11.playlists.find(playlist => playlist.mode === "Play Apex");
 const season11Ranked = season11.playlists.find(playlist => playlist.ranked === true);
 
 // const season12Data = apexData.seasons.find(season => season.id === 12);
@@ -52,7 +52,7 @@ describe('@PlaylistItem', function() {
 
     describe('.mode property', function() {
         it('returns the mode of the parent playlist', function() {
-            expect(new PlaylistItem(map('we', 30), season11BR).mode).to.equal('Battle Royale');
+            expect(new PlaylistItem(map('we', 30), season11BR).mode).to.equal('Play Apex');
         });
     });
 

@@ -19,18 +19,14 @@ class Season {
     get unranked() {
         return {
             battleRoyale: this.playlists
-                .filter(playlist => !playlist.ranked)
-                .filter(playlist => playlist.mode == "Battle Royale")
-                [0],
+                .find(playlist => playlist.mode == 'Play Apex')
         };
     };
 
     get ranked() {
         return {
             battleRoyale: this.playlists
-                .filter(playlist => playlist.ranked == true)
-                .filter(playlist => playlist.mode == "Battle Royale")
-                [0],
+                .find(playlist => playlist.mode == 'Ranked Leagues')
         };
     }
 

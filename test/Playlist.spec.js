@@ -21,7 +21,7 @@ describe('@Playlist', function() {
 
     describe('.mode property', function() {
         it('returns the mode', function() {
-            expect(season11BR.mode).to.equal("Battle Royale");
+            expect(season11BR.mode).to.equal("Play Apex");
         });
     });
 
