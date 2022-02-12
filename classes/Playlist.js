@@ -6,8 +6,8 @@ class Playlist {
         this.startTime = isParseableDate(playlistData.startTime)
             ? parseDate(playlistData.startTime)
             : parseDate(seasonData.startTime);
-        this.endTime = isParseableDate(playlistData.startTime)
-            ? parseDate(playlistData.startTime)
+        this.endTime = isParseableDate(playlistData.endTime)
+            ? parseDate(playlistData.endTime)
             : parseDate(seasonData.endTime);
         this.maps = playlistData.maps;
 
