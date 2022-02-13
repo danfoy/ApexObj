@@ -139,6 +139,7 @@ describe('@RotatingPlaylist', function() {
             function check(date, mapName, duration) {
                 MockDate.set(date);
                 expect(season11BR.nextMap).to.include({map: mapName, duration: duration * 60 * 1000});
+                expect(season11BR.nextMap.startTime).to.eql(season11BR.currentMap.endTime);
                 MockDate.reset();
             };
 

@@ -42,12 +42,9 @@ class RotatingPlaylist extends Playlist {
     };
 
     get nextMap() {
-        if (new Date() > this.endTime) return null;
-        if ((new Date().getTime() + (this.currentMap.duration)) > this.endTime.getTime())
-            return null;
-
-        const next = this.rotations[this.normaliseIndex(this.currentIndex + 1)];
-        return new PlaylistItem({mapName: next.map, mapDuration: next.duration}, this);
+        if (new Date() >= this.endTime) return null;
+        if (this.currentMap.endTime >= this.endTime) return null;
+        return this.getMapByDate(this.currentMap.endTime);
     };
 
     getIndexByOffset(offset) {
