@@ -8,9 +8,9 @@ class PlaylistItem {
             throw new Error('playlist.mode String required and not provided');
 
         // Required properties
+        this.mode       = playlist.mode;
         this.map        = mapName;
         this.duration   = mapDuration;
-        this.mode       = playlist.mode;
 
         // Conditional properties
         if (playlist.ranked)    this.ranked     = playlist.ranked;

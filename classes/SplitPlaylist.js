@@ -10,6 +10,7 @@ class SplitPlaylist extends Playlist {
             throw new Error('requires maps and splitTime from playlistData');
 
         this.splitTime = parseDate(playlistData.splitTime);
+
         this.rotations = [
             new ScheduledPlaylistItem({
                 mapName: this.maps[0],
