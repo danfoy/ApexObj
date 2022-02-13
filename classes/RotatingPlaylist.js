@@ -42,6 +42,7 @@ class RotatingPlaylist extends Playlist {
     };
 
     get nextMap() {
+        if (new Date() < this.startTime) return this.getMapByDate(this.startTime);
         if (new Date() >= this.endTime) return null;
         if (this.currentMap.endTime >= this.endTime) return null;
         return this.getMapByDate(this.currentMap.endTime);
