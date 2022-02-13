@@ -80,7 +80,7 @@ describe('@RotatingPlaylist', function() {
                 MockDate.set(date);
                 const testMap = season11BR.currentMap;
                 const testStartTime = new Date(startDate);
-                const testEndTime = new Date( new Date(startDate).getTime() + ((duration * 60 * 1000) - 1));
+                const testEndTime = new Date( new Date(startDate).getTime() + (duration * 60 * 1000));
 
                 // Map and duration properties can be tested simply
                 expect(testMap).to.include({
@@ -247,7 +247,7 @@ describe('@RotatingPlaylist', function() {
             function check(date, mapName, duration) {
                 const testMap = season11BR.getMapByDate(date);
                 const testStartTime = new Date(date);
-                const testEndTime = new Date( new Date(date).getTime() + ((duration * 60 * 1000) - 1));
+                const testEndTime = new Date( new Date(date).getTime() + (duration * 60 * 1000));
 
                 // Map and duration properties can be tested simply
                 expect(testMap).to.include({
@@ -276,7 +276,7 @@ describe('@RotatingPlaylist', function() {
         it('passes regression tests', function() {
             MockDate.set('2022-02-08T01:00:00Z')
             expect(season11BR.getMapByDate().timeRemaining)
-                .to.equal((30 * 60 * 1000) - 1);
+                .to.equal(30 * 60 * 1000);
             MockDate.reset();
         });
     });

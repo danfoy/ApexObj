@@ -8,7 +8,7 @@ class ScheduledPlaylistItem extends PlaylistItem {
         if (!isParseableDate(startTime)) throw new Error(`${startTime} is not a parseable date`);
 
         this.startTime = parseDate(startTime);
-        this.endTime = new Date(this.startTime.getTime() + (mapDuration - 1));
+        this.endTime = new Date(this.startTime.getTime() + mapDuration);
     };
 
     get timeRemaining() {

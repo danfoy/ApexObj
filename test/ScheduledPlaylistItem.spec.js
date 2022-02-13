@@ -32,14 +32,14 @@ describe('@ScheduledPlaylistItem', function() {
                 // Time remaining at start of rotation
                 MockDate.set(date);
                 const timeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
-                expect(timeRemaining).to.equal((mapDuration * 1000 * 60) - 1)
+                expect(timeRemaining).to.equal(mapDuration * 1000 * 60)
                 MockDate.reset();
 
                 // Time remaining half an hour into rotation
                 const halfHourOffset = new Date(new Date(date).getTime() + (30 * 60 * 1000));
                 MockDate.set(halfHourOffset);
                 const offsetTimeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
-                expect(offsetTimeRemaining).to.equal( ((mapDuration * 1000 * 60) - (30 * 60 * 1000)) - 1);
+                expect(offsetTimeRemaining).to.equal( (mapDuration * 1000 * 60) - (30 * 60 * 1000));
                 MockDate.reset();
             };
 
