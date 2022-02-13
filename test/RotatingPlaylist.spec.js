@@ -12,13 +12,6 @@ describe('@RotatingPlaylist', function() {
     const season11 = new Season(apexData.seasons[0]);
     const season11BR = new RotatingPlaylist(season11PlaylistData, season11);
 
-    describe('.mapDurations property', function() {
-        it("returns an Array of this season's map durations converted to seconds", function() {
-            const offsetsInSeconds = [90, 60, 60, 120, 90, 120].map(offset => offset * 60 * 1000);
-            expect(season11BR.mapDurations).to.eql(offsetsInSeconds);
-        });
-    });
-
     describe('.rotations property', function() {
         it('.rotations property', function() {
             expect(season11BR.rotations)

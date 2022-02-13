@@ -7,16 +7,17 @@ class RotatingPlaylist extends Playlist {
     constructor(playlistData, seasonData) {
         super(playlistData, seasonData);
 
+        // Argument validation
         if(!playlistData.maps || !playlistData.mapDurations)
-            throw new Error('Requires maps and durations from season data');
+            throw new Error('Requires .maps and .mapDurations from Season');
 
-        this.mapDurations = playlistData.mapDurations
-            ? playlistData.mapDurations.map(duration => duration * 60 * 1000)
-            : [];
+        // Private properties
+        const { maps, mapDurations } = playlistData;
 
-        this.rotations = Array.from(this.mapDurations,
-            duration => Array.from(this.maps,
-                map => new PlaylistItem({mapName: map, mapDuration: duration}, this))
+        // Public properties
+        this.rotations = [...mapDurations.map(duration => duration * 60 * 1000)]
+            .map(duration => [...maps]
+                .map(map => new PlaylistItem({mapName: map, mapDuration: duration}, this))
             ).flat();
     };
 
