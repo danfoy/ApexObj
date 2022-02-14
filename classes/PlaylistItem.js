@@ -13,8 +13,9 @@ class PlaylistItem {
         this.duration   = mapDuration;
 
         // Conditional properties
-        if (playlist.ranked)    this.ranked     = playlist.ranked;
-        if (playlist.takeover)  this.takeover   = playlist.takeover;
+        if (playlist.ranked)    this.ranked     = true;
+        if (playlist.LTM)       this.LTM        = true;
+        if (playlist.takeover)  this.takeover   = true;
         if (playlist.replaces)  this.replaces   = playlist.replaces;
     };
 };

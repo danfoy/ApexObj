@@ -67,6 +67,46 @@ describe('@Season', function() {
         });
     });
 
+    describe('.currentLTMs computed property', function() {
+        it('is null if there is not a current Limited Time Mode', function() {
+            // No LTMs in season11 data
+            MockDate.set(season11.startTime);
+            expect(season11.currentLTMs).to.be.null;
+            MockDate.reset();
+
+            // No LTM 3 weeks into season 12
+            MockDate.set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
+            expect(season12.currentLTMs).to.be.null;
+            MockDate.reset();
+        });
+
+        it('returns the current LTM playlist(s)', function() {
+            MockDate.set(season12.startTime);
+            expect(season12.currentLTMs).to.have.length(2);
+            MockDate.reset();
+        });
+    });
+
+    describe('.currentTakeovers computed property', function() {
+        it('is null if there is not a current takeover LTM', function() {
+            // No LTMs in season11 data
+            MockDate.set(season11.startTime);
+            expect(season11.currentTakeovers).to.be.null;
+            MockDate.reset();
+
+            // No LTM 3 weeks into season 12
+            MockDate.set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
+            expect(season12.currentTakeovers).to.be.null;
+            MockDate.reset();
+        });
+
+        it('returns the current takeover LTM playlist(s)', function() {
+            MockDate.set(season12.startTime);
+            expect(season12.currentTakeovers).to.have.length(1);
+            MockDate.reset();
+        });
+    });
+
     describe('.currentMaps getter', function() {
         it('returns an array', function() {
             MockDate.set('2022-02-04T12:44:00Z');
@@ -94,6 +134,28 @@ describe('@Season', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+    });
+
+    describe('.nextMaps computed property', function () {
+        it('returns null at end of season', function() {
+            MockDate.set(season12.endTime);
+            expect(season12.nextMaps).to.be.null;
+            MockDate.reset()
+        });
+
+        it('returns an array without null elements if data available', function() {
+            MockDate.set('2022-02-14T16:00:00Z');
+            expect(season12.nextMaps).to.be.an('array');
+            expect(season12.nextMaps).to.not.include(null);
+            MockDate.reset();
+        });
+
+        it('filters out primary modes during takeovers', function() {
+            MockDate.set('2022-02-14T16:00:00Z');
+            expect(season12.nextMaps.filter(map => map.mode === "Play Apex"))
+                .to.have.length(1);
+            MockDate.reset();
         });
     });
 
@@ -134,6 +196,26 @@ describe('@Season', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+
+        it('returns correct values for Season 12', function() {
+
+            // Shows the Control LTM when in date
+            expect(season12.getMapsByDate('2022-02-14T01:00:00Z')
+                .filter(map => map.mode === "Control")).to.have.length(1);
+
+            // Doesn't show Control after Control finish date
+            expect(season12.getMapsByDate('2022-03-03T01:00:00Z')
+                .filter(map => map.mode === "Control")).to.have.length(0);
+
+            // Includes the Olympus 24/7 event when active
+            expect(season12.getMapsByDate('2022-02-14T01:00:00Z')
+                .filter(map => map.mode === "Olympus 24/7")).to.have.length(1);
+
+            // Doesn't include Play Apex mode when not active
+            expect(season12.getMapsByDate('2022-02-14T01:00:00Z')
+                .filter(map => map.mode === "Play Apex")).to.have.length(0);
+
         });
     });
 

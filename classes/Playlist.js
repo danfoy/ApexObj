@@ -11,6 +11,8 @@ class Playlist {
 
         if (this.mode.includes("Ranked")) this.ranked = true;
 
+        if (playlistData.LTM) this.LTM = true;
+
         this.startTime = isParseableDate(playlistData.startTime)
             ? parseDate(playlistData.startTime)
             : parseDate(seasonData.startTime);

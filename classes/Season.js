@@ -1,4 +1,4 @@
-const { parseDate } = require('../util');
+const { isParseableDate, parseDate } = require('../util');
 const RotatingPlaylist = require('./RotatingPlaylist');
 const SplitPlaylist = require('./SplitPlaylist');
 const SingleItemPlaylist = require('./SingleItemPlaylist');
@@ -9,11 +9,18 @@ class Season {
         this.name = seasonData.name;
         this.startTime = parseDate(seasonData.startTime);
         this.endTime = parseDate(seasonData.endTime);
-        this.playlists = [...seasonData.playlists]
-            .map(playlist => this.parsePlaylist(playlist));
 
-        if (seasonData.LTMs) this.LTMs = [...seasonData.LTMs]
-            .map(ltm => this.parsePlaylist(ltm));
+        const availablePlaylists = [...seasonData.playlists]
+            .map(playlist => this.parsePlaylist(playlist));
+        const availableLTMs = seasonData.LTMs
+            ? [...seasonData.LTMs]
+                .map(ltm => this.parsePlaylist({...ltm, LTM: true}))
+            : []
+
+        this.playlists = [
+            ...availablePlaylists,
+            ...availableLTMs,
+        ];
     };
 
     get unranked() {
@@ -30,8 +37,56 @@ class Season {
         };
     }
 
+    get LTMs() {
+        const availableLTMs = this.playlists.filter(playlist => playlist.LTM);
+        if (!availableLTMs.length) return null;
+        return availableLTMs;
+    };
+
+    get currentLTMs() {
+        if (!this.LTMs) return null;
+        const now = new Date();
+        const currentLTMs = this.LTMs
+            .filter(ltm => ltm.startTime <= now && ltm.endTime > now);
+        if (currentLTMs.length === 0) return null;
+        return currentLTMs;
+    };
+
+    get takeovers() {
+        if (!this.LTMs) return null;
+        const takeovers = this.LTMs.filter(ltm => ltm.takeover);
+        if (!takeovers.length) return null;
+        return takeovers;
+    };
+
+    get currentTakeovers() {
+        if (!this.takeovers) return null;
+        const now = new Date();
+        const currentTakeovers = this.takeovers
+            .filter(takeovers => takeovers.startTime <= now && takeovers.endTime > now);
+        if (!currentTakeovers.length) return null;
+        return currentTakeovers;
+    };
+
     get currentMaps() {
-        return this.playlists.map(playlist => playlist.currentMap);
+        return this.getMapsByDate();
+    };
+
+    get nextMaps() {
+        let nextMaps = this.playlists
+            .map(playlist => playlist.nextMap)
+            .filter(map => map !== null);
+
+        if (this.currentTakeovers) this.currentTakeovers.forEach(takeover => {
+            nextMaps = nextMaps.filter(map => map.mode !== takeover.replaces);
+            nextMaps.push(this.playlists
+                .find(playlist => playlist.mode === takeover.replaces)
+                .getMapByDate(takeover.endTime)
+            );
+        });
+
+        if (!nextMaps.length) return null;
+        return nextMaps;
     };
 
     parsePlaylist(playlistData) {
@@ -44,7 +99,17 @@ class Season {
     };
 
     getMapsByDate(date) {
-        return this.playlists.map(playlist => playlist.getMapByDate(date));
+        let availableMaps = this.playlists
+            .map(playlist => playlist.getMapByDate(date))
+            .filter(map => map !== null);
+
+        const takeovers = availableMaps
+            .filter(map => map.takeover);
+
+        takeovers.forEach(takeover => availableMaps = availableMaps
+            .filter(map => map.mode !== takeover.replaces));
+
+        return availableMaps;
     };
 };
 
