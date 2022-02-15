@@ -15,6 +15,10 @@ class ApexObj {
         return this.getSeasonByDate();
     };
 
+    get nextSeason() {
+        return this.getSeasonByDate(this.currentSeason.endTime);
+    };
+
     get currentMaps() {
         if (!this.currentSeason) return null;
         return this.currentSeason.currentMaps;

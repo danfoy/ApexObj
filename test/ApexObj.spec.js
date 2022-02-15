@@ -7,6 +7,7 @@ const ApexObj = require('../classes/ApexObj');
 const apexData = require('../data/seasons.json');
 
 const testObj = new ApexObj(apexData);
+const season11 = testObj.seasons.find(season => season.id === 11);
 const season12 = testObj.seasons.find(season => season.id === 12);
 
 describe('@ApexObj', function() {
@@ -57,6 +58,21 @@ describe('@ApexObj', function() {
 
             check('2021-11-10T00:00:00Z', 'Escape');
             check('2022-02-10T00:00:00Z', 'Defiance');
+        });
+    });
+
+    describe('.nextSeason computed property', function() {
+        it('returns the next season if data is available', function() {
+            MockDate.set(season11.startTime);
+            expect(testObj.nextSeason).to.eql(season12);
+            MockDate.reset()
+        });
+
+        it('is null if next season data not available', function() {
+            const finalSeason = [...testObj.seasons].pop();
+            MockDate.set(finalSeason.startTime);
+            expect(testObj.nextSeason).to.be.null;
+            MockDate.reset()
         });
     });
 
