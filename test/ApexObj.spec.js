@@ -5,7 +5,9 @@ chai.use(require('chai-things'));
 const MockDate = require('mockdate');
 const ApexObj = require('../classes/ApexObj');
 const apexData = require('../data/seasons.json');
+
 const testObj = new ApexObj(apexData);
+const season12 = testObj.seasons.find(season => season.id === 12);
 
 describe('@ApexObj', function() {
 
@@ -89,6 +91,26 @@ describe('@ApexObj', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+    });
+
+    describe('.currentLTMs computed property', function() {
+        it('is an alias for .currentSeason.currentLTMs', function() {
+            MockDate.set(season12.startTime);
+            expect(testObj.currentLTMs)
+                .to.have.length(2)
+                .and.to.eql(season12.currentLTMs);
+            MockDate.reset();
+        });
+    });
+
+    describe('.currentTakeovers computed property', function() {
+        it('is an alias for .currentSeason.currentTakeovers', function() {
+            MockDate.set(season12.startTime);
+            expect(testObj.currentTakeovers)
+                .to.have.length(1)
+                .and.to.eql(season12.currentTakeovers);
+            MockDate.reset();
         });
     });
 

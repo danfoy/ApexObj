@@ -20,6 +20,16 @@ class ApexObj {
         return this.currentSeason.currentMaps;
     };
 
+    get currentLTMs() {
+        if (!this.currentSeason) return null;
+        return this.currentSeason.currentLTMs;
+    };
+
+    get currentTakeovers() {
+        if (!this.currentSeason) return null;
+        return this.currentSeason.currentTakeovers;
+    };
+
     getSeasonByDate(date) {
         if (date && !isParseableDate(date))
             throw new Error(`Couldn't parse ${date} into a Date`);
