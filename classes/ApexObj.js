@@ -24,6 +24,11 @@ class ApexObj {
         return this.currentSeason.currentMaps;
     };
 
+    get nextMaps() {
+        if (!this.currentSeason) return null;
+        return this.currentSeason.nextMaps;
+    };
+
     get currentLTMs() {
         if (!this.currentSeason) return null;
         return this.currentSeason.currentLTMs;
