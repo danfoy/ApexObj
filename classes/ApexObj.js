@@ -26,7 +26,7 @@ class ApexObj {
 
         const targetDate = date ? parseDate(date) : new Date();
         return this.seasons.find(season =>
-            season.startTime < targetDate &&
+            season.startTime <= targetDate &&
             season.endTime > targetDate
         ) || null;
     };
