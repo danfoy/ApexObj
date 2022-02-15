@@ -1,4 +1,4 @@
-const { isParseableDate, parseDate } = require('../util');
+const { parseDate } = require('../util');
 const RotatingPlaylist = require('./RotatingPlaylist');
 const SplitPlaylist = require('./SplitPlaylist');
 const SingleItemPlaylist = require('./SingleItemPlaylist');
@@ -96,6 +96,14 @@ class Season {
             return new RotatingPlaylist(playlistData, this);
         if (playlistData.maps.length === 1)
             return new SingleItemPlaylist(playlistData, this);
+    };
+
+    getPlaylistsByDate(date) {
+        const now = new Date();
+        const currentPlaylists = this.playlists
+            .filter(playlist => playlist.startTime <= now && playlist.endTime > now);
+        if (currentPlaylists.length === 0) return null;
+        return currentPlaylists;
     };
 
     getMapsByDate(date) {

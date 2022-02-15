@@ -1,4 +1,4 @@
-const { isParseableDate, parseDate } = require('../util');
+const { parseDate } = require('../util');
 class Playlist {
     constructor(playlistData, seasonData) {
 
@@ -13,11 +13,11 @@ class Playlist {
 
         if (playlistData.LTM) this.LTM = true;
 
-        this.startTime = isParseableDate(playlistData.startTime)
+        this.startTime = playlistData.startTime
             ? parseDate(playlistData.startTime)
             : parseDate(seasonData.startTime);
 
-        this.endTime = isParseableDate(playlistData.endTime)
+        this.endTime = playlistData.endTime
             ? parseDate(playlistData.endTime)
             : parseDate(seasonData.endTime);
 

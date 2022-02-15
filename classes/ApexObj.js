@@ -1,4 +1,4 @@
-const {isParseableDate, parseDate} = require('../util');
+const { parseDate } = require('../util');
 const Season = require('./Season');
 
 class ApexObj {
@@ -35,10 +35,7 @@ class ApexObj {
     };
 
     getSeasonByDate(date) {
-        if (date && !isParseableDate(date))
-            throw new Error(`Couldn't parse ${date} into a Date`);
-
-        const targetDate = date ? parseDate(date) : new Date();
+        const targetDate = parseDate(date);
         return this.seasons.find(season =>
             season.startTime <= targetDate &&
             season.endTime > targetDate
@@ -46,10 +43,7 @@ class ApexObj {
     };
 
     getMapsByDate(date) {
-        if (date && !isParseableDate(date))
-            throw new Error(`Couldn't parse ${date} into a Date`);
-
-        const targetDate = date ? parseDate(date) : new Date();
+        const targetDate = parseDate(date);
         const targetSeason = this.getSeasonByDate(targetDate);
         if (!targetSeason) return null;
         return targetSeason.getMapsByDate(targetDate);

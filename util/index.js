@@ -12,37 +12,23 @@ function isDate(target) {
 module.exports.isDate = isDate;
 
 /**
- * Get a date object or an error. Returns the input if it's already an instance
- * of Date. Attempts to create a new Date object from the supplied argument and
- * returns a new Date instance on success or an Error on failure.
+ * Get a date object or an error. Creates a new Date() at calltime if no target
+ * date is provided. Returns the supplied date if it is already an instance of
+ * Date. Returns a new Date set to the supplied time if parseable into a Date
+ * object. Throws an error if none of the above are applicable.
  *
  * @param {Date|ISO date string} target
  * @returns {Date|Error}
  */
 function parseDate(target) {
-    if (!target) throw new Error(`Target date is required and not provided`);
-    if(isDate(target)) return target;
+
+    if (!target) return new Date();
+    if (isDate(target)) return target;
     const newDate = new Date(target);
-    if (!isDate(newDate)) throw new Error(`Unable to parse date from ${target}`);
-    return newDate;
+    if (isDate(newDate)) return newDate;
+    throw new Error(`Unable to parse date from '${target}'`);
 };
 module.exports.parseDate = parseDate
-
-/**
- * Determine whether it's possible to parse a date from the provided input
- *
- * @param {*} target
- * @returns {boolean}
- */
-function isParseableDate(target) {
-    try {
-        parseDate(target);
-        return true;
-    } catch (error) {
-        return false;
-    }
-};
-module.exports.isParseableDate = isParseableDate;
 
 /**
  * Select [quantity] items from [array]. By default returns a string in single

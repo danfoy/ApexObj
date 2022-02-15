@@ -18,13 +18,13 @@ describe('Utility library', function() {
     describe('.parseDate(target) function', function() {
         const { parseDate } = require('../util');
 
-        it('throws if target is not supplied', function() {
-            expect(()=>parseDate()).to.throw;
+        it('returns a new Date if none supplied', function() {
+            expect(parseDate()).to.eql(new Date());
         });
 
         it('throws if the target is an invalid date ISO string', function() {
-            expect(()=>parseDate('foo')).to.throw;
-            expect(()=>parseDate('2022-13-11T12:00:00Z')).to.throw;
+            expect(()=>parseDate('foo')).to.throw();
+            expect(()=>parseDate('2022-13-11T12:00:00Z')).to.throw();
         });
 
         it('returns the target if it is already an instance of Date', function() {
@@ -35,22 +35,6 @@ describe('Utility library', function() {
 
         it('returns an instance of Date if target is a valid date ISO string', function() {
             expect(parseDate('2022-01-11T12:00:00Z').getMonth()).to.equal(0);
-        });
-    });
-
-    describe('.isParseableDate(target) function', function() {
-        const { isParseableDate } = require('../util');
-
-        it('returns true when passed a date', function() {
-            expect(isParseableDate(new Date())).to.be.true;
-        });
-
-        it('returns true when passed an ISO date string', function() {
-            expect(isParseableDate('2022-01-11T12:00:00Z')).to.be.true;
-        });
-
-        it('returns false when passed an invalid ISO date string', function() {
-            expect(isParseableDate('foo')).to.be.false;
         });
     });
 

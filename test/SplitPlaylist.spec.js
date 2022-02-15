@@ -2,7 +2,7 @@ const { expect } = require('chai');
 const MockDate = require('mockdate');
 const Season = require('../classes/Season');
 const SplitPlaylist = require('../classes/SplitPlaylist');
-const { isParseableDate } = require('../util');
+const { parseDate } = require('../util');
 
 describe('@SplitPlaylist', function() {
 
@@ -13,7 +13,7 @@ describe('@SplitPlaylist', function() {
 
     describe('.splitTime property', function() {
         it('returns a date', function() {
-            expect(isParseableDate(season11RankedBR.splitTime)).to.be.true;
+            expect(parseDate(season11RankedBR.splitTime)).to.be.ok.and.not.eql(new Date());
         });
     });
 

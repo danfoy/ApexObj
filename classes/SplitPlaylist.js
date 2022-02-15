@@ -1,4 +1,4 @@
-const { isParseableDate, parseDate } = require('../util');
+const { parseDate } = require('../util');
 const Playlist = require('./Playlist');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
 
@@ -39,10 +39,7 @@ class SplitPlaylist extends Playlist {
     };
 
     getMapByDate(date) {
-        if (date && !isParseableDate(date))
-            throw new Error(`${date} is not a parseable date`);
-
-        const targetDate = date ? parseDate(date) : new Date();
+        const targetDate = parseDate(date);
 
         if (targetDate < this.startTime) return null;
         if (targetDate > this.endTime) return null;

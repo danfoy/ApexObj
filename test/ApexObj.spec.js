@@ -110,6 +110,35 @@ describe('@ApexObj', function() {
         });
     });
 
+    // describe('.nextMaps pseudo property', function() {
+    //     it('returns null if there is no next season', function() {
+    //         const finalSeason = [...testObj.seasons].pop();
+    //         MockDate.set(finalSeason.endTime);
+    //         expect(testObj.nextMaps).to.be.null;
+    //         MockDate.reset()
+    //     });
+
+    //     it('returns null if there are no next maps', function() {
+    //         const finalSeason = [...testObj.seasons].pop();
+    //         MockDate.set(finalSeason.endTime - 10000);
+    //         expect(testObj.nextMaps).to.be.null;
+    //         MockDate.reset()
+    //     });
+
+    //     it('is equal to .currentSeason.nextMaps at the season start', function() {
+    //         MockDate.set(season12.startTime);
+    //         expect(testObj.nextMaps).to.eql(season12.nextMaps);
+    //         MockDate.reset();
+    //     });
+
+    //     it('gets maps from the next season if available', function() {
+    //         MockDate.set(season11.endTime - (1000* 60 * 30));
+    //         // Change this to look for .something.like
+    //         expect(testObj.nextMaps).to.have.length(4);
+    //         MockDate.reset();
+    //     });
+    // });
+
     describe('.currentLTMs computed property', function() {
         it('is an alias for .currentSeason.currentLTMs', function() {
             MockDate.set(season12.startTime);

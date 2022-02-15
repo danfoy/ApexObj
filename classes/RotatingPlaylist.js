@@ -1,4 +1,4 @@
-const { isParseableDate, parseDate } = require('../util');
+const { parseDate } = require('../util');
 const Playlist = require('./Playlist');
 const PlaylistItem = require('./PlaylistItem');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
@@ -74,13 +74,8 @@ class RotatingPlaylist extends Playlist {
     };
 
     getPlaylistTimeElapsed(date) {
-        if (date && !isParseableDate(date))
-            throw new Error(`Unable to parse '${date}' to a Date`);
-
             const startDate = (this.rotationBaseTime.getTime());
-            const targetDate = date
-                ? (parseDate(date).getTime())
-                : (new Date().getTime());
+            const targetDate = parseDate(date);
 
         const offset = (targetDate - startDate) % this.playlistRotationsDuration;
         if (Number.isNaN(offset))
@@ -90,10 +85,7 @@ class RotatingPlaylist extends Playlist {
     };
 
     getMapByDate(date) {
-        if (date && !isParseableDate(date))
-            throw new Error(`Couldn't parse ${date} into a Date`);
-
-        const targetDate = date ? parseDate(date) : new Date();
+        const targetDate = parseDate(date);
 
         // Only return dates within season bounds
         if(targetDate < this.startTime) return null;
