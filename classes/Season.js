@@ -100,12 +100,19 @@ class Season {
 
     getPlaylistsByDate(date) {
         const targetDate = parseDate(date);
-        const currentPlaylists = this.playlists
+        let availablePlaylists = this.playlists
             .filter(playlist =>
                 playlist.startTime <= targetDate &&
                 playlist.endTime > targetDate);
-        if (currentPlaylists.length === 0) return null;
-        return currentPlaylists;
+
+        const takeovers = availablePlaylists
+            .filter(playlist => playlist.takeover);
+
+        takeovers.forEach(takeover => availablePlaylists = availablePlaylists
+            .filter(playlist => playlist.mode !== takeover.replaces));
+
+        if (availablePlaylists.length === 0) return null;
+        return availablePlaylists;
     };
 
     getMapsByDate(date) {

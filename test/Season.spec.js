@@ -191,7 +191,11 @@ describe('@Season', function() {
         });
 
         it('returns correct results for season 12', function() {
-            expect(season12.getPlaylistsByDate(season12.startTime)).to.have.length(4);
+            expect(season12.getPlaylistsByDate(season12.startTime))
+                .to.contain.something.like({mode: "Control"})
+                .and.contain.something.like({mode: "Ranked Leagues"})
+                .and.contain.something.like({mode: "Olympus 24/7"})
+                .and.not.contain.something.like({mode: "Play Apex"})
         });
     });
 
