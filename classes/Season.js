@@ -99,9 +99,11 @@ class Season {
     };
 
     getPlaylistsByDate(date) {
-        const now = new Date();
+        const targetDate = parseDate(date);
         const currentPlaylists = this.playlists
-            .filter(playlist => playlist.startTime <= now && playlist.endTime > now);
+            .filter(playlist =>
+                playlist.startTime <= targetDate &&
+                playlist.endTime > targetDate);
         if (currentPlaylists.length === 0) return null;
         return currentPlaylists;
     };

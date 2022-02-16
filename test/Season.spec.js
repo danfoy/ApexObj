@@ -177,6 +177,24 @@ describe('@Season', function() {
         });
     });
 
+    describe('.getPlaylistsByDate(date) method', function() {
+        it('returns null when no playlists available', function() {
+            expect(season12.getPlaylistsByDate(season12.startTime - 1000)).to.be.null;
+            expect(season12.getPlaylistsByDate(season12.endTime + 1000)).to.be.null;
+        });
+
+        it('uses the current date if none provided', function() {
+            MockDate.set(season12.startTime);
+            expect(season12.getPlaylistsByDate())
+                .to.eql(season12.getPlaylistsByDate(season12.startTime));
+            MockDate.reset();
+        });
+
+        it('returns correct results for season 12', function() {
+            expect(season12.getPlaylistsByDate(season12.startTime)).to.have.length(4);
+        });
+    });
+
     describe('.getMapsByDate() method', function() {
         it('returns correct maps for season 11', function() {
 
