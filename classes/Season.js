@@ -35,7 +35,28 @@ class Season {
             battleRoyale: this.playlists
                 .find(playlist => playlist.mode == 'Ranked Leagues')
         };
-    }
+    };
+
+    get currentMaps() {
+        return this.getMapsByDate();
+    };
+
+    get nextMaps() {
+        let nextMaps = this.playlists
+            .map(playlist => playlist.nextMap)
+            .filter(map => map !== null);
+
+        if (this.currentTakeovers) this.currentTakeovers.forEach(takeover => {
+            nextMaps = nextMaps.filter(map => map.mode !== takeover.replaces);
+            nextMaps.push(this.playlists
+                .find(playlist => playlist.mode === takeover.replaces)
+                .getMapByDate(takeover.endTime)
+            );
+        });
+
+        if (!nextMaps.length) return null;
+        return nextMaps;
+    };
 
     get LTMs() {
         const availableLTMs = this.playlists.filter(playlist => playlist.LTM);
@@ -66,27 +87,6 @@ class Season {
             .filter(takeovers => takeovers.startTime <= now && takeovers.endTime > now);
         if (!currentTakeovers.length) return null;
         return currentTakeovers;
-    };
-
-    get currentMaps() {
-        return this.getMapsByDate();
-    };
-
-    get nextMaps() {
-        let nextMaps = this.playlists
-            .map(playlist => playlist.nextMap)
-            .filter(map => map !== null);
-
-        if (this.currentTakeovers) this.currentTakeovers.forEach(takeover => {
-            nextMaps = nextMaps.filter(map => map.mode !== takeover.replaces);
-            nextMaps.push(this.playlists
-                .find(playlist => playlist.mode === takeover.replaces)
-                .getMapByDate(takeover.endTime)
-            );
-        });
-
-        if (!nextMaps.length) return null;
-        return nextMaps;
     };
 
     parsePlaylist(playlistData) {
