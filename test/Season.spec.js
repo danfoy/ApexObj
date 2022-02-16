@@ -67,6 +67,15 @@ describe('@Season', function() {
         });
     });
 
+    describe('.currentPlaylists pseudo property', function() {
+        it('aliases .getPlaylistsByDate(<current Date>)', function() {
+            MockDate.set(season12.startTime);
+            expect(season12.currentPlaylists)
+                .to.eql(season12.getPlaylistsByDate(season12.startTime));
+            MockDate.reset();
+        });
+    });
+
     describe('.currentMaps getter', function() {
         it('returns an array', function() {
             MockDate.set('2022-02-04T12:44:00Z');

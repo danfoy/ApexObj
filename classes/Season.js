@@ -37,6 +37,10 @@ class Season {
         };
     };
 
+    get currentPlaylists() {
+        return this.getPlaylistsByDate();
+    };
+
     get currentMaps() {
         return this.getMapsByDate();
     };
