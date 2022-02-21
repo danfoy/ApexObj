@@ -38,6 +38,47 @@ describe('Utility library', function() {
         });
     });
 
+    describe('withinDates function', function(){
+
+        const { withinDates } = require('../util');
+
+        it('requires {startTime, endTime} argument', function() {
+            expect(()=>withinDates({endTime: new Date()})).to.throw();
+            expect(()=>withinDates({startTime: new Date()})).to.throw();
+        });
+
+        it('uses the current date if none provided', function() {
+            const now = new Date().getTime();
+            const before = new Date(now - 1000);
+            const after = new Date(now + 1000);
+            expect(withinDates({startTime: before, endTime: after})).to.be.true;
+        });
+
+        it('returns false if before start of range', function() {
+            const now = new Date().getTime();
+            expect(withinDates({startTime: now - 1000, endTime: now + 1000}, now - 2000))
+                .to.be.false;
+        });
+
+        it('returns false if after end of range', function() {
+            const now = new Date().getTime();
+            expect(withinDates({startTime: now - 1000, endTime: now + 1000}, now + 2000))
+                .to.be.false;
+        });
+
+        it('returns true if within range', function() {
+            const now = new Date().getTime();
+
+            // With target provided
+            expect(withinDates({startTime: now - 1000, endTime: now + 1000}, now + 500))
+                .to.be.true;
+
+            // With target not provided
+            expect(withinDates({startTime: now - 1000, endTime: now + 1000}))
+                .to.be.true;
+        });
+    });
+
     describe('.randomFrom(list, quantity, options) function', function() {
 
         const { randomFrom } = require('../util');
