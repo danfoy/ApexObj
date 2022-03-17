@@ -1,4 +1,4 @@
-const { parseDate } = require('../util');
+const { parseDate, withinDates } = require('../util');
 const Playlist = require('./Playlist');
 const PlaylistItem = require('./PlaylistItem');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
@@ -86,10 +86,7 @@ class RotatingPlaylist extends Playlist {
 
     getMapByDate(date) {
         const targetDate = parseDate(date);
-
-        // Only return dates within season bounds
-        if(targetDate < this.startTime) return null;
-        if(targetDate > this.endTime) return null;
+        if (!withinDates(this, date)) return null;
 
         const targetIndex = this.getIndexByOffset(this.getPlaylistTimeElapsed(targetDate));
         const targetRotation = this.rotations[targetIndex];

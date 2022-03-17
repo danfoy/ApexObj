@@ -1,4 +1,4 @@
-const { parseDate } = require('../util');
+const { parseDate, withinDates } = require('../util');
 const RotatingPlaylist = require('./RotatingPlaylist');
 const SplitPlaylist = require('./SplitPlaylist');
 const SingleItemPlaylist = require('./SingleItemPlaylist');
@@ -70,9 +70,8 @@ class Season {
 
     get currentLTMs() {
         if (!this.LTMs) return null;
-        const now = new Date();
         const currentLTMs = this.LTMs
-            .filter(ltm => ltm.startTime <= now && ltm.endTime > now);
+            .filter(ltm => withinDates(ltm));
         if (currentLTMs.length === 0) return null;
         return currentLTMs;
     };
@@ -88,7 +87,7 @@ class Season {
         if (!this.takeovers) return null;
         const now = new Date();
         const currentTakeovers = this.takeovers
-            .filter(takeovers => takeovers.startTime <= now && takeovers.endTime > now);
+            .filter(takeover => withinDates(takeover));
         if (!currentTakeovers.length) return null;
         return currentTakeovers;
     };
@@ -105,9 +104,7 @@ class Season {
     getPlaylistsByDate(date) {
         const targetDate = parseDate(date);
         let availablePlaylists = this.playlists
-            .filter(playlist =>
-                playlist.startTime <= targetDate &&
-                playlist.endTime > targetDate);
+            .filter(playlist => withinDates(playlist, targetDate));
 
         const takeovers = availablePlaylists
             .filter(playlist => playlist.takeover);
@@ -120,17 +117,10 @@ class Season {
     };
 
     getMapsByDate(date) {
-        let availableMaps = this.playlists
-            .map(playlist => playlist.getMapByDate(date))
-            .filter(map => map !== null);
-
-        const takeovers = availableMaps
-            .filter(map => map.takeover);
-
-        takeovers.forEach(takeover => availableMaps = availableMaps
-            .filter(map => map.mode !== takeover.replaces));
-
-        return availableMaps;
+        if (!withinDates(this, date)) return null;
+        const targetDate = parseDate(date);
+        return this.getPlaylistsByDate(targetDate)
+            .map(playlist => playlist.getMapByDate(targetDate));
     };
 };
 

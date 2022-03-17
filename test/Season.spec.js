@@ -209,6 +209,19 @@ describe('@Season', function() {
     });
 
     describe('.getMapsByDate() method', function() {
+
+        it('uses the current date if none provided', function() {
+            MockDate.set(season12.startTime);
+            expect(season12.getMapsByDate())
+                .to.eql(season12.getMapsByDate(season12.startTime));
+            MockDate.reset()
+        });
+
+        it('returns null if outside season date boundaries', function() {
+            expect(season12.getMapsByDate(season12.startTime - 1000)).to.be.null;
+            expect(season12.getMapsByDate(season12.endTime + 1000)).to.be.null;
+        });
+
         it('returns correct maps for season 11', function() {
 
             function check(date, map, duration) {
