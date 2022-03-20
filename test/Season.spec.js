@@ -222,10 +222,12 @@ describe('@Season', function() {
             expect(season12.getMapsByDate(season12.endTime + 1000)).to.be.null;
         });
 
+
         it('returns correct maps for season 11', function() {
 
             function check(date, map, duration) {
-                return expect(season11.getMapsByDate(date))
+                return expect(season11.getMapsByDate(date)
+                    .filter(map => map.mode === "Play Apex"))
                     .to.contain.something.like({map: map, duration: duration * 60 * 1000});
             };
 
@@ -240,6 +242,24 @@ describe('@Season', function() {
             check('2022-01-12T01:30:00Z',   "World's Edge", 90  )
             check('2022-01-12T03:00:00Z',   "Storm Point",  60  )
             check('2022-01-12T04:00:00Z',   "World's Edge", 60  )
+        });
+
+        it('returns correct maps for season 12', function() {
+
+            function check(date, map, duration) {
+                // console.log(season12.getMapsByDate(date));
+                return expect(season12.getMapsByDate(date)
+                    .filter(map => map.mode === 'Play Apex'))
+                    .to.contain.something.like({map: map, duration: duration * 60 * 1000});
+            };
+
+            check('2022-02-16T12:30:00Z',   "Storm Point",      90 );
+            check('2022-02-16T14:00:00Z',   "Olympus",          120);
+            check('2022-02-16T16:00:00Z',   "King's Canyon",    120);
+            check('2022-02-16T18:00:00Z',   "Storm Point",      120);
+            check('2022-02-16T20:00:00Z',   "Olympus",          90);
+            check('2022-02-16T21:30:00Z',   "King's Canyon",    90);
+            check('2022-02-16T23:00:00Z',   "Storm Point",      90);
         });
 
         it('returns correct values for Season 12', function() {

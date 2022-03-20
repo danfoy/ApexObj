@@ -7,7 +7,8 @@
                 {
                     "mode": "Play Apex",
                     "maps": ["Storm Point", "World's Edge"],
-                    "mapDurations": [90, 60, 60, 120, 90, 120]
+                    "mapDurations": [90, 60, 60, 120, 90, 120],
+                    "baseTime": "2021-11-01T18:00:00Z"
                 },
                 {
                     "mode": "Ranked Leagues",
@@ -24,8 +25,9 @@
             "playlists": [
                 {
                     "mode": "Play Apex",
-                    "maps": ["Storm Point", "World's Edge", "King's Canyon"],
-                    "mapDurations": [90, 60, 60, 120, 90, 120]
+                    "maps": ["Olympus", "King's Canyon", "Storm Point"],
+                    "mapDurations": [90, 60, 60, 120, 90, 120],
+                    "baseTime": "2022-02-07T19:00:00Z"
                 },
                 {
                     "mode":"Ranked Leagues",

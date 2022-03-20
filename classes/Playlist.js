@@ -13,6 +13,8 @@ class Playlist {
 
         if (playlistData.LTM) this.LTM = true;
 
+        if (playlistData.baseTime) this.baseTime = parseDate(playlistData.baseTime);
+
         this.startTime = playlistData.startTime
             ? parseDate(playlistData.startTime)
             : parseDate(seasonData.startTime);

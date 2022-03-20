@@ -10,7 +10,15 @@ describe('@RotatingPlaylist', function() {
     const apexData = require('../data/seasons.json');
     const season11PlaylistData = apexData.seasons[0].playlists[0];
     const season11 = new Season(apexData.seasons[0]);
-    const season11BR = new RotatingPlaylist(season11PlaylistData, season11);
+    const season11BR = season11
+        .playlists.find(playlist => playlist.mode === 'Play Apex');
+    const season12 = new Season(apexData.seasons[1]);
+    const season12ControlData = apexData
+        .seasons.find(season => season.id === 12)
+        .LTMs.find(playlist => playlist.mode === 'Control');
+    const season12Control = season12
+        .playlists.find(playlist => playlist.mode === 'Control');
+
 
     describe('.rotations property', function() {
         it('.rotations property', function() {
@@ -20,8 +28,12 @@ describe('@RotatingPlaylist', function() {
     });
 
     describe('.rotationBaseDate getter', function() {
-        it('returns a date object set to midday', function() {
-            expect(season11BR.rotationBaseTime.getUTCHours()).to.equal(12);
+        it('returns the baseTime if available', function() {
+            expect(season11BR.rotationBaseTime).to.eql(new Date(season11PlaylistData.baseTime));
+        });
+
+        it('returns the startTime if baseTime not provided', function() {
+            expect(season12Control.rotationBaseTime).to.eql(new Date(season12ControlData.startTime));
         });
     });
 

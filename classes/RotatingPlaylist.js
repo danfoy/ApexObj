@@ -22,9 +22,9 @@ class RotatingPlaylist extends Playlist {
     };
 
     get rotationBaseTime() {
-        const baseDate = new Date(this.startTime);
-        baseDate.setUTCHours(12);
-        return baseDate;
+        return this.baseTime
+            ? this.baseTime
+            : this.startTime;
     };
 
     get playlistRotationsDuration() {
@@ -74,7 +74,7 @@ class RotatingPlaylist extends Playlist {
     };
 
     getPlaylistTimeElapsed(date) {
-            const startDate = (this.rotationBaseTime.getTime());
+            const startDate = this.rotationBaseTime;
             const targetDate = parseDate(date);
 
         const offset = (targetDate - startDate) % this.playlistRotationsDuration;

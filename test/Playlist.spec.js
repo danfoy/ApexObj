@@ -14,6 +14,7 @@ describe('@Playlist', function() {
     const season11BR = new RotatingPlaylist(season11BRData, season11);
     const season11Ranked = new SplitPlaylist(season11RankedData, season11);
     const season12 = new Season(apexData.seasons.find(season => season.id === 12));
+    const season12BR = season12.playlists.find(playlist => playlist.mode === "Play Apex");
     const olympus247 = new SingleItemPlaylist(season12.LTMs.find(ltm => ltm.mode === 'Olympus 24/7'), season12);
 
     it('throws if not provided with required ApexSeason properties', function() {
@@ -36,6 +37,16 @@ describe('@Playlist', function() {
         it('returns true if the playlist is ranked, else undefined', function() {
             expect(season11BR.ranked).to.be.undefined;
             expect(season11Ranked.ranked).to.be.true;
+        });
+    });
+
+    describe('.baseTime property', function() {
+        it('exists if the playlist has a baseTime', function() {
+            expect(season12BR.baseTime).to.be.ok;
+        });
+
+        it('does not exist if the playlist does not have a baseTime', function() {
+            expect(olympus247.baseTime).to.not.be.ok
         });
     });
 
