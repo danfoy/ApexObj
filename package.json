@@ -1,6 +1,6 @@
 {
   "name": "apexobj",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Apex Legends data in Object form",
   "main": "index.js",
   "directories": {
