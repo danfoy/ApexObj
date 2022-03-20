@@ -41,10 +41,9 @@ class ApexObj {
 
     getSeasonByDate(date) {
         const targetDate = parseDate(date);
-        return this.seasons.find(season =>
-            season.startTime <= targetDate &&
-            season.endTime > targetDate
-        ) || null;
+        const foundSeason = this.seasons
+            .find(season => (season.startTime <= targetDate) && (season.endTime > targetDate))
+        return foundSeason || null;
     };
 
     getMapsByDate(date) {

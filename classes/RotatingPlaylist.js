@@ -18,7 +18,8 @@ class RotatingPlaylist extends Playlist {
         this.rotations = [...mapDurations.map(duration => duration * 60 * 1000)]
             .map(duration => [...maps]
                 .map(map => new PlaylistItem({mapName: map, mapDuration: duration}, this))
-            ).flat();
+            )
+            .flat();
     };
 
     get rotationBaseTime() {
@@ -28,9 +29,10 @@ class RotatingPlaylist extends Playlist {
     };
 
     get playlistRotationsDuration() {
-        return this.rotations.reduce( (accumulator, currentItem) => {
-            return accumulator + currentItem.duration;
-        }, 0);
+        return this.rotations
+            .reduce( (accumulator, currentItem) => {
+                return accumulator + currentItem.duration;
+            }, 0);
     };
 
     get currentIndex() {
@@ -62,10 +64,10 @@ class RotatingPlaylist extends Playlist {
     getOffsetByIndex(index) {
         const targetIndex = this.normaliseIndex(index);
         if (targetIndex === 0) return 0;
-        return (this.rotations
+        return this.rotations
             .map(rotation => rotation.duration)
             .slice(0, targetIndex)
-            .reduce((acc, current) => current + acc));
+            .reduce((acc, current) => current + acc);
     };
 
     normaliseIndex(target) {
@@ -74,12 +76,11 @@ class RotatingPlaylist extends Playlist {
     };
 
     getPlaylistTimeElapsed(date) {
-            const startDate = this.rotationBaseTime;
-            const targetDate = parseDate(date);
-
+        const targetDate = parseDate(date);
+        const startDate = this.rotationBaseTime;
         const offset = (targetDate - startDate) % this.playlistRotationsDuration;
-        if (Number.isNaN(offset))
-            throw new Error(`Unable to get requested offset; got '${offset}'`);
+
+        if (Number.isNaN(offset)) throw new Error(`Unable to get requested offset; got '${offset}'`);
 
         return offset;
     };
