@@ -1,16 +1,22 @@
+/*
+
+This set of tests uses unit tests. This is fine, but I've moved to using tests
+only on the API surface for the rest of the classes so I don't have to fiddle
+with implementation tests for things which don't affect output. At some point
+I should rewrite these.
+
+*/
+
+// TODO: rewrite unit tests as integration tests
+
 const { expect } = require('chai');
-const Season = require('../classes/Season');
 const PlaylistItem = require('../classes/PlaylistItem');
 
-const apexData = require('../data/seasons.json');
+const apex = require('../');
 
-const season11Data = apexData.seasons.find(season => season.id === 11);
-const season11 = new Season(season11Data);
-const season11BR = season11.playlists.find(playlist => playlist.mode === "Play Apex");
-const season11Ranked = season11.playlists.find(playlist => playlist.ranked === true);
-
-// const season12Data = apexData.seasons.find(season => season.id === 12);
-// const season12 = new Season(season12Data);
+const season11 = apex.seasons.find(season => season.id === 11);
+const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
+const season11Ranked = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
 
 function map(_mapName, _mapDuration) {
     return {mapName: _mapName, mapDuration: _mapDuration};
@@ -56,7 +62,7 @@ describe('@PlaylistItem', function() {
         });
     });
 
-    describe('.ranked optional property', function() {
+    describe('.ranked conditional property', function() {
         it('returns true if the parent season is ranked', function() {
             expect(new PlaylistItem(map('we', 30), season11Ranked).ranked).to.be.true;
         });
@@ -64,12 +70,4 @@ describe('@PlaylistItem', function() {
             expect(new PlaylistItem(map('we', 30), season11BR).ranked).to.be.undefined;
         });
     });
-
-    // describe('.takeover optional property', function() {
-
-    // });
-
-    // describe('.replaces optional property', function() {
-
-    // });
 });

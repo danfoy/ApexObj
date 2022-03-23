@@ -1,21 +1,17 @@
 const { expect } = require('chai');
-const Season = require('../classes/Season');
 const RotatingPlaylist = require('../classes/RotatingPlaylist');
-const SplitPlaylist = require('../classes/SplitPlaylist');
-const SingleItemPlaylist = require('../classes/SingleItemPlaylist');
 
 describe('@Playlist', function() {
 
-    const apexData = require('../data/seasons.json');
-    const season11PlaylistsData = apexData.seasons.find(season => season.id === 11).playlists
-    const season11BRData = season11PlaylistsData.find(playlist => playlist.mode === "Play Apex");
-    const season11RankedData = season11PlaylistsData.find(playlist => playlist.mode === "Ranked Leagues");
-    const season11 = new Season(apexData.seasons.find(season => season.id === 11));
-    const season11BR = new RotatingPlaylist(season11BRData, season11);
-    const season11Ranked = new SplitPlaylist(season11RankedData, season11);
-    const season12 = new Season(apexData.seasons.find(season => season.id === 12));
+    const apex = require('../');
+
+    const season11 = apex.seasons.find(season => season.id === 11);
+    const season11BR = season11.playlists.find(playlist =>  playlist.mode === 'Play Apex');
+    const season11Ranked = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
+
+    const season12 = apex.seasons.find(season => season.id === 12);
     const season12BR = season12.playlists.find(playlist => playlist.mode === "Play Apex");
-    const olympus247 = new SingleItemPlaylist(season12.LTMs.find(ltm => ltm.mode === 'Olympus 24/7'), season12);
+    const olympus247 = season12.LTMs.find(ltm => ltm.mode === 'Olympus 24/7');
 
     it('throws if not provided with required ApexSeason properties', function() {
         expect(()=>new RotatingPlaylist({})).to.throw
@@ -23,6 +19,7 @@ describe('@Playlist', function() {
 
     describe('.maps property', function() {
         it("returns an Array of this season's maps", function() {
+            console.log(season11);
             expect(season11BR.maps).to.eql(["Storm Point", "World's Edge"]);
         });
     });

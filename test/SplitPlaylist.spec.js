@@ -1,15 +1,13 @@
 const { expect } = require('chai');
 const MockDate = require('mockdate');
-const Season = require('../classes/Season');
-const SplitPlaylist = require('../classes/SplitPlaylist');
 const { parseDate } = require('../util');
 
 describe('@SplitPlaylist', function() {
 
-    const apexData = require('../data/seasons.json');
-    const season11RankedBRPlaylistData = apexData.seasons[0].playlists[1];
-    const season11 = new Season(apexData.seasons[0]);
-    const season11RankedBR = new SplitPlaylist(season11RankedBRPlaylistData, season11);
+    const apex = require('../');
+
+    const season11 = apex.seasons.find(season => season.id === 11);
+    const season11RankedBR = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
 
     describe('.splitTime property', function() {
         it('returns a date', function() {
@@ -28,7 +26,7 @@ describe('@SplitPlaylist', function() {
         });
     });
 
-    describe('.currentMap computed property', function() {
+    describe('.currentMap pseudo property', function() {
 
         it('returns null if outside current playlist date boundary', function() {
             function check(date) {
@@ -53,7 +51,7 @@ describe('@SplitPlaylist', function() {
         });
     });
 
-    describe('.nextMap computed property', function() {
+    describe('.nextMap pseudo property', function() {
         it('returns null if after season end', function() {
             MockDate.set('2022-02-10T00:00:00Z');
             expect(season11RankedBR.nextMap).to.be.null;
@@ -109,6 +107,5 @@ describe('@SplitPlaylist', function() {
             check('2021-12-24T00:00:00Z', "World's Edge");
         });
     });
-
 
 });

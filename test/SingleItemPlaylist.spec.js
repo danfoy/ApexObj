@@ -4,12 +4,13 @@ const MockDate = require('mockdate');
 const SingleItemPlaylist = require('../classes/SingleItemPlaylist');
 const Season = require('../classes/Season');
 
-const apexData = require('../data/seasons.json');
-const season12Data = apexData.seasons.find(season => season.id === 12);
-const season12 = new Season(season12Data);
-const olympus247Data = season12Data.LTMs.find(ltm => ltm.mode === "Olympus 24/7");
+const data = require('../data/seasons.json');
+const apex = require('../');
 
-const olympus247 = new SingleItemPlaylist(olympus247Data, season12);
+const season12Data = data.seasons.find(season => season.id === 12);
+const season12 = apex.seasons.find(season => season.id === 12);
+const olympus247Data = season12Data.LTMs.find(ltm => ltm.mode === "Olympus 24/7");
+const olympus247 = season12.playlists.find(playlist => playlist.mode === 'Olympus 24/7');
 
 describe('@SingleItemPlaylist', function() {
     describe('.rotations property', function() {
@@ -18,7 +19,7 @@ describe('@SingleItemPlaylist', function() {
         });
     });
 
-    describe('.currentMap computed property', function() {
+    describe('.currentMap pseudo property', function() {
         it('returns the map when within date bounds', function() {
             MockDate.set(olympus247.startTime + 30);
             expect(olympus247.currentMap.map).to.equal('Olympus');
@@ -38,7 +39,7 @@ describe('@SingleItemPlaylist', function() {
         });
     });
 
-    describe('.nextMap computed property', function() {
+    describe('.nextMap pseudo property', function() {
         it('returns the map when before playlist startTime', function() {
             MockDate.set(olympus247.startTime - 30);
             expect(olympus247.nextMap.map).to.equal('Olympus');
@@ -67,10 +68,8 @@ describe('@SingleItemPlaylist', function() {
 
         it('returns null if before/after the playlist start/end', function() {
             // Before start time
-            expect(olympus247.getMapByDate(olympus247.startTime.getTime() - 30))
-                .to.be.null;
-            expect(olympus247.getMapByDate(olympus247.endTime.getTime() + 30))
-                .to.be.null;
+            expect(olympus247.getMapByDate(olympus247.startTime.getTime() - 30)).to.be.null;
+            expect(olympus247.getMapByDate(olympus247.endTime.getTime() + 30)).to.be.null;
         });
     });
 });

@@ -1,8 +1,20 @@
+/*
+
+This set of tests uses unit tests. This is fine, but I've moved to using tests
+only on the API surface for the rest of the classes so I don't have to fiddle
+with implementation tests for things which don't affect output. At some point
+I should rewrite these.
+
+*/
+
+// TODO: rewrite unit tests as integration tests
+
 const { expect } = require('chai');
 const MockDate = require('mockdate');
 const RotatingPlaylist = require('../classes/RotatingPlaylist');
 const PlaylistItem = require('../classes/PlaylistItem');
 const ScheduledPlaylistItem = require('../classes/ScheduledPlaylistItem');
+
 const seasonData = require('../data/seasons.json').seasons[0];
 const mockSeasonObj = {mode: 'br', ranked: false};
 

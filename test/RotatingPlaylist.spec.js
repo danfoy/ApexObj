@@ -1,35 +1,38 @@
 const { expect } = require('chai');
 const MockDate = require('mockdate');
-const Season = require('../classes/Season');
-const RotatingPlaylist = require('../classes/RotatingPlaylist');
-const ApexObj = require('../classes/ApexObj');
 
 
 describe('@RotatingPlaylist', function() {
 
-    const apexData = require('../data/seasons.json');
-    const season11PlaylistData = apexData.seasons[0].playlists[0];
-    const season11 = new Season(apexData.seasons[0]);
-    const season11BR = season11
+    const data = require('../data/seasons.json');
+    const apex = require('../');
+
+    const season11BRData = data.seasons.find(season => season.id === 11)
         .playlists.find(playlist => playlist.mode === 'Play Apex');
-    const season12 = new Season(apexData.seasons[1]);
-    const season12ControlData = apexData
+    const season11 = apex.seasons.find(season => season.id === 11);
+    const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
+
+    const season12 = apex.seasons.find(season => season.id === 12);
+    const season12ControlData = data
         .seasons.find(season => season.id === 12)
         .LTMs.find(playlist => playlist.mode === 'Control');
-    const season12Control = season12
-        .playlists.find(playlist => playlist.mode === 'Control');
+    const season12Control = season12.playlists.find(playlist => playlist.mode === 'Control');
 
 
     describe('.rotations property', function() {
-        it('.rotations property', function() {
+        it('returns an array', function() {
             expect(season11BR.rotations)
                 .to.be.an('array');
         });
+        it('returns the correct number of rotations', function() {
+            const totalRotations = season11BRData.maps.length * season11BRData.mapDurations.length;
+            expect(season11BR.rotations.length).to.equal(totalRotations);
+        });
     });
 
-    describe('.rotationBaseDate getter', function() {
+    describe('.rotationBaseTime pseudo property', function() {
         it('returns the baseTime if available', function() {
-            expect(season11BR.rotationBaseTime).to.eql(new Date(season11PlaylistData.baseTime));
+            expect(season11BR.rotationBaseTime).to.eql(new Date(season11BRData.baseTime));
         });
 
         it('returns the startTime if baseTime not provided', function() {
@@ -37,13 +40,13 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.totalDuration getter', function() {
+    describe('.playlistRotationsDuration pseudo property', function() {
         it('returns the total playlist duration', function() {
             expect(season11BR.playlistRotationsDuration).to.equal(1080 * 60 * 1000);
         });
     });
 
-    describe('.currentIndex getter', function() {
+    describe('.currentIndex pseudo property', function() {
 
         function check(date, index) {
             MockDate.set(date);
@@ -73,7 +76,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.currentMap getter', function() {
+    describe('.currentMap psuedo property', function() {
 
         it('returns null when out of season', function() {
             MockDate.set(new Date(season11BR.startTime.getTime() - 1000));
@@ -88,11 +91,11 @@ describe('@RotatingPlaylist', function() {
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration, startOverride) {
-                const startDate = startOverride ?? date;
+                const startDate = startOverride ?? date; // to check maps partway through rotations
                 MockDate.set(date);
                 const testMap = season11BR.currentMap;
                 const testStartTime = new Date(startDate);
-                const testEndTime = new Date( new Date(startDate).getTime() + (duration * 60 * 1000));
+                const testEndTime = new Date(testStartTime.getTime() + (duration * 60 * 1000));
 
                 // Map and duration properties can be tested simply
                 expect(testMap).to.include({
@@ -124,7 +127,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.nextMap getter', function() {
+    describe('.nextMap pseudo property', function() {
 
         it('returns null if after season end', function() {
             // After season ends

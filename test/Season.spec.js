@@ -8,19 +8,19 @@ const Season = require('../classes/Season');
 const SplitPlaylist = require('../classes/SplitPlaylist');
 const RotatingPlaylist = require('../classes/RotatingPlaylist');
 
-const season11Data = require('../data/seasons.json').seasons
-    .find(season => season.id == 11);
-const season11 = new Season(season11Data);
+const apex = require('../');
 
-const season12Data = require('../data/seasons.json').seasons
-    .find(season => season.id == 12)
-const season12 = new Season(season12Data);
+const season11 = apex.seasons.find(season => season.id === 11);
+const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
+const season11RankedBR = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
+
+const season12 = apex.seasons.find(season => season.id === 12);
 
 describe('@Season', function() {
 
     describe('.id property', function() {
         it('returns the season id as a Number', function() {
-            expect(season11.id).to.eql(11);
+            expect(season11.id).to.equal(11);
         });
     });
 
@@ -50,20 +50,19 @@ describe('@Season', function() {
 
     describe('.playlists.rotations', function() {
         it('returns an array', function() {
-            expect(season11.playlists[0].rotations)
-                .to.be.an('array');
+            expect(season11BR.rotations).to.be.an('array');
         });
     });
 
-    describe('.unranked.battleRoyale getter', function() {
+    describe('.unranked.battleRoyale pseudo property', function() {
         it('is an alias for unranked Battle Royale mode', function() {
-            expect(season11.unranked.battleRoyale).to.eql(season11.playlists[0]);
+            expect(season11.unranked.battleRoyale).to.eql(season11BR);
         });
     });
 
-    describe('.ranked.battleRoyale getter', function() {
+    describe('.ranked.battleRoyale pseudo property', function() {
         it('is an alias for ranked Battle Royale mode', function() {
-            expect(season11.ranked.battleRoyale).to.eql(season11.playlists[1]);
+            expect(season11.ranked.battleRoyale).to.eql(season11RankedBR);
         });
     });
 
@@ -76,7 +75,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.currentMaps getter', function() {
+    describe('.currentMaps pseudo property', function() {
         it('returns an array', function() {
             MockDate.set('2022-02-04T12:44:00Z');
             expect(season11.currentMaps).to.be.an('array');
@@ -106,7 +105,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.nextMaps computed property', function () {
+    describe('.nextMaps pseudo property', function () {
         it('returns null at end of season', function() {
             MockDate.set(season12.endTime);
             expect(season12.nextMaps).to.be.null;
@@ -120,7 +119,7 @@ describe('@Season', function() {
             MockDate.reset();
         });
 
-        it('filters out primary modes during takeovers', function() {
+        it('returns the replaced mode during takeovers', function() {
             MockDate.set('2022-02-14T16:00:00Z');
             expect(season12.nextMaps.filter(map => map.mode === "Play Apex"))
                 .to.have.length(1);
@@ -128,7 +127,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.currentLTMs computed property', function() {
+    describe('.currentLTMs pseudo property', function() {
         it('is null if there is not a current Limited Time Mode', function() {
             // No LTMs in season11 data
             MockDate.set(season11.startTime);
@@ -141,14 +140,14 @@ describe('@Season', function() {
             MockDate.reset();
         });
 
-        it('returns the current LTM playlist(s)', function() {
+        it('returns the correct number of current LTM playlist(s)', function() {
             MockDate.set(season12.startTime);
             expect(season12.currentLTMs).to.have.length(2);
             MockDate.reset();
         });
     });
 
-    describe('.currentTakeovers computed property', function() {
+    describe('.currentTakeovers pseudo property', function() {
         it('is null if there is not a current takeover LTM', function() {
             // No LTMs in season11 data
             MockDate.set(season11.startTime);
@@ -161,7 +160,7 @@ describe('@Season', function() {
             MockDate.reset();
         });
 
-        it('returns the current takeover LTM playlist(s)', function() {
+        it('returns the correct number of current takeover LTM playlist(s)', function() {
             MockDate.set(season12.startTime);
             expect(season12.currentTakeovers).to.have.length(1);
             MockDate.reset();
@@ -170,19 +169,13 @@ describe('@Season', function() {
 
     describe('.parsePlaylist(playlistData) method', function() {
         it('parses ranked playlists', function() {
-            const rankedPlaylist = season12.parsePlaylist(
-                season12Data.playlists.find(playlist => playlist.mode === "Ranked Leagues")
-            );
-            expect(rankedPlaylist instanceof SplitPlaylist).to.be.true;
-            expect(rankedPlaylist instanceof RotatingPlaylist).to.be.false;
+            expect(season11RankedBR instanceof SplitPlaylist).to.be.true;
+            expect(season11RankedBR instanceof RotatingPlaylist).to.be.false;
         });
 
         it('parses unranked playlists', function() {
-            const unrankedPlaylist = season12.parsePlaylist(
-                season12Data.playlists.find(playlist => playlist.mode === "Play Apex")
-            );
-            expect(unrankedPlaylist instanceof RotatingPlaylist).to.be.true;
-            expect(unrankedPlaylist instanceof SplitPlaylist).to.be.false;
+            expect(season11BR instanceof RotatingPlaylist).to.be.true;
+            expect(season11BR instanceof SplitPlaylist).to.be.false;
         });
     });
 
@@ -247,7 +240,6 @@ describe('@Season', function() {
         it('returns correct maps for season 12', function() {
 
             function check(date, map, duration) {
-                // console.log(season12.getMapsByDate(date));
                 return expect(season12.getMapsByDate(date)
                     .filter(map => map.mode === 'Play Apex'))
                     .to.contain.something.like({map: map, duration: duration * 60 * 1000});
@@ -262,7 +254,7 @@ describe('@Season', function() {
             check('2022-02-16T23:00:00Z',   "Storm Point",      90);
         });
 
-        it('returns correct values for Season 12', function() {
+        it('returns correct LTM values for Season 12', function() {
 
             // Shows the Control LTM when in date
             expect(season12.getMapsByDate('2022-02-14T01:00:00Z')
