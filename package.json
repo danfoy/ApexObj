@@ -19,6 +19,7 @@
   ],
   "author": "Dan Foy",
   "license": "ISC",
+  "homepage": "https://danfoy.github.io/ApexObj",
   "repository": {
     "type": "git",
     "url": "https://github.com/danfoy/ApexObj.git"
