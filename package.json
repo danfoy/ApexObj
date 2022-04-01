@@ -11,7 +11,7 @@
     "watch": "nodemon index.js",
     "test": "npx mocha",
     "dev": "npx mocha --watch",
-    "docs:": "npx jsdoc -c ./docs/conf.js"
+    "docs": "npx jsdoc -c ./docs/conf.js"
   },
   "keywords": [
     "apex",
