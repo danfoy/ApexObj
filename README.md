@@ -2,21 +2,22 @@
 
 A filterable, queryable object providing data about the game [Apex Legends](https://www.ea.com/games/apex-legends), including:
 
-[x] Start and end times for seasons, playlists, and limited-time modes
-[x] Current and next maps per season or playlist
-[x] Active maps for a given date
+- Start and end times for seasons, playlists, and limited-time modes
+- Current and next maps per season or playlist
+- Active maps for a given date
 
 Still to come:
 
-[ ] Support for Arenas mode
-[ ] Information on legends
-[ ] Random mode/legend generators
+- Support for Arenas playlists
+- Crafting rotations
+- Information on legends
+- Random mode/legend generators
 
 Full documentation is available at [https://danfoy.github.io/ApexObj](https://danfoy.github.io/ApexObj).
 
 ## Beta information
 
-There may be frequent breaking changes before the project reaches the v1 milestone.
+There may be breaking changes before the project reaches the v1 milestone.
 
 ## Basic usage
 
