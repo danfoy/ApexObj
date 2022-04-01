@@ -1,7 +1,7 @@
 {
   "name": "apexobj",
   "version": "0.8.2",
-  "description": "Apex Legends data in Object form",
+  "description": "Apex Legends data in Object form. Synchronous, performant and completely local - has no runtime dependencies and doesn't query mozambiquehe.re or any other external APIs.",
   "main": "index.js",
   "directories": {
     "test": "test",
@@ -15,7 +15,9 @@
   },
   "keywords": [
     "apex",
-    "legends"
+    "apex legends",
+    "respawn",
+    "mozambique"
   ],
   "author": "Dan Foy",
   "license": "ISC",
