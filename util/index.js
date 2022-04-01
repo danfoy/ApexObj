@@ -17,7 +17,7 @@ module.exports.isDate = isDate;
  * Date. Returns a new Date set to the supplied time if parseable into a Date
  * object. Throws an error if none of the above are applicable.
  *
- * @param {Date|ISO date string} target
+ * @param {Date|dateString} [target=now] the date to target
  * @returns {Date|Error}
  */
 function parseDate(target) {
