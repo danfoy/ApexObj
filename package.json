@@ -4,12 +4,14 @@
   "description": "Apex Legends data in Object form",
   "main": "index.js",
   "directories": {
-    "test": "test"
+    "test": "test",
+    "docs": "docs"
   },
   "scripts": {
     "watch": "nodemon index.js",
     "test": "npx mocha",
-    "dev": "npx mocha --watch"
+    "dev": "npx mocha --watch",
+    "docs:": "npx jsdoc -c ./docs/conf.js"
   },
   "keywords": [
     "apex",
@@ -22,9 +24,11 @@
     "url": "https://github.com/danfoy/ApexObj.git"
   },
   "devDependencies": {
+    "better-docs": "^2.7.2",
     "chai": "^4.3.4",
     "chai-like": "^1.1.1",
     "chai-things": "^0.2.0",
+    "jsdoc": "^3.6.10",
     "mocha": "^8.1.3",
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.15"
