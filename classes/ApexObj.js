@@ -2,6 +2,7 @@ const { parseDate } = require('../util');
 const Playlist = require('./Playlist');
 const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
 const Season = require('./Season');
+const Legend = require('./Legend');
 
 /**
  * This is the base class for the module, and the first port of call for making
@@ -23,9 +24,11 @@ class ApexObj {
      * provided.
      *
      * @param {object} seasonsData data parsed from `/data/seasons.json`
+     * @param {array} legendsData data parsed from `/data/legends.json`
      */
-    constructor(seasonsData) {
-        if (!seasonsData) throw new Error('No Apex Legends data provided');
+    constructor(seasonsData, legendsData) {
+        if (!seasonsData) throw new Error('No Seasons data provided');
+        if (!legendsData) throw new Error('No Legends data provided');
         const { seasons } = seasonsData;
 
         /**
@@ -33,6 +36,12 @@ class ApexObj {
          * @type {Season[]}
          */
         this.seasons = seasons.map(season => new Season(season));
+
+        /**
+         * Array of Legends
+         * @type {Legend[]}
+         */
+        this.legends = legendsData.map(legendsData => new Legend(legendsData));
     };
 
     /**

@@ -1,5 +1,6 @@
 const ApexObj = require('./classes/ApexObj');
-const data = require('./data/seasons.json');
+const seasonData = require('./data/seasons.json');
+const legendData = require('./data/legends.json');
 
 /**
  * The module exports a new instance of ApexObj. This causes the module to act
@@ -11,4 +12,4 @@ const data = require('./data/seasons.json');
  * an external JSON file. Exporting a faux singleton massively cuts down on
  * file reads and blocking.
  */
-module.exports = new ApexObj(data);
+module.exports = new ApexObj(seasonData, legendData);

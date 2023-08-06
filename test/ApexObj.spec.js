@@ -4,16 +4,21 @@ chai.use(require('chai-like'));
 chai.use(require('chai-things'));
 const MockDate = require('mockdate');
 
-const data = require('../data/seasons.json');
+const seasonData = require('../data/seasons.json');
+const legendData = require('../data/legends.json');
 const apex = require('../');
 
-const season11data = data.seasons.find(season => season.id === 11);
+const season11data = seasonData.seasons.find(season => season.id === 11);
 const season11 = apex.seasons.find(season => season.id === 11);
 
-const season12data = data.seasons.find(season => season.id === 12);
+const season12data = seasonData.seasons.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
 
 describe('@ApexObj', function() {
+
+    it('throws when Season data not provided', function() {
+
+    });
 
     describe('.seasons', function() {
 
@@ -34,6 +39,12 @@ describe('@ApexObj', function() {
             expect(season12.playlists).to.be.an('array');
         });
 
+    });
+
+    describe('.legends property', function() {
+        it('is an array', function() {
+            expect(apex.legends).to.be.an('array');
+        });
     });
 
     describe('.currentSeason psuedo property', function() {
