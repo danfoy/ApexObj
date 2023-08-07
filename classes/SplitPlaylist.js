@@ -1,6 +1,6 @@
-const { parseDate } = require('../util');
-const Playlist = require('./Playlist');
-const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
+import { parseDate } from '../util/index.js';
+import Playlist from './Playlist.js';
+import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 
 /**
  * An implementation for playlists which have two maps and change at a
@@ -101,4 +101,4 @@ class SplitPlaylist extends Playlist {
 
 };
 
-module.exports = SplitPlaylist;
+export default SplitPlaylist;

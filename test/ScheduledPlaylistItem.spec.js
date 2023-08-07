@@ -9,13 +9,14 @@ I should rewrite these.
 
 // TODO: rewrite unit tests as integration tests
 
-const { expect } = require('chai');
-const MockDate = require('mockdate');
-const RotatingPlaylist = require('../classes/RotatingPlaylist');
-const PlaylistItem = require('../classes/PlaylistItem');
-const ScheduledPlaylistItem = require('../classes/ScheduledPlaylistItem');
+import { expect } from 'chai';
+import { set, reset } from 'mockdate';
+import RotatingPlaylist from '../classes/RotatingPlaylist.js';
+import PlaylistItem from '../classes/PlaylistItem.js';
+import ScheduledPlaylistItem from '../classes/ScheduledPlaylistItem.js';
+import seasons from '../data/seasons.json' assert { type: 'json' };
 
-const seasonData = require('../data/seasons.json').seasons[0];
+const seasonData = seasons.seasons[0];
 const mockSeasonObj = {mode: 'br', ranked: false};
 
 
@@ -42,17 +43,17 @@ describe('@ScheduledPlaylistItem', function() {
             function check(date, mapDuration) {
 
                 // Time remaining at start of rotation
-                MockDate.set(date);
+                set(date);
                 const timeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
                 expect(timeRemaining).to.equal(mapDuration * 1000 * 60)
-                MockDate.reset();
+                reset();
 
                 // Time remaining half an hour into rotation
                 const halfHourOffset = new Date(new Date(date).getTime() + (30 * 60 * 1000));
-                MockDate.set(halfHourOffset);
+                set(halfHourOffset);
                 const offsetTimeRemaining = new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining;
                 expect(offsetTimeRemaining).to.equal( (mapDuration * 1000 * 60) - (30 * 60 * 1000));
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-11T12:00:00Z', 60  )
@@ -71,10 +72,10 @@ describe('@ScheduledPlaylistItem', function() {
         it('does not return negative values', function() {
             // Regression test for known example where .timeRemaining was negative
             function check(date) {
-                MockDate.set(date);
+                set(date);
                 expect(new RotatingPlaylist(seasonData.playlists[0], seasonData).currentMap.timeRemaining)
                     .to.be.gt(0);
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-17T04:10:00Z');

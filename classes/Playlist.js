@@ -1,4 +1,4 @@
-const { parseDate } = require('../util');
+import { parseDate } from '../util/index.js';
 
 /**
  * Base Playlist class, used as a foundation for the more specialised playlist
@@ -98,4 +98,4 @@ class Playlist {
 
 };
 
-module.exports = Playlist;
+export default Playlist;

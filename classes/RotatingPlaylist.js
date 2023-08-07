@@ -1,7 +1,7 @@
-const { parseDate, withinDates } = require('../util');
-const Playlist = require('./Playlist');
-const PlaylistItem = require('./PlaylistItem');
-const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
+import { parseDate, withinDates } from '../util/index.js';
+import Playlist from './Playlist.js';
+import PlaylistItem from './PlaylistItem.js';
+import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 
 /**
  * Playlist class for modes which rotate through a collection of maps at set
@@ -200,4 +200,4 @@ class RotatingPlaylist extends Playlist {
     };
 };
 
-module.exports = RotatingPlaylist;
+export default RotatingPlaylist;

@@ -1,7 +1,7 @@
-const { parseDate } = require('../util');
+import { parseDate } from '../util/index.js';
 
-const Playlist = require('./Playlist');
-const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
+import Playlist from './Playlist.js';
+import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 
 /**
  * Playlist for modes with a single map (e.g. [Shadow Royale]{@link https://apexlegends.fandom.com/wiki/Shadow_Royale}).
@@ -75,4 +75,4 @@ class SingleItemPlaylist extends Playlist {
     };
 };
 
-module.exports = SingleItemPlaylist;
+export default SingleItemPlaylist;

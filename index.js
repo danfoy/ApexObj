@@ -1,8 +1,8 @@
-const ApexObj = require('./classes/ApexObj');
-const seasonData = require('./data/seasons.json');
-const legendData = require('./data/legends.json');
+import ApexObj from './classes/ApexObj.js';
+import seasonData from './data/seasons.json' assert { type: 'json' };
+import legendData from './data/legends.json' assert { type: 'json' };
 
-/**
+/**w
  * The module exports a new instance of ApexObj. This causes the module to act
  * like a singleton due to the way nodejs caching works - as long as every
  * consumer of this module within a given package is using the same version of
@@ -12,4 +12,7 @@ const legendData = require('./data/legends.json');
  * an external JSON file. Exporting a faux singleton massively cuts down on
  * file reads and blocking.
  */
-module.exports = new ApexObj(seasonData, legendData);
+export default new ApexObj(seasonData, legendData);
+
+const apexObj = new ApexObj(seasonData, legendData);
+console.dir(apexObj.legends);

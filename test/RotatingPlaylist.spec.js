@@ -1,11 +1,11 @@
-const { expect } = require('chai');
-const MockDate = require('mockdate');
+import { expect } from 'chai';
+import { set, reset } from 'mockdate';
+import apex from '../index.js';
+import data from '../data/seasons.json' assert { type: 'json' };
+
 
 
 describe('@RotatingPlaylist', function() {
-
-    const data = require('../data/seasons.json');
-    const apex = require('../');
 
     const season11BRData = data.seasons.find(season => season.id === 11)
         .playlists.find(playlist => playlist.mode === 'Play Apex');
@@ -49,10 +49,10 @@ describe('@RotatingPlaylist', function() {
     describe('.currentIndex pseudo property', function() {
 
         function check(date, index) {
-            MockDate.set(date);
+            set(date);
             expect(season11BR.currentIndex)
             .to.equal(index);
-            MockDate.reset();
+            reset();
         };
 
         it('returns the current playlist index', function() {
@@ -79,20 +79,20 @@ describe('@RotatingPlaylist', function() {
     describe('.currentMap psuedo property', function() {
 
         it('returns null when out of season', function() {
-            MockDate.set(new Date(season11BR.startTime.getTime() - 1000));
+            set(new Date(season11BR.startTime.getTime() - 1000));
             expect(season11BR.currentMap).to.be.null;
-            MockDate.reset();
+            reset();
 
-            MockDate.set(new Date(season11BR.endTime.getTime() + 1000));
+            set(new Date(season11BR.endTime.getTime() + 1000));
             expect(season11BR.currentMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
 
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration, startOverride) {
                 const startDate = startOverride ?? date; // to check maps partway through rotations
-                MockDate.set(date);
+                set(date);
                 const testMap = season11BR.currentMap;
                 const testStartTime = new Date(startDate);
                 const testEndTime = new Date(testStartTime.getTime() + (duration * 60 * 1000));
@@ -107,7 +107,7 @@ describe('@RotatingPlaylist', function() {
                 expect(testMap.startTime).to.eql(testStartTime);
                 expect(testMap.endTime).to.eql(testEndTime);
 
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
@@ -132,30 +132,30 @@ describe('@RotatingPlaylist', function() {
         it('returns null if after season end', function() {
             // After season ends
             const afterSeason = new Date(season11BR.endTime.getTime() + 1000);
-            MockDate.set(afterSeason);
+            set(afterSeason);
             expect(season11BR.nextMap).to.be.null;
-            MockDate.reset();
+            reset();
 
             // during the last season rotation
             const duringLastRotation = new Date(season11BR.endTime.getTime() - (1000 * 60 * 30));
-            MockDate.set(duringLastRotation);
+            set(duringLastRotation);
             expect(season11BR.nextMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
 
         it('returns the first rotation if before season start', function() {
-            MockDate.set(season11BR.startTime - 1000);
+            set(season11BR.startTime - 1000);
             expect(season11BR.nextMap).to.eql(season11BR.getMapByDate(season11BR.startTime));
-            MockDate.reset()
+            reset()
         });
 
         it("provides correct values for Season 11 'Escape'", function() {
 
             function check(date, mapName, duration) {
-                MockDate.set(date);
+                set(date);
                 expect(season11BR.nextMap).to.include({map: mapName, duration: duration * 60 * 1000});
                 expect(season11BR.nextMap.startTime).to.eql(season11BR.currentMap.endTime);
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-11T12:00:00Z',   "Storm Point",  120 )
@@ -246,9 +246,9 @@ describe('@RotatingPlaylist', function() {
         });
 
         it('uses the current date if none provided', function() {
-            MockDate.set('2022-01-11T12:00:00Z');
+            set('2022-01-11T12:00:00Z');
             expect(season11BR.getMapByDate()).to.include({map: "World's Edge", duration: 60 * 60 * 1000});
-            MockDate.reset();
+            reset();
         });
 
         it('returns null if date out of bounds', function() {
@@ -290,10 +290,10 @@ describe('@RotatingPlaylist', function() {
         });
 
         it('passes regression tests', function() {
-            MockDate.set('2022-02-08T01:00:00Z')
+            set('2022-02-08T01:00:00Z')
             expect(season11BR.getMapByDate().timeRemaining)
                 .to.equal(30 * 60 * 1000);
-            MockDate.reset();
+            reset();
         });
     });
 });

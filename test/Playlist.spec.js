@@ -1,9 +1,8 @@
-const { expect } = require('chai');
-const RotatingPlaylist = require('../classes/RotatingPlaylist');
+import { expect } from 'chai';
+import RotatingPlaylist from '../classes/RotatingPlaylist.js';
+import apex from '../index.js';
 
 describe('@Playlist', function() {
-
-    const apex = require('../');
 
     const season11 = apex.seasons.find(season => season.id === 11);
     const season11BR = season11.playlists.find(playlist =>  playlist.mode === 'Play Apex');

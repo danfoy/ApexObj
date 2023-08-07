@@ -1,15 +1,15 @@
-const { expect } = require('chai');
-const MockDate = require('mockdate');
+import { expect } from 'chai';
+import { set, reset } from 'mockdate';
 
-const SingleItemPlaylist = require('../classes/SingleItemPlaylist');
-const Season = require('../classes/Season');
+import SingleItemPlaylist from '../classes/SingleItemPlaylist.js';
+import Season from '../classes/Season.js';
 
-const data = require('../data/seasons.json');
-const apex = require('../');
+import apex from '../index.js';
+import seasonData from '../data/seasons.json' assert { type: 'json' };
 
-const season12Data = data.seasons.find(season => season.id === 12);
+// const season12Data = seasonData.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
-const olympus247Data = season12Data.LTMs.find(ltm => ltm.mode === "Olympus 24/7");
+// const olympus247Data = season12Data.LTMs.find(ltm => ltm.mode === "Olympus 24/7");
 const olympus247 = season12.playlists.find(playlist => playlist.mode === 'Olympus 24/7');
 
 describe('@SingleItemPlaylist', function() {
@@ -21,35 +21,35 @@ describe('@SingleItemPlaylist', function() {
 
     describe('.currentMap pseudo property', function() {
         it('returns the map when within date bounds', function() {
-            MockDate.set(olympus247.startTime + 30);
+            set(olympus247.startTime + 30);
             expect(olympus247.currentMap.map).to.equal('Olympus');
-            MockDate.reset();
+            reset();
         });
 
         it('returns null when outside of date bounds', function() {
             // Before start time
-            MockDate.set(olympus247.startTime.getTime() - 30);
+            set(olympus247.startTime.getTime() - 30);
             expect(olympus247.currentMap).to.be.null;
-            MockDate.reset();
+            reset();
 
             // After end time
-            MockDate.set(olympus247.endTime.getTime() + 4000);
+            set(olympus247.endTime.getTime() + 4000);
             expect(olympus247.currentMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.nextMap pseudo property', function() {
         it('returns the map when before playlist startTime', function() {
-            MockDate.set(olympus247.startTime - 30);
+            set(olympus247.startTime - 30);
             expect(olympus247.nextMap.map).to.equal('Olympus');
-            MockDate.reset();
+            reset();
         });
 
         it('returns null if after playlist startTime', function() {
-            MockDate.set(olympus247.startTime + 30);
+            set(olympus247.startTime + 30);
             expect(olympus247.nextMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
     });
 
@@ -59,9 +59,9 @@ describe('@SingleItemPlaylist', function() {
         });
 
         it('uses the current date if date not provided', function() {
-            MockDate.set(olympus247.startTime);
+            set(olympus247.startTime);
             const implicitMap = olympus247.getMapByDate();
-            MockDate.reset();
+            reset();
             const explicitMap = olympus247.getMapByDate(olympus247.startTime);
             expect(implicitMap).to.eql(explicitMap);
         });

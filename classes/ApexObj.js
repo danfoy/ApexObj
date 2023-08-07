@@ -1,8 +1,8 @@
-const { parseDate } = require('../util');
-const Playlist = require('./Playlist');
-const ScheduledPlaylistItem = require('./ScheduledPlaylistItem');
-const Season = require('./Season');
-const Legend = require('./Legend');
+import { parseDate } from '../util/index.js';
+import Playlist from './Playlist.js';
+import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
+import Season from './Season.js';
+import Legend from './Legend.js';
 
 /**
  * This is the base class for the module, and the first port of call for making
@@ -152,4 +152,4 @@ class ApexObj {
     };
 };
 
-module.exports = ApexObj;
+export default ApexObj;

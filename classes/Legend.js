@@ -5,4 +5,4 @@ class Legend {
     };
 };
 
-module.exports = Legend;
+export default Legend;

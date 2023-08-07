@@ -1,8 +1,8 @@
-const { expect } = require('chai');
+import { expect } from 'chai';
+import { isDate, parseDate, withinDates, randomFrom } from '../util/index.js';
 
 describe('Utility library', function() {
     describe('.isDate(target) function', function() {
-        const { isDate } = require('../util');
 
         it('returns true when target is an instance of Date', function() {
             expect(isDate(new Date())).to.be.true;
@@ -16,7 +16,6 @@ describe('Utility library', function() {
     });
 
     describe('.parseDate(target) function', function() {
-        const { parseDate } = require('../util');
 
         it('returns a new Date if none supplied', function() {
             expect(parseDate()).to.eql(new Date());
@@ -39,8 +38,6 @@ describe('Utility library', function() {
     });
 
     describe('withinDates function', function(){
-
-        const { withinDates } = require('../util');
 
         it('requires {startTime, endTime} argument', function() {
             expect(()=>withinDates({endTime: new Date()})).to.throw();
@@ -80,8 +77,6 @@ describe('Utility library', function() {
     });
 
     describe('.randomFrom(list, quantity, options) function', function() {
-
-        const { randomFrom } = require('../util');
 
         it('throws when input is not an array', function() {
             expect(()=>randomFrom({sampletype: "object"})).to.throw;

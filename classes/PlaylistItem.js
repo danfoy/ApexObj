@@ -88,4 +88,4 @@ class PlaylistItem {
     };
 };
 
-module.exports = PlaylistItem;
+export default PlaylistItem;

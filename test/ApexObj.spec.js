@@ -1,17 +1,18 @@
-const chai = require('chai');
-const { expect } = chai;
-chai.use(require('chai-like'));
-chai.use(require('chai-things'));
-const MockDate = require('mockdate');
+import { use, expect } from 'chai';
+import chaiLike from 'chai-like';
+import chaiThings from 'chai-things';
+use(chaiLike);
+use(chaiThings);
+import { set, reset } from 'mockdate';
 
-const seasonData = require('../data/seasons.json');
-const legendData = require('../data/legends.json');
-const apex = require('../');
+import seasons from '../data/seasons.json' assert { type: 'json' };
 
-const season11data = seasonData.seasons.find(season => season.id === 11);
+import apex from '../index.js';
+
+const season11data = seasons.seasons.find(season => season.id === 11);
 const season11 = apex.seasons.find(season => season.id === 11);
 
-const season12data = seasonData.seasons.find(season => season.id === 12);
+const season12data = seasons.seasons.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
 
 describe('@ApexObj', function() {
@@ -50,9 +51,9 @@ describe('@ApexObj', function() {
     describe('.currentSeason psuedo property', function() {
         it('returns null if no season currently active', function() {
             function check(date) {
-                MockDate.set(date);
+                set(date);
                 expect(apex.currentSeason).to.be.null;
-                MockDate.reset();
+                reset();
             };
 
             check('2018-01-01T00:00:00Z');
@@ -61,9 +62,9 @@ describe('@ApexObj', function() {
 
         it('returns the current season', function() {
             function check(date, name) {
-                MockDate.set(date);
+                set(date);
                 expect(apex.currentSeason.name).to.equal(name);
-                MockDate.reset();
+                reset();
             };
 
             check('2021-11-10T00:00:00Z', 'Escape');
@@ -73,25 +74,25 @@ describe('@ApexObj', function() {
 
     describe('.nextSeason pseudo property', function() {
         it('returns the next season if data is available', function() {
-            MockDate.set(season11.startTime);
+            set(season11.startTime);
             expect(apex.nextSeason).to.eql(season12);
-            MockDate.reset()
+            reset()
         });
 
         it('is null if next season data not available', function() {
             const finalSeason = [...apex.seasons].pop();
-            MockDate.set(finalSeason.startTime);
+            set(finalSeason.startTime);
             expect(apex.nextSeason).to.be.null;
-            MockDate.reset()
+            reset()
         });
     });
 
     describe('.currentMaps pseudo property', function() {
         it('returns null if no season currently active', function() {
             function check(date) {
-                MockDate.set(date);
+                set(date);
                 expect(apex.currentMaps).to.be.null;
-                MockDate.reset();
+                reset();
             };
 
             check('2018-01-01T00:00:00Z');
@@ -100,10 +101,10 @@ describe('@ApexObj', function() {
 
         it('provides correct values for Season 11', function() {
             function check(date, map, duration) {
-                MockDate.set(date);
+                set(date);
                 expect(apex.currentMaps)
                     .to.contain.something.like({map: map, duration: duration * 60 * 1000});
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
@@ -123,41 +124,41 @@ describe('@ApexObj', function() {
     describe('.nextMaps pseudo property', function() {
         it('returns null if there is no next season', function() {
             const finalSeason = [...apex.seasons].pop();
-            MockDate.set(finalSeason.endTime);
+            set(finalSeason.endTime);
             expect(apex.nextMaps).to.be.null;
-            MockDate.reset()
+            reset()
         });
 
         it('returns null if there are no next maps', function() {
-            MockDate.set(season11.endTime - 1000);
+            set(season11.endTime - 1000);
             expect(apex.nextMaps).to.be.null;
-            MockDate.reset()
+            reset()
         });
 
         it('is equal to .currentSeason.nextMaps at the season start', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(apex.nextMaps).to.eql(season12.nextMaps);
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.currentLTMs pseudo property', function() {
         it('is an alias for .currentSeason.currentLTMs', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(apex.currentLTMs)
                 .to.have.length(2)
                 .and.to.eql(season12.currentLTMs);
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.currentTakeovers pseudo property', function() {
         it('is an alias for .currentSeason.currentTakeovers', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(apex.currentTakeovers)
                 .to.have.length(1)
                 .and.to.eql(season12.currentTakeovers);
-            MockDate.reset();
+            reset();
         });
     });
 
@@ -167,9 +168,9 @@ describe('@ApexObj', function() {
         });
 
         it('uses the current date if none provided', function() {
-            MockDate.set('2022-02-05T02:00:00Z');
+            set('2022-02-05T02:00:00Z');
             expect(apex.getSeasonByDate().id).to.equal(11);
-            MockDate.reset();
+            reset();
         });
 
         it('returns correct seasons at known dates', function() {

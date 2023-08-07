@@ -4,12 +4,11 @@
  * @param {*} target
  * @returns {boolean}
  */
-function isDate(target) {
+export function isDate(target) {
     return target && // Check date is truthy
         Object.prototype.toString.call(target) === '[object Date]' && // Check target is date object
         target != 'Invalid Date' // Check target is not 'inavlid date';
 };
-module.exports.isDate = isDate;
 
 /**
  * Get a date object or an error. Creates a new Date() at calltime if no target
@@ -20,7 +19,7 @@ module.exports.isDate = isDate;
  * @param {Date|dateString} [target=now] the date to target
  * @returns {Date|Error}
  */
-function parseDate(target) {
+export function parseDate(target) {
 
     if (!target) return new Date();
     if (isDate(target)) return target;
@@ -28,7 +27,6 @@ function parseDate(target) {
     if (isDate(newDate)) return newDate;
     throw new Error(`Unable to parse date from '${target}'`);
 };
-module.exports.parseDate = parseDate;
 
 /**
  * Check whether a supplied date (or the current date if none specified) is
@@ -40,7 +38,7 @@ module.exports.parseDate = parseDate;
  * @param {Date} target the date to target, current date if not provided
  * @returns {Boolean} whether target is between supplied dates
  */
-function withinDates({startTime, endTime}, target = new Date()) {
+export function withinDates({startTime, endTime}, target = new Date()) {
     if (!startTime) throw new Error('startTime required, received', startTime);
     if (!endTime) throw new Error('endTime required, received', endTime);
     const start = parseDate(startTime);
@@ -50,7 +48,6 @@ function withinDates({startTime, endTime}, target = new Date()) {
     if (_target >= start && _target < end) return true;
     return false;
 };
-module.exports.withinDates = withinDates;
 
 /**
  * Select [quantity] items from [array]. By default returns a string in single
@@ -65,7 +62,7 @@ module.exports.withinDates = withinDates;
  *     }]
  * @returns {string|array}
  */
-function randomFrom(
+export function randomFrom(
     source,
     quantity = 1,
     options = {
@@ -96,4 +93,3 @@ function randomFrom(
     return selectedEntries;
 
 };
-module.exports.randomFrom = randomFrom;

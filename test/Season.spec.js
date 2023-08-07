@@ -1,14 +1,15 @@
-const chai = require('chai');
-const { expect } = chai;
-chai.use(require('chai-like'));
-chai.use(require('chai-things'));
-const MockDate = require('mockdate');
-const { isDate } = require('../util');
-const Season = require('../classes/Season');
-const SplitPlaylist = require('../classes/SplitPlaylist');
-const RotatingPlaylist = require('../classes/RotatingPlaylist');
+import { use, expect } from 'chai';
+import chaiLike from 'chai-like';
+import chaiThings from 'chai-things';
+use(chaiLike);
+use(chaiThings);
+import { set, reset } from 'mockdate';
+import { isDate } from '../util/index.js';
+import Season from '../classes/Season.js';
+import SplitPlaylist from '../classes/SplitPlaylist.js';
+import RotatingPlaylist from '../classes/RotatingPlaylist.js';
 
-const apex = require('../');
+import apex from '../index.js';
 
 const season11 = apex.seasons.find(season => season.id === 11);
 const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
@@ -68,27 +69,27 @@ describe('@Season', function() {
 
     describe('.currentPlaylists pseudo property', function() {
         it('aliases .getPlaylistsByDate(<current Date>)', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(season12.currentPlaylists)
                 .to.eql(season12.getPlaylistsByDate(season12.startTime));
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.currentMaps pseudo property', function() {
         it('returns an array', function() {
-            MockDate.set('2022-02-04T12:44:00Z');
+            set('2022-02-04T12:44:00Z');
             expect(season11.currentMaps).to.be.an('array');
-            MockDate.reset();
+            reset();
         });
 
         it('returns correct results for Season 11', function() {
 
             function check(date, map, duration) {
-                MockDate.set(date);
+                set(date);
                 expect(season11.currentMaps)
                     .to.contain.something.like({map: map, duration: duration * 60 * 1000});
-                MockDate.reset();
+                reset();
             };
 
             check('2022-01-11T12:00:00Z',   "World's Edge", 60  )
@@ -107,63 +108,63 @@ describe('@Season', function() {
 
     describe('.nextMaps pseudo property', function () {
         it('returns null at end of season', function() {
-            MockDate.set(season12.endTime);
+            set(season12.endTime);
             expect(season12.nextMaps).to.be.null;
-            MockDate.reset()
+            reset()
         });
 
         it('returns an array without null elements if data available', function() {
-            MockDate.set('2022-02-14T16:00:00Z');
+            set('2022-02-14T16:00:00Z');
             expect(season12.nextMaps).to.be.an('array');
             expect(season12.nextMaps).to.not.include(null);
-            MockDate.reset();
+            reset();
         });
 
         it('returns the replaced mode during takeovers', function() {
-            MockDate.set('2022-02-14T16:00:00Z');
+            set('2022-02-14T16:00:00Z');
             expect(season12.nextMaps.filter(map => map.mode === "Play Apex"))
                 .to.have.length(1);
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.currentLTMs pseudo property', function() {
         it('is null if there is not a current Limited Time Mode', function() {
             // No LTMs in season11 data
-            MockDate.set(season11.startTime);
+            set(season11.startTime);
             expect(season11.currentLTMs).to.be.null;
-            MockDate.reset();
+            reset();
 
             // No LTM 3 weeks into season 12
-            MockDate.set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
+            set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
             expect(season12.currentLTMs).to.be.null;
-            MockDate.reset();
+            reset();
         });
 
         it('returns the correct number of current LTM playlist(s)', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(season12.currentLTMs).to.have.length(2);
-            MockDate.reset();
+            reset();
         });
     });
 
     describe('.currentTakeovers pseudo property', function() {
         it('is null if there is not a current takeover LTM', function() {
             // No LTMs in season11 data
-            MockDate.set(season11.startTime);
+            set(season11.startTime);
             expect(season11.currentTakeovers).to.be.null;
-            MockDate.reset();
+            reset();
 
             // No LTM 3 weeks into season 12
-            MockDate.set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
+            set(season12.startTime.getTime() + (1000 * 60 * 60 * 24 * 7 * 3));
             expect(season12.currentTakeovers).to.be.null;
-            MockDate.reset();
+            reset();
         });
 
         it('returns the correct number of current takeover LTM playlist(s)', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(season12.currentTakeovers).to.have.length(1);
-            MockDate.reset();
+            reset();
         });
     });
 
@@ -186,10 +187,10 @@ describe('@Season', function() {
         });
 
         it('uses the current date if none provided', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(season12.getPlaylistsByDate())
                 .to.eql(season12.getPlaylistsByDate(season12.startTime));
-            MockDate.reset();
+            reset();
         });
 
         it('returns correct results for season 12', function() {
@@ -204,10 +205,10 @@ describe('@Season', function() {
     describe('.getMapsByDate() method', function() {
 
         it('uses the current date if none provided', function() {
-            MockDate.set(season12.startTime);
+            set(season12.startTime);
             expect(season12.getMapsByDate())
                 .to.eql(season12.getMapsByDate(season12.startTime));
-            MockDate.reset()
+            reset()
         });
 
         it('returns null if outside season date boundaries', function() {

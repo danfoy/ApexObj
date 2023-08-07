@@ -9,10 +9,11 @@ I should rewrite these.
 
 // TODO: rewrite unit tests as integration tests
 
-const { expect } = require('chai');
-const PlaylistItem = require('../classes/PlaylistItem');
+import { expect } from 'chai';
+import PlaylistItem from '../classes/PlaylistItem.js';
+import apex from '../index.js';
 
-const apex = require('../');
+import seasons from '../data/seasons.json' assert { type: 'json' };
 
 const season11 = apex.seasons.find(season => season.id === 11);
 const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');

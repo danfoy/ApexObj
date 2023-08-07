@@ -1,9 +1,9 @@
-const { parseDate, withinDates } = require('../util');
-const RotatingPlaylist = require('./RotatingPlaylist');
-const SplitPlaylist = require('./SplitPlaylist');
-const SingleItemPlaylist = require('./SingleItemPlaylist');
-const PlaylistItem = require('./PlaylistItem');
-const Playlist = require('./Playlist');
+import { parseDate, withinDates } from '../util/index.js';
+import RotatingPlaylist from './RotatingPlaylist.js';
+import SplitPlaylist from './SplitPlaylist.js';
+import SingleItemPlaylist from './SingleItemPlaylist.js';
+import PlaylistItem from './PlaylistItem.js';
+import Playlist from './Playlist.js';
 
 /** Represents a Apex Legends season. */
 class Season {
@@ -256,4 +256,4 @@ class Season {
     };
 };
 
-module.exports = Season;
+export default Season;

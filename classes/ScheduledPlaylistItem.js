@@ -1,5 +1,5 @@
-const PlaylistItem = require('./PlaylistItem');
-const { parseDate } = require('../util');
+import PlaylistItem from './PlaylistItem.js';
+import { parseDate } from '../util/index.js';
 
 /**
  * A {@link PlaylistItem} with a designated start and end time.
@@ -44,4 +44,4 @@ class ScheduledPlaylistItem extends PlaylistItem {
     };
 };
 
-module.exports = ScheduledPlaylistItem;
+export default ScheduledPlaylistItem;

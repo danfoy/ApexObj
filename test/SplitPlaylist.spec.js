@@ -1,10 +1,9 @@
-const { expect } = require('chai');
-const MockDate = require('mockdate');
-const { parseDate } = require('../util');
+import { expect } from 'chai';
+import { set, reset } from 'mockdate';
+import { parseDate } from '../util/index.js';
+import apex from '../index.js';
 
 describe('@SplitPlaylist', function() {
-
-    const apex = require('../');
 
     const season11 = apex.seasons.find(season => season.id === 11);
     const season11RankedBR = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
@@ -30,9 +29,9 @@ describe('@SplitPlaylist', function() {
 
         it('returns null if outside current playlist date boundary', function() {
             function check(date) {
-                MockDate.set(date);
+                set(date);
                 expect(season11RankedBR.currentMap).to.be.null;
-                MockDate.reset();
+                reset();
             };
 
             check('2021-11-01T00:00:00Z');
@@ -41,9 +40,9 @@ describe('@SplitPlaylist', function() {
 
         it('provides correct values for Season 11', function() {
             function check(date, map) {
-                MockDate.set(date);
+                set(date);
                 expect(season11RankedBR.currentMap.map).to.equal(map);
-                MockDate.reset();
+                reset();
             };
 
             check('2021-11-05T00:00:00Z', 'Storm Point');
@@ -53,26 +52,26 @@ describe('@SplitPlaylist', function() {
 
     describe('.nextMap pseudo property', function() {
         it('returns null if after season end', function() {
-            MockDate.set('2022-02-10T00:00:00Z');
+            set('2022-02-10T00:00:00Z');
             expect(season11RankedBR.nextMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
 
         it('returns the first rotation if before season start', function() {
-            MockDate.set('2021-11-01T00:00:00Z');
+            set('2021-11-01T00:00:00Z');
             expect(season11RankedBR.nextMap.map).to.equal('Storm Point');
-            MockDate.reset();
+            reset();
         });
 
         it('returns the next split if there is one', function() {
-            MockDate.set('2021-12-20T00:00:00Z');
+            set('2021-12-20T00:00:00Z');
             expect(season11RankedBR.nextMap.map).to.equal("World's Edge");
-            MockDate.reset();
+            reset();
 
             // During second split
-            MockDate.set('2021-12-24T00:00:00Z');
+            set('2021-12-24T00:00:00Z');
             expect(season11RankedBR.nextMap).to.be.null;
-            MockDate.reset();
+            reset();
         });
     });
 
@@ -92,9 +91,9 @@ describe('@SplitPlaylist', function() {
         });
 
         it('uses the current date if none provided', function() {
-            MockDate.set('2021-11-05T00:00:00Z');
+            set('2021-11-05T00:00:00Z');
             expect(season11RankedBR.getMapByDate().map).to.equal('Storm Point');
-            MockDate.reset();
+            reset();
         });
 
         it('returns correct values for Season 11', function() {
