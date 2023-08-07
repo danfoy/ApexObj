@@ -7,7 +7,7 @@ import { set, reset } from 'mockdate';
 
 import seasons from '../data/seasons.json' assert { type: 'json' };
 
-import apex from '../index.js';
+import apex from '../src/index.js';
 
 const season11data = seasons.seasons.find(season => season.id === 11);
 const season11 = apex.seasons.find(season => season.id === 11);

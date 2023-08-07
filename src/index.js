@@ -1,6 +1,6 @@
 import ApexObj from './classes/ApexObj.js';
-import seasonData from './data/seasons.json' assert { type: 'json' };
-import legendData from './data/legends.json' assert { type: 'json' };
+import seasonData from '../data/seasons.json' assert { type: 'json' };
+import legendData from '../data/legends.json' assert { type: 'json' };
 
 /**w
  * The module exports a new instance of ApexObj. This causes the module to act

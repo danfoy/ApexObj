@@ -4,12 +4,11 @@ import chaiThings from 'chai-things';
 use(chaiLike);
 use(chaiThings);
 import { set, reset } from 'mockdate';
-import { isDate } from '../util/index.js';
-import Season from '../classes/Season.js';
-import SplitPlaylist from '../classes/SplitPlaylist.js';
-import RotatingPlaylist from '../classes/RotatingPlaylist.js';
+import { isDate } from '../src/util/index.js';
+import SplitPlaylist from '../src/classes/SplitPlaylist.js';
+import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
 
-import apex from '../index.js';
+import apex from '../src/index.js';
 
 const season11 = apex.seasons.find(season => season.id === 11);
 const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');

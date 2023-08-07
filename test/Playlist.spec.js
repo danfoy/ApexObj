@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import RotatingPlaylist from '../classes/RotatingPlaylist.js';
-import apex from '../index.js';
+import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
+import apex from '../src/index.js';
 
 describe('@Playlist', function() {
 

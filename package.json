@@ -2,7 +2,7 @@
   "name": "apexobj",
   "version": "0.8.2",
   "description": "Apex Legends data in Object form. Synchronous, performant and completely local - has no runtime dependencies and doesn't query mozambiquehe.re or any other external APIs.",
-  "main": "index.js",
+  "main": "./src/index.js",
   "type": "module",
   "directories": {
     "test": "test",

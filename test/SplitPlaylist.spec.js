@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
-import { parseDate } from '../util/index.js';
-import apex from '../index.js';
+import { parseDate } from '../src/util/index.js';
+import apex from '../src/index.js';
 
 describe('@SplitPlaylist', function() {
 

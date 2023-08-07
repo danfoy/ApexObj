@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
 
-import SingleItemPlaylist from '../classes/SingleItemPlaylist.js';
-import Season from '../classes/Season.js';
+import SingleItemPlaylist from '../src/classes/SingleItemPlaylist.js';
+import Season from '../src/classes/Season.js';
 
-import apex from '../index.js';
+import apex from '../src/index.js';
 import seasonData from '../data/seasons.json' assert { type: 'json' };
 
 // const season12Data = seasonData.find(season => season.id === 12);

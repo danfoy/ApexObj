@@ -10,8 +10,8 @@ I should rewrite these.
 // TODO: rewrite unit tests as integration tests
 
 import { expect } from 'chai';
-import PlaylistItem from '../classes/PlaylistItem.js';
-import apex from '../index.js';
+import PlaylistItem from '../src/classes/PlaylistItem.js';
+import apex from '../src/index.js';
 
 import seasons from '../data/seasons.json' assert { type: 'json' };
 

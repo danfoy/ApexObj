@@ -11,9 +11,9 @@ I should rewrite these.
 
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
-import RotatingPlaylist from '../classes/RotatingPlaylist.js';
-import PlaylistItem from '../classes/PlaylistItem.js';
-import ScheduledPlaylistItem from '../classes/ScheduledPlaylistItem.js';
+import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
+import PlaylistItem from '../src/classes/PlaylistItem.js';
+import ScheduledPlaylistItem from '../src/classes/ScheduledPlaylistItem.js';
 import seasons from '../data/seasons.json' assert { type: 'json' };
 
 const seasonData = seasons.seasons[0];

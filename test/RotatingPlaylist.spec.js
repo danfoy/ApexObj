@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
-import apex from '../index.js';
+import apex from '../src/index.js';
 import data from '../data/seasons.json' assert { type: 'json' };
 
 
