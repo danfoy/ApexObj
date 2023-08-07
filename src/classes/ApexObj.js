@@ -2,7 +2,7 @@ import { parseDate } from '../util/index.js';
 import Playlist from './Playlist.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 import Season from './Season.js';
-import Legend from './Legend.js';
+import LegendsArray from './LegendsArray.js';
 
 /**
  * This is the base class for the module, and the first port of call for making
@@ -41,7 +41,7 @@ class ApexObj {
          * Array of Legends
          * @type {Legend[]}
          */
-        this.legends = legendsData.map(legendsData => new Legend(legendsData));
+        this.legends = new LegendsArray(...legendsData);
     };
 
     /**

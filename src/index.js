@@ -14,5 +14,6 @@ import legendData from '../data/legends.json' assert { type: 'json' };
  */
 export default new ApexObj(seasonData, legendData);
 
-const apexObj = new ApexObj(seasonData, legendData);
-console.dir(apexObj.legends);
+const apex = new ApexObj(seasonData, legendData);
+const random = apex.legends.random;
+console.log(random);

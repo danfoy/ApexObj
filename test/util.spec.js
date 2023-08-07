@@ -1,5 +1,6 @@
 import { expect } from 'chai';
-import { isDate, parseDate, withinDates, randomFrom } from '../src/util/index.js';
+import { isDate, parseDate, withinDates } from '../src/util/index.js';
+import randomFrom from '../src/util/randomFrom.js';
 
 describe('Utility library', function() {
     describe('.isDate(target) function', function() {
@@ -103,15 +104,11 @@ describe('Utility library', function() {
             });
 
             it("doesn't return duplicates in subtractive mode", function() {
-                function checkDuplicates() {
-                    const results = [];
-                    for (let i = 0; i < 100; i++) {
-                        results.push(randomFrom([1, 2, 3], 2))
-                    };
-                    return results.filter(result => result[0] == result[1]);
+                const arr = [1, 2, 3, 4, 5];
+                for (let i = 0; i < 1000; i++) {
+                    const workingSet = randomFrom(arr, 3);
+                    workingSet.forEach(entry => expect(workingSet.indexOf(entry)).to.equal(workingSet.lastIndexOf(entry)));
                 };
-
-                expect(checkDuplicates()).to.be.empty;
             });
 
             it('throws when subtractive and requesting > input size', function() {

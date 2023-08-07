@@ -1,0 +1,41 @@
+/**
+ * Select [quantity] items from [array]. By default returns a string in single
+ * mode, unless {array: true} is passed in the options object. Doesn't allow
+ * duplicates unless {subtractive: false} is passed in the options object.
+ *
+ * @param {array} source array of items to randomise
+ * @param {number} [quantity=1] quantity of results required
+ * @param {object} options options object
+ * @param {boolean} options.subtractive whether results should be unique
+ * @returns {string|array}
+ */
+export default function randomFrom(
+  source,
+  quantity = 1,
+  options = {
+      subtractive: true
+    }
+){
+  // Error if input is not compatiable
+  if (!Array.isArray(source))
+      throw new Error(`${source} is not an array`);
+
+  // Error if in subtractive mode and requested quantity is larger than input
+  if (options.subtractive && quantity > source.length)
+      throw new Error(`Requested quantity ${quantity} is greater than the ${source.length} available items`);
+
+  // Return a single item in single mode (no array)
+  if (quantity === 1)
+      return source[Math.floor(Math.random() * source.length)];
+
+  // Pick random items as if from a hat
+  let availableEntries = [...source];
+  let selectedEntries = [];
+  for (let i = 0; quantity > i; i++) {
+      const randomIndex = Math.floor(Math.random() * availableEntries.length);
+      selectedEntries.push(availableEntries[randomIndex]);
+      if (options.subtractive) availableEntries.splice(randomIndex, 1);
+  };
+  return selectedEntries;
+
+};
