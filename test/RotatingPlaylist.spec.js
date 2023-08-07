@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
-import apex from '../src/index.js';
-import data from '../data/seasons.json' assert { type: 'json' };
+import apex from '../dist/index.js';
+import data from '../dist/data/seasons.json' assert { type: 'json' };
 
 
 
-describe('@RotatingPlaylist', function() {
+describe('RotatingPlaylist', function() {
 
     const season11BRData = data.seasons.find(season => season.id === 11)
         .playlists.find(playlist => playlist.mode === 'Play Apex');
@@ -19,7 +19,7 @@ describe('@RotatingPlaylist', function() {
     const season12Control = season12.playlists.find(playlist => playlist.mode === 'Control');
 
 
-    describe('.rotations property', function() {
+    describe('.rotations', function() {
         it('returns an array', function() {
             expect(season11BR.rotations)
                 .to.be.an('array');
@@ -30,7 +30,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.rotationBaseTime pseudo property', function() {
+    describe('.rotationBaseTime readonly property', function() {
         it('returns the baseTime if available', function() {
             expect(season11BR.rotationBaseTime).to.eql(new Date(season11BRData.baseTime));
         });
@@ -40,13 +40,13 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.playlistRotationsDuration pseudo property', function() {
+    describe('.playlistRotationsDuration readonly property', function() {
         it('returns the total playlist duration', function() {
             expect(season11BR.playlistRotationsDuration).to.equal(1080 * 60 * 1000);
         });
     });
 
-    describe('.currentIndex pseudo property', function() {
+    describe('.currentIndex readonly property', function() {
 
         function check(date, index) {
             set(date);
@@ -127,7 +127,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.nextMap pseudo property', function() {
+    describe('.nextMap readonly property', function() {
 
         it('returns null if after season end', function() {
             // After season ends
@@ -172,7 +172,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.getIndexByOffset(minutes) method', function() {
+    describe('#getIndexByOffset(minutes)', function() {
         it('gets the rotation index by the given time offset', function() {
             function check(offset, index) {
                 const offsetInMs = offset * 60 * 1000;
@@ -194,7 +194,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.getOffsetByIndex(index) method', function() {
+    describe('#getOffsetByIndex(index)', function() {
         it('gets the minutes offset from the playlist start for the map at the given index', function() {
             function check(index, offset) {
                 const offsetInMs = offset * 60 * 1000;
@@ -209,7 +209,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('normaliseIndex(index) method', function() {
+    describe('#normaliseIndex(index)', function() {
         function check(index, normalised) {
             return expect(season11BR.normaliseIndex(index)).to.equal(normalised);
         }
@@ -226,7 +226,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.getPlaylistTimeElapsed(date) method', function() {
+    describe('#getPlaylistTimeElapsed(date)', function() {
         it('returns the time elapsed in this playlist rotation', function() {
             expect(season11BR.getPlaylistTimeElapsed('2022-01-24T02:00:00Z'))
                 .to.equal(120 * 60 * 1000);
@@ -237,7 +237,7 @@ describe('@RotatingPlaylist', function() {
         });
     });
 
-    describe('.getMapByDate(date) method', function() {
+    describe('#getMapByDate(date)', function() {
 
         it('throws if the provided date is invalid', function() {
             expect(()=>season11BR.getMapByDate('zzz')).to.throw()

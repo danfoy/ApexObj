@@ -1,20 +1,20 @@
 import { expect } from 'chai';
-import { set, reset } from 'mockdate';
-import { parseDate } from '../src/util/index.js';
-import apex from '../src/index.js';
+import mockdate from 'mockdate';
+import { parseDate } from '../dist/util/date.js';
+import apex from '../dist/index.js';
 
-describe('@SplitPlaylist', function() {
+describe('SplitPlaylist', function() {
 
     const season11 = apex.seasons.find(season => season.id === 11);
     const season11RankedBR = season11.playlists.find(playlist => playlist.mode === 'Ranked Leagues');
 
-    describe('.splitTime property', function() {
+    describe('.splitTime', function() {
         it('returns a date', function() {
             expect(parseDate(season11RankedBR.splitTime)).to.be.ok.and.not.eql(new Date());
         });
     });
 
-    describe('.rotations property', function() {
+    describe('.rotations', function() {
         it('returns an Array', function () {
             expect(season11RankedBR.rotations).to.be.an('array');
         });
@@ -25,13 +25,13 @@ describe('@SplitPlaylist', function() {
         });
     });
 
-    describe('.currentMap pseudo property', function() {
+    describe('.currentMap readonly property', function() {
 
         it('returns null if outside current playlist date boundary', function() {
             function check(date) {
-                set(date);
+                mockdate.set(date);
                 expect(season11RankedBR.currentMap).to.be.null;
-                reset();
+                mockdate.reset();
             };
 
             check('2021-11-01T00:00:00Z');
@@ -40,9 +40,9 @@ describe('@SplitPlaylist', function() {
 
         it('provides correct values for Season 11', function() {
             function check(date, map) {
-                set(date);
-                expect(season11RankedBR.currentMap.map).to.equal(map);
-                reset();
+                mockdate.set(date);
+                expect(season11RankedBR.currentMap?.map).to.equal(map);
+                mockdate.reset();
             };
 
             check('2021-11-05T00:00:00Z', 'Storm Point');
@@ -50,32 +50,32 @@ describe('@SplitPlaylist', function() {
         });
     });
 
-    describe('.nextMap pseudo property', function() {
+    describe('.nextMap readonly property', function() {
         it('returns null if after season end', function() {
-            set('2022-02-10T00:00:00Z');
+            mockdate.set('2022-02-10T00:00:00Z');
             expect(season11RankedBR.nextMap).to.be.null;
-            reset();
+            mockdate.reset();
         });
 
         it('returns the first rotation if before season start', function() {
-            set('2021-11-01T00:00:00Z');
+            mockdate.set('2021-11-01T00:00:00Z');
             expect(season11RankedBR.nextMap.map).to.equal('Storm Point');
-            reset();
+            mockdate.reset();
         });
 
         it('returns the next split if there is one', function() {
-            set('2021-12-20T00:00:00Z');
+            mockdate.set('2021-12-20T00:00:00Z');
             expect(season11RankedBR.nextMap.map).to.equal("World's Edge");
-            reset();
+            mockdate.reset();
 
             // During second split
-            set('2021-12-24T00:00:00Z');
+            mockdate.set('2021-12-24T00:00:00Z');
             expect(season11RankedBR.nextMap).to.be.null;
-            reset();
+            mockdate.reset();
         });
     });
 
-    describe('.getMapByDate(date) method', function() {
+    describe('#getMapByDate(date)', function() {
 
         it('throws if an invalid date is provided', function() {
             expect(()=>season11RankedBR.getMapByDate('zzz')).to.throw();
@@ -91,9 +91,9 @@ describe('@SplitPlaylist', function() {
         });
 
         it('uses the current date if none provided', function() {
-            set('2021-11-05T00:00:00Z');
+            mockdate.set('2021-11-05T00:00:00Z');
             expect(season11RankedBR.getMapByDate().map).to.equal('Storm Point');
-            reset();
+            mockdate.reset();
         });
 
         it('returns correct values for Season 11', function() {

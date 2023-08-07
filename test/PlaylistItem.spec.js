@@ -10,10 +10,10 @@ I should rewrite these.
 // TODO: rewrite unit tests as integration tests
 
 import { expect } from 'chai';
-import PlaylistItem from '../src/classes/PlaylistItem.js';
-import apex from '../src/index.js';
+import PlaylistItem from '../dist/classes/PlaylistItem.js';
+import apex from '../dist/index.js';
 
-import seasons from '../data/seasons.json' assert { type: 'json' };
+import seasons from '../dist/data/seasons.json' assert { type: 'json' };
 
 const season11 = apex.seasons.find(season => season.id === 11);
 const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
@@ -27,7 +27,7 @@ function playlist(_mode, _ranked) {
     return {mode: _mode, ranked: _ranked};
 };
 
-describe('@PlaylistItem', function() {
+describe('PlaylistItem', function() {
     it('returns an object', function() {
         expect(new PlaylistItem(map('we', 30), playlist('br', false)))
             .to.include({map: 'we', duration: 30, mode: 'br'});
@@ -45,19 +45,19 @@ describe('@PlaylistItem', function() {
         expect(()=> new PlaylistItem(map('ol', 60), playlist('br', false))).to.not.throw();
     });
 
-    describe('.map property', function() {
+    describe('.map', function() {
         it('returns the supplied map', function() {
             expect(new PlaylistItem(map('we', 30), season11BR).map).to.equal('we');
         });
     });
 
-    describe('.duration property', function() {
+    describe('.duration', function() {
         it('returns the duration of the map', function() {
             expect(new PlaylistItem(map('we', 30), season11BR).duration).to.equal(30);
         });
     });
 
-    describe('.mode property', function() {
+    describe('.mode', function() {
         it('returns the mode of the parent playlist', function() {
             expect(new PlaylistItem(map('we', 30), season11BR).mode).to.equal('Play Apex');
         });
@@ -67,8 +67,8 @@ describe('@PlaylistItem', function() {
         it('returns true if the parent season is ranked', function() {
             expect(new PlaylistItem(map('we', 30), season11Ranked).ranked).to.be.true;
         });
-        it('is undefined if the parent playlist is unranked', function() {
-            expect(new PlaylistItem(map('we', 30), season11BR).ranked).to.be.undefined;
+        it('returns false if the parent playlist is unranked', function() {
+            expect(new PlaylistItem(map('we', 30), season11BR).ranked).to.be.false;
         });
     });
 });

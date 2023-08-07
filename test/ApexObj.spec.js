@@ -5,9 +5,9 @@ use(chaiLike);
 use(chaiThings);
 import { set, reset } from 'mockdate';
 
-import seasons from '../data/seasons.json' assert { type: 'json' };
+import seasons from '../src/data/seasons.json' assert { type: 'json' };
 
-import apex from '../src/index.js';
+import apex from '../dist/index.js';
 
 const season11data = seasons.seasons.find(season => season.id === 11);
 const season11 = apex.seasons.find(season => season.id === 11);
@@ -15,7 +15,7 @@ const season11 = apex.seasons.find(season => season.id === 11);
 const season12data = seasons.seasons.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
 
-describe('@ApexObj', function() {
+describe('ApexObj', function() {
 
     it('throws when Season data not provided', function() {
 
@@ -72,7 +72,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.nextSeason pseudo property', function() {
+    describe('.nextSeason readonly property', function() {
         it('returns the next season if data is available', function() {
             set(season11.startTime);
             expect(apex.nextSeason).to.eql(season12);
@@ -87,7 +87,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.currentMaps pseudo property', function() {
+    describe('.currentMaps readonly property', function() {
         it('returns null if no season currently active', function() {
             function check(date) {
                 set(date);
@@ -121,7 +121,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.nextMaps pseudo property', function() {
+    describe('.nextMaps readonly property', function() {
         it('returns null if there is no next season', function() {
             const finalSeason = [...apex.seasons].pop();
             set(finalSeason.endTime);
@@ -142,7 +142,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.currentLTMs pseudo property', function() {
+    describe('.currentLTMs readonly property', function() {
         it('is an alias for .currentSeason.currentLTMs', function() {
             set(season12.startTime);
             expect(apex.currentLTMs)
@@ -152,7 +152,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.currentTakeovers pseudo property', function() {
+    describe('.currentTakeovers readonly property', function() {
         it('is an alias for .currentSeason.currentTakeovers', function() {
             set(season12.startTime);
             expect(apex.currentTakeovers)
@@ -179,7 +179,7 @@ describe('@ApexObj', function() {
         });
     });
 
-    describe('.getMapsByDate() method', function() {
+    describe('#getMapsByDate()', function() {
         it('returns correct maps for season 11', function() {
 
             function check(date, map, duration) {

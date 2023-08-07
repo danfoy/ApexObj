@@ -1,7 +1,8 @@
 node_modules/
 Resources/
-dist/
 
 *.DS_Store
 *.ds_store
 *.icloud
+
+.git

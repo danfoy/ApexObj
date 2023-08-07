@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import legendsData from '../data/legends.json' assert { type: 'json' };
-import LegendsArray from '../src/classes/LegendsArray.js';
-import Legend from '../src/classes/Legend.js';
+import legendsData from '../dist/data/legends.json' assert { type: 'json' };
+import LegendsArray from '../dist/classes/LegendsArray.js';
+import Legend from '../dist/classes/Legend.js';
 
 const legends = new LegendsArray(...legendsData);
 
@@ -11,7 +11,7 @@ describe('LegendsArray', function() {
     expect(Array.isArray(legends)).to.be.true;
   });
 
-  describe('.randomise()', function() {
+  describe('#randomise()', function() {
     it('returns an instance of Legend', function() {
       console.log(legends.randomise());
       expect(legends.randomise(1) instanceof Legend).to.be.true;

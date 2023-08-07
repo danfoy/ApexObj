@@ -11,16 +11,16 @@ I should rewrite these.
 
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
-import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
-import PlaylistItem from '../src/classes/PlaylistItem.js';
-import ScheduledPlaylistItem from '../src/classes/ScheduledPlaylistItem.js';
-import seasons from '../data/seasons.json' assert { type: 'json' };
+import RotatingPlaylist from '../dist/classes/RotatingPlaylist.js';
+import PlaylistItem from '../dist/classes/PlaylistItem.js';
+import ScheduledPlaylistItem from '../dist/classes/ScheduledPlaylistItem.js';
+import seasons from '../dist/data/seasons.json' assert { type: 'json' };
 
 const seasonData = seasons.seasons[0];
 const mockSeasonObj = {mode: 'br', ranked: false};
 
 
-describe('@ScheduledPlaylistItem', function() {
+describe('ScheduledPlaylistItem', function() {
     it('returns a superset of PlaylistItem', function() {
         const testStartTime = new Date();
         const testPlaylistItem = new PlaylistItem({mapName: 'we', mapDuration: 60, startTime: testStartTime}, mockSeasonObj);
@@ -37,7 +37,7 @@ describe('@ScheduledPlaylistItem', function() {
     });
 
 
-    describe('.timeRemaining getter', function() {
+    describe('.timeRemaining readonly property', function() {
         it('returns known correct values from season 11', function() {
 
             function check(date, mapDuration) {

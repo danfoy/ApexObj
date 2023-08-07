@@ -1,8 +1,8 @@
 import { expect } from 'chai';
-import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
-import apex from '../src/index.js';
+import RotatingPlaylist from '../dist/classes/RotatingPlaylist.js';
+import apex from '../dist/index.js';
 
-describe('@Playlist', function() {
+describe('Playlist', function() {
 
     const season11 = apex.seasons.find(season => season.id === 11);
     const season11BR = season11.playlists.find(playlist =>  playlist.mode === 'Play Apex');

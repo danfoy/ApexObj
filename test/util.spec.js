@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { isDate, parseDate, withinDates } from '../src/util/index.js';
-import randomFrom from '../src/util/randomFrom.js';
+import { isDate, parseDate, withinDates } from '../dist/util/date.js';
+import randomFrom from '../dist/util/randomFrom.js';
 
 describe('Utility library', function() {
     describe('.isDate(target) function', function() {

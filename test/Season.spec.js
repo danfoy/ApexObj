@@ -4,11 +4,11 @@ import chaiThings from 'chai-things';
 use(chaiLike);
 use(chaiThings);
 import { set, reset } from 'mockdate';
-import { isDate } from '../src/util/index.js';
-import SplitPlaylist from '../src/classes/SplitPlaylist.js';
-import RotatingPlaylist from '../src/classes/RotatingPlaylist.js';
+import { isDate } from '../dist/util/date.js';
+import SplitPlaylist from '../dist/classes/SplitPlaylist.js';
+import RotatingPlaylist from '../dist/classes/RotatingPlaylist.js';
 
-import apex from '../src/index.js';
+import apex from '../dist/index.js';
 
 const season11 = apex.seasons.find(season => season.id === 11);
 const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
@@ -16,15 +16,15 @@ const season11RankedBR = season11.playlists.find(playlist => playlist.mode === '
 
 const season12 = apex.seasons.find(season => season.id === 12);
 
-describe('@Season', function() {
+describe('Season', function() {
 
-    describe('.id property', function() {
+    describe('.id', function() {
         it('returns the season id as a Number', function() {
             expect(season11.id).to.equal(11);
         });
     });
 
-    describe('.name property', function() {
+    describe('.name', function() {
         it('returns the name of the season', function() {
             expect(season11.name).to.equal('Escape');
         })
@@ -54,19 +54,19 @@ describe('@Season', function() {
         });
     });
 
-    describe('.unranked.battleRoyale pseudo property', function() {
+    describe('.unranked.battleRoyale readonly property', function() {
         it('is an alias for unranked Battle Royale mode', function() {
             expect(season11.unranked.battleRoyale).to.eql(season11BR);
         });
     });
 
-    describe('.ranked.battleRoyale pseudo property', function() {
+    describe('.ranked.battleRoyale readonly property', function() {
         it('is an alias for ranked Battle Royale mode', function() {
             expect(season11.ranked.battleRoyale).to.eql(season11RankedBR);
         });
     });
 
-    describe('.currentPlaylists pseudo property', function() {
+    describe('.currentPlaylists readonly property', function() {
         it('aliases .getPlaylistsByDate(<current Date>)', function() {
             set(season12.startTime);
             expect(season12.currentPlaylists)
@@ -75,7 +75,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.currentMaps pseudo property', function() {
+    describe('.currentMaps readonly property', function() {
         it('returns an array', function() {
             set('2022-02-04T12:44:00Z');
             expect(season11.currentMaps).to.be.an('array');
@@ -105,7 +105,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.nextMaps pseudo property', function () {
+    describe('.nextMaps readonly property', function () {
         it('returns null at end of season', function() {
             set(season12.endTime);
             expect(season12.nextMaps).to.be.null;
@@ -127,7 +127,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.currentLTMs pseudo property', function() {
+    describe('.currentLTMs readonly property', function() {
         it('is null if there is not a current Limited Time Mode', function() {
             // No LTMs in season11 data
             set(season11.startTime);
@@ -147,7 +147,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.currentTakeovers pseudo property', function() {
+    describe('.currentTakeovers readonly property', function() {
         it('is null if there is not a current takeover LTM', function() {
             // No LTMs in season11 data
             set(season11.startTime);
@@ -167,7 +167,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.parsePlaylist(playlistData) method', function() {
+    describe('#parsePlaylist(playlistData)', function() {
         it('parses ranked playlists', function() {
             expect(season11RankedBR instanceof SplitPlaylist).to.be.true;
             expect(season11RankedBR instanceof RotatingPlaylist).to.be.false;
@@ -179,7 +179,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.getPlaylistsByDate(date) method', function() {
+    describe('#getPlaylistsByDate(date)', function() {
         it('returns null when no playlists available', function() {
             expect(season12.getPlaylistsByDate(season12.startTime - 1000)).to.be.null;
             expect(season12.getPlaylistsByDate(season12.endTime + 1000)).to.be.null;
@@ -201,7 +201,7 @@ describe('@Season', function() {
         });
     });
 
-    describe('.getMapsByDate() method', function() {
+    describe('#getMapsByDate()', function() {
 
         it('uses the current date if none provided', function() {
             set(season12.startTime);

@@ -1,25 +1,25 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
 
-import SingleItemPlaylist from '../src/classes/SingleItemPlaylist.js';
-import Season from '../src/classes/Season.js';
+import SingleItemPlaylist from '../dist/classes/SingleItemPlaylist.js';
+import Season from '../dist/classes/Season.js';
 
-import apex from '../src/index.js';
-import seasonData from '../data/seasons.json' assert { type: 'json' };
+import apex from '../dist/index.js';
+import seasonData from '../dist/data/seasons.json' assert { type: 'json' };
 
 // const season12Data = seasonData.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
 // const olympus247Data = season12Data.LTMs.find(ltm => ltm.mode === "Olympus 24/7");
 const olympus247 = season12.playlists.find(playlist => playlist.mode === 'Olympus 24/7');
 
-describe('@SingleItemPlaylist', function() {
-    describe('.rotations property', function() {
+describe('SingleItemPlaylist', function() {
+    describe('.rotations', function() {
         it('returns an array with a single entry', function() {
             expect(olympus247.rotations.length).to.equal(1);
         });
     });
 
-    describe('.currentMap pseudo property', function() {
+    describe('.currentMap readonly property', function() {
         it('returns the map when within date bounds', function() {
             set(olympus247.startTime + 30);
             expect(olympus247.currentMap.map).to.equal('Olympus');
@@ -39,7 +39,7 @@ describe('@SingleItemPlaylist', function() {
         });
     });
 
-    describe('.nextMap pseudo property', function() {
+    describe('.nextMap readonly property', function() {
         it('returns the map when before playlist startTime', function() {
             set(olympus247.startTime - 30);
             expect(olympus247.nextMap.map).to.equal('Olympus');
@@ -53,7 +53,7 @@ describe('@SingleItemPlaylist', function() {
         });
     });
 
-    describe('.getMapByDate(date) method', function() {
+    describe('#getMapByDate(date)', function() {
         it('throws if an invalid date is provided', function() {
             expect(()=>olympus247.getMapByDate('zzz')).to.throw();
         });
