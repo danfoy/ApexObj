@@ -1,21 +1,22 @@
 import { expect } from 'chai';
 import { set, reset } from 'mockdate';
 import apex from '../dist/index.js';
-import data from '../dist/data/seasons.json' assert { type: 'json' };
+import seasons from '../dist/data/seasons.json' assert { type: 'json' };
 
 
 
 describe('RotatingPlaylist', function() {
 
-    const season11BRData = data.seasons.find(season => season.id === 11)
+    const season11BRData = seasons.find(season => season.id === 11)
         .playlists.find(playlist => playlist.mode === 'Play Apex');
     const season11 = apex.seasons.find(season => season.id === 11);
     const season11BR = season11.playlists.find(playlist => playlist.mode === 'Play Apex');
 
     const season12 = apex.seasons.find(season => season.id === 12);
-    const season12ControlData = data
-        .seasons.find(season => season.id === 12)
-        .LTMs.find(playlist => playlist.mode === 'Control');
+    const season12ControlData = seasons
+        .find(season => season.id === 12)
+        .LTMs
+        .find(playlist => playlist.mode === 'Control');
     const season12Control = season12.playlists.find(playlist => playlist.mode === 'Control');
 
 

@@ -1,4 +1,4 @@
-import { parseDate, withinDates } from '../util/date.js';
+import { ParseableDate, parseDate, withinDates } from '../util/date.js';
 import RotatingPlaylist from './RotatingPlaylist.js';
 import SplitPlaylist from './SplitPlaylist.js';
 import SingleItemPlaylist from './SingleItemPlaylist.js';
@@ -11,7 +11,7 @@ export interface SeasonData {
     playlists: Array<PlaylistData>;
     startTime: string;
     endTime: string;
-    LTMs: Array<PlaylistData>;
+    LTMs?: Array<PlaylistData>;
 };
 
 export default class Season {
@@ -180,7 +180,7 @@ export default class Season {
      * provided date, or the current date if not provided. Returns null
      * if none found.
      */
-    getPlaylistsByDate(date?) {
+    getPlaylistsByDate(date: ParseableDate = new Date()) {
         const targetDate = date ? parseDate(date) : new Date();
         let availablePlaylists = this.playlists
             .filter(playlist => withinDates(playlist, targetDate));
@@ -201,9 +201,9 @@ export default class Season {
      *
      * @todo should return null if no maps found.
      */
-    getMapsByDate(date?) {
-        if (!withinDates(this, date)) return null;
-        const targetDate = date ? parseDate(date) : new Date();
+    getMapsByDate(date: ParseableDate = new Date()) {
+        const targetDate = parseDate(date);
+        if (!withinDates(this, targetDate)) return null;
         return this.getPlaylistsByDate(targetDate)
             .map(playlist => playlist.getMapByDate(targetDate));
     };

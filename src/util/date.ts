@@ -1,6 +1,11 @@
 
 export type ParseableDate = string | number | Date;
 
+export interface DateRange {
+    startTime: ParseableDate;
+    endTime: ParseableDate;
+};
+
 /**
  * Determines whether the input is an instance of Date.
  */
@@ -15,14 +20,16 @@ export function isDate(target: Date | string): boolean {
  * within {startTime, endTime}. Throws if either dates.startTime or
  * dates.endTime is ommitted or if any of the values are invalid dates.
  */
-export function withinDates({startTime, endTime}, target = new Date()) {
-    if (!startTime) throw new Error('startTime required, received', startTime);
-    if (!endTime) throw new Error('endTime required, received', endTime);
+export function withinDates(dateRange: DateRange, target = new Date()) {
+    if (!dateRange.startTime) throw new Error('startTime required, received ' + dateRange.startTime);
+    if (!dateRange.endTime) throw new Error('endTime required, received' + dateRange.endTime);
+
+    const {startTime, endTime} = dateRange;
     const start = parseDate(startTime);
     const end = parseDate(endTime);
-    const _target = parseDate(target);
+    const targetTime = parseDate(target);
 
-    if (_target >= start && _target < end) return true;
+    if (targetTime >= start && targetTime < end) return true;
     return false;
 };
 
@@ -31,12 +38,15 @@ export function withinDates({startTime, endTime}, target = new Date()) {
  * date is provided. Returns the supplied date if it is already an instance of
  * Date. Returns a new Date set to the supplied time if parseable into a Date
  * object. Throws an error if none of the above are applicable.
+ *
+ * todo: refactor to accept only type ParseableDate, with guards
  */
-export function parseDate(target): Date {
-
-    if (!target) return new Date();
-    if (isDate(target)) return target;
-    const newDate = new Date(target);
-    if (isDate(newDate)) return newDate;
+export function parseDate(target: ParseableDate): Date {
+    if (typeof target == "number" || typeof target == "string") {
+        const newDate = new Date(target);
+        if (isDate(newDate)) return newDate;
+    } else {
+        if (isDate(target)) return target;
+    }
     throw new Error(`Unable to parse date from '${target}'`);
 };

@@ -1,4 +1,4 @@
-import { parseDate } from '../util/date.js';
+import { ParseableDate, parseDate } from '../util/date.js';
 
 import BasePlaylist, { PlaylistData } from './BasePlaylist.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
@@ -63,8 +63,8 @@ class SingleItemPlaylist extends BasePlaylist {
      * @param {parseableDate} [date=new Date()] the date to target
      * @returns {?ScheduledPlaylistItem} active map or {@link null}
      */
-    getMapByDate(date) {
-        const targetDate = parseDate(date);
+    getMapByDate(date?: ParseableDate) {
+        const targetDate = date ? parseDate(date) : new Date();
 
         if(targetDate < this.startTime) return null;
         if(targetDate > this.endTime) return null;

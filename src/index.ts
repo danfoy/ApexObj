@@ -1,6 +1,6 @@
 import ApexObj from './classes/ApexObj.js';
-import seasonData from './data/seasons.json' assert { type: 'json' };
-import legendData from './data/legends.json' assert { type: 'json' };
+import seasonsData from './data/seasons.json' assert { type: 'json' };
+import legendsData from './data/legends.json' assert { type: 'json' };
 
 /**w
  * The module exports a new instance of ApexObj. This causes the module to act
@@ -12,4 +12,4 @@ import legendData from './data/legends.json' assert { type: 'json' };
  * an external JSON file. Exporting a faux singleton massively cuts down on
  * file reads and blocking.
  */
-export default new ApexObj(seasonData, legendData);
+export default new ApexObj(seasonsData, legendsData);

@@ -1,6 +1,12 @@
 import PlaylistItem from './PlaylistItem.js';
-import { parseDate } from '../util/date.js';
+import { ParseableDate, parseDate } from '../util/date.js';
 import { Playlist } from './BasePlaylist.js';
+
+interface SchedulingOptions {
+    mapName: string;
+    mapDuration: number;
+    startTime: ParseableDate;
+};
 
 /**
  * A {@link PlaylistItem} with a designated start and end time.
@@ -9,7 +15,7 @@ class ScheduledPlaylistItem extends PlaylistItem {
     startTime: Date;
     endTime: Date;
 
-    constructor({mapName, mapDuration, startTime}, playlist: Playlist) {
+    constructor({mapName, mapDuration, startTime}: SchedulingOptions, playlist: Playlist) {
         super({mapName, mapDuration}, playlist);
 
         this.startTime = parseDate(startTime);

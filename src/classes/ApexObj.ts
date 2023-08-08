@@ -1,4 +1,4 @@
-import { parseDate } from '../util/date.js';
+import { ParseableDate, parseDate } from '../util/date.js';
 import BasePlaylist from './BasePlaylist.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 import Season, { SeasonData } from './Season.js';
@@ -23,12 +23,11 @@ export default class ApexObj {
     seasons: Array<Season>;
     legends: LegendsArray;
 
-    constructor(seasonsData, legendsData: Array<LegendData>) {
+    constructor(seasonsData: SeasonData[], legendsData: LegendData[]) {
         if (!seasonsData) throw new Error('No Seasons data provided');
         if (!legendsData) throw new Error('No Legends data provided');
-        const { seasons } = seasonsData;
         const legendsSubmittable = [...legendsData] as const;
-        this.seasons = seasons.map(season => new Season(season));
+        this.seasons = seasonsData.map(season => new Season(season));
         this.legends = new LegendsArray(...legendsSubmittable);
     };
 
@@ -90,7 +89,7 @@ export default class ApexObj {
      * Returns the season for the given date, or {@link null} if none found. Uses
      * the current date if none provided.
      */
-    getSeasonByDate(date?) {
+    getSeasonByDate(date?: ParseableDate) {
         const targetDate = date ? parseDate(date) : new Date();
         const foundSeason = this.seasons
             .find(season => (season.startTime <= targetDate) && (season.endTime > targetDate))
@@ -102,7 +101,7 @@ export default class ApexObj {
      * for the given date, or {@link null} if none found. Uses the current date
      * if none provided.
      */
-    getMapsByDate(date) {
+    getMapsByDate(date?: ParseableDate) {
         const targetDate = parseDate(date);
         const targetSeason = this.getSeasonByDate(targetDate);
         if (!targetSeason) return null;

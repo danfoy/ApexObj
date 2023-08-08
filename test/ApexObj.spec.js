@@ -9,10 +9,10 @@ import seasons from '../src/data/seasons.json' assert { type: 'json' };
 
 import apex from '../dist/index.js';
 
-const season11data = seasons.seasons.find(season => season.id === 11);
+const season11data = seasons.find(season => season.id === 11);
 const season11 = apex.seasons.find(season => season.id === 11);
 
-const season12data = seasons.seasons.find(season => season.id === 12);
+const season12data = seasons.find(season => season.id === 12);
 const season12 = apex.seasons.find(season => season.id === 12);
 
 describe('ApexObj', function() {

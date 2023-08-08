@@ -4,7 +4,7 @@
  * duplicates unless {subtractive: false} is passed in the options object.
  */
 export default function randomFrom(
-  source,
+  source: Array<any>,
   quantity = 1,
   options = {
       subtractive: true

@@ -16,7 +16,7 @@ import PlaylistItem from '../dist/classes/PlaylistItem.js';
 import ScheduledPlaylistItem from '../dist/classes/ScheduledPlaylistItem.js';
 import seasons from '../dist/data/seasons.json' assert { type: 'json' };
 
-const seasonData = seasons.seasons[0];
+const seasonData = seasons[0];
 const mockSeasonObj = {mode: 'br', ranked: false};
 
 

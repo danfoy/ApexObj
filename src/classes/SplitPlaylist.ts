@@ -1,4 +1,4 @@
-import { parseDate } from '../util/date.js';
+import { ParseableDate, parseDate } from '../util/date.js';
 import BasePlaylist, { PlaylistData } from './BasePlaylist.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 import Season, { SeasonData } from './Season.js';
@@ -58,8 +58,8 @@ export default class SplitPlaylist extends BasePlaylist {
      * Get the map rotation for a given date, or the current date if none
      * provided, or {@link null} if outside of date boundaries.
      */
-    getMapByDate(date?) {
-        const targetDate = date ? parseDate(date) : new Date();
+    getMapByDate(date: ParseableDate = new Date()) {
+        const targetDate = parseDate(date);
 
         if (targetDate.valueOf() < this.startTime.valueOf()) return null;
         if (targetDate.valueOf() > this.endTime.valueOf()) return null;

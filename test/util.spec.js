@@ -3,7 +3,7 @@ import { isDate, parseDate, withinDates } from '../dist/util/date.js';
 import randomFrom from '../dist/util/randomFrom.js';
 
 describe('Utility library', function() {
-    describe('.isDate(target) function', function() {
+    describe('isDate()', function() {
 
         it('returns true when target is an instance of Date', function() {
             expect(isDate(new Date())).to.be.true;
@@ -16,10 +16,10 @@ describe('Utility library', function() {
         });
     });
 
-    describe('.parseDate(target) function', function() {
+    describe('parseDate()', function() {
 
-        it('returns a new Date if none supplied', function() {
-            expect(parseDate()).to.eql(new Date());
+        it('throws if no date supplied', function() {
+            expect(()=>parseDate()).to.throw;
         });
 
         it('throws if the target is an invalid date ISO string', function() {
@@ -38,7 +38,7 @@ describe('Utility library', function() {
         });
     });
 
-    describe('withinDates function', function(){
+    describe('withinDates()', function(){
 
         it('requires {startTime, endTime} argument', function() {
             expect(()=>withinDates({endTime: new Date()})).to.throw();

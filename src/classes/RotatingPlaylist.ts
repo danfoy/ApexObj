@@ -1,4 +1,4 @@
-import { parseDate, withinDates } from '../util/date.js';
+import { ParseableDate, parseDate, withinDates } from '../util/date.js';
 import BasePlaylist, { PlaylistData } from './BasePlaylist.js';
 import PlaylistItem from './PlaylistItem.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
@@ -124,8 +124,8 @@ class RotatingPlaylist extends BasePlaylist {
     /**
      * Returns the milliseconds elapsed since the start of this rotation cycle.
      */
-    getPlaylistTimeElapsed(date?) {
-        const targetDate = date ? parseDate(date) : new Date();
+    getPlaylistTimeElapsed(date: ParseableDate = new Date()) {
+        const targetDate = parseDate(date);
         const startDate = this.rotationBaseTime;
         const offset = (targetDate.valueOf() - startDate.valueOf()) % this.playlistRotationsDuration;
 
@@ -137,9 +137,9 @@ class RotatingPlaylist extends BasePlaylist {
     /**
      * Get the map active for the given date, or the current date if not provided.
      */
-    getMapByDate(date?) {
-        const targetDate = date ? parseDate(date) : new Date();
-        if (!withinDates(this, date)) return null
+    getMapByDate(date: ParseableDate = new Date()) {
+        const targetDate = parseDate(date);
+        if (!withinDates(this, targetDate)) return null
 
         const targetIndex = this.getIndexByOffset(this.getPlaylistTimeElapsed(targetDate));
         const targetRotation = this.rotations[targetIndex];

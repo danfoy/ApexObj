@@ -26,6 +26,9 @@ export type Playlist = SplitPlaylist | RotatingPlaylist | SingleItemPlaylist;
  * - {@link SingleItemPlaylist}: Single-map LTMs
  * - {@link RotatingPlaylist}: Play Apex, most LTMs
  * - {@link SplitPlaylist}: Ranked Leagues
+ *
+ * @export
+ * @class BasePlaylist
  */
 export default class BasePlaylist {
     mode: string;
@@ -33,29 +36,25 @@ export default class BasePlaylist {
     maps: Array<string>;
     startTime: Date;
     endTime: Date;
-    takeover?: boolean;
-    replaces?: string;
-    ranked?: boolean;
-    baseTime?: Date;
-    /**
-     * Creates an instance of Playlist.
-     * @param {PlaylistData} playlistData
-     * @param {*} seasonData
-     * @memberof Playlist
-     */
+    takeover: boolean;
+    replaces: string | null;
+    ranked: boolean;
+    baseTime: Date;
     constructor(playlistData: PlaylistData, seasonData: SeasonData | Season) {
         this.mode = playlistData.mode;
-        if (playlistData.LTM) this.LTM = true;
-        if (playlistData.replaces) this.takeover = true;
-        if (playlistData.replaces) this.replaces = playlistData.replaces;
-        if (this.mode.includes("Ranked")) this.ranked = true;
-        if (playlistData.baseTime) this.baseTime = parseDate(playlistData.baseTime);
+        this.maps = playlistData.maps;
+        this.LTM = playlistData?.LTM ? true : false;
+        this.takeover = playlistData?.replaces ? true : false;
+        this.replaces = playlistData?.replaces ?? null;
+        this.ranked = this.mode.toLowerCase().includes("ranked") ? true : false;
         this.startTime = playlistData.startTime
             ? parseDate(playlistData.startTime)
             : parseDate(seasonData.startTime);
         this.endTime = playlistData.endTime
             ? parseDate(playlistData.endTime)
             : parseDate(seasonData.endTime);
-        this.maps = playlistData.maps;
+        this.baseTime = playlistData?.baseTime
+            ? parseDate(playlistData.baseTime)
+            : this.startTime;
     };
 };
