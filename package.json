@@ -12,7 +12,7 @@
     "test": "npx mocha",
     "test:watch": "npx mocha --watch",
     "build": "npx tsc --build --clean",
-    "dev": "npx tsc --watch"
+    "build:watch": "npx tsc --watch"
   },
   "keywords": [
     "apex",
