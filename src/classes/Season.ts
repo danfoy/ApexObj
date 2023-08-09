@@ -4,6 +4,7 @@ import SplitPlaylist from './SplitPlaylist.js';
 import SingleItemPlaylist from './SingleItemPlaylist.js';
 import PlaylistItem from './PlaylistItem.js';
 import BasePlaylist, { Playlist, PlaylistData } from './BasePlaylist.js';
+import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 
 export interface SeasonData {
     id: number;
@@ -101,22 +102,36 @@ export default class Season {
      * Takes into account whether a takeover LTM is about to end and will
      * attempt to replace this entry with the 'regular' mode map.
      *
+     * @todo deal with nextmap being an ltm?
+     *
      */
     get nextMaps() {
-        let nextMaps = this.playlists
+
+        const nextMaps = this.playlists
             .map(playlist => playlist.nextMap)
             .filter(map => map !== null);
 
-        if (this.currentTakeovers) this.currentTakeovers.forEach(takeover => {
-            nextMaps = nextMaps.filter(map => map.mode !== takeover.replaces);
-            nextMaps.push(this.playlists
-                .find(playlist => playlist.mode === takeover.replaces)
-                .getMapByDate(takeover.endTime)
-            );
-        });
-
         if (!nextMaps.length) return null;
+
         return nextMaps;
+
+        // let nextMaps = this.playlists
+        //     .map(playlist => playlist.nextMap)
+        //     .filter(map => map !== null);
+
+        // if (!nextMaps.length) return null;
+
+        // if (this.currentTakeovers) this.currentTakeovers.forEach(takeover => {
+        //     nextMaps = nextMaps.filter(map => map?.mode !== takeover.replaces);
+        //     nextMaps.push(this.playlists
+        //         .find(playlist => playlist.mode === takeover.replaces)
+        //         .getMapByDate(takeover.endTime)
+        //     );
+        // // });
+
+        // if (!nextMaps.length) return null;
+
+        // return nextMaps;
     };
 
     /**
@@ -173,6 +188,7 @@ export default class Season {
             return new RotatingPlaylist(playlistData, this);
         if (playlistData.maps.length === 1)
             return new SingleItemPlaylist(playlistData, this);
+        throw new Error(`Unable to parse playlist data '${playlistData}'`)
     };
 
     /**
@@ -205,6 +221,6 @@ export default class Season {
         const targetDate = parseDate(date);
         if (!withinDates(this, targetDate)) return null;
         return this.getPlaylistsByDate(targetDate)
-            .map(playlist => playlist.getMapByDate(targetDate));
+            ?.map(playlist => playlist.getMapByDate(targetDate));
     };
 };

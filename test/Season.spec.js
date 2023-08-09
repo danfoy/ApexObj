@@ -117,12 +117,23 @@ describe('Season', function() {
             expect(season12.nextMaps).to.be.an('array');
             expect(season12.nextMaps).to.not.include(null);
             reset();
+
         });
 
         it('returns the replaced mode during takeovers', function() {
+
+            // When Olympus 24/7 takeover is happening
             set('2022-02-14T16:00:00Z');
+
+            // confirm LTM is active
+            expect(season12.currentMaps.filter(map => map.mode === "Olympus 24/7"))
+                .to.have.length(1);
+
+            // Check nextmap returns to regular mode and doesn't include the LTM
             expect(season12.nextMaps.filter(map => map.mode === "Play Apex"))
                 .to.have.length(1);
+            expect(season12.nextMaps.filter(map => map.mode === "Olympus 24/7"))
+                .to.have.length(0);
             reset();
         });
     });

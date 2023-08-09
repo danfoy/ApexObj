@@ -37,7 +37,7 @@ export default class ApexObj {
      */
     get currentSeason() {
         if (new Date() < this.seasons[0].startTime) return null;
-        if (new Date() > [...this.seasons].pop().endTime) return null;
+        if (new Date() > this.seasons[this.seasons.length - 1].endTime) return null;
         return this.getSeasonByDate();
     };
 
@@ -46,7 +46,7 @@ export default class ApexObj {
      * {@link null} if no data available.
      */
     get nextSeason() {
-        return this.getSeasonByDate(this.currentSeason.endTime);
+        return this.getSeasonByDate(this.currentSeason?.endTime) || null;
     };
 
     /**
@@ -101,7 +101,7 @@ export default class ApexObj {
      * for the given date, or {@link null} if none found. Uses the current date
      * if none provided.
      */
-    getMapsByDate(date?: ParseableDate) {
+    getMapsByDate(date: ParseableDate = new Date()) {
         const targetDate = parseDate(date);
         const targetSeason = this.getSeasonByDate(targetDate);
         if (!targetSeason) return null;
