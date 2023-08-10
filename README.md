@@ -1,68 +1,26 @@
 # ApexObj
 
-A filterable, queryable object providing data about the game [Apex Legends](https://www.ea.com/games/apex-legends), including:
+A filterable, queryable object providing data about the game [Apex Legends](https://www.ea.com/games/apex-legends).
+
+Forked from another personal project to use as an information source for current map rotations without having to rely on HTTP-based APIs (that may not be available, and have latency).
+
+Prioritises keeping the amount of data you need to provide upfront to an absolute minimum, because I'll be the one having to maintain it, and writing detailed config is error-prone and boring.
+
+Achieves this by inferring gamemode, type of map rotation, takeover events etc. from the small amount of data provided, and using this to generate rich structures of highly filterable and remappable data, which extend built-in structures such as Array with methods to provide functions such as additional data parsing, transforming, querying.
+
+The end-user experience is intended to be as intuitive as possbile, providing data via dynamic read-only accessors such as `apex.legends.random.squad`, `apex.seasons.current`, `apex.maps.next` and so on. And because it's written in TypeScript and described in the source via [tsdoc](https://tsdoc.org) comments, TS-aware editors (such as VS Code) will provide automatic property descriptions and valid arguments for methods for end-users, even if they're writing vanilla JS.
 
 - Start and end times for seasons, playlists, and limited-time modes
 - Current and next maps per season or playlist
-- Active maps for a given date
+- Active maps per date query
+- Random Legend/squad generator
 
 Still to come:
 
-- Support for Arenas playlists
-- Crafting rotations
-- Information on legends
-- Random mode/legend generators
-
-Full documentation is available at [https://danfoy.github.io/ApexObj](https://danfoy.github.io/ApexObj).
+- Daily/weekly crafter items schedule
+- Additional data for Legends for easy filtering
+- Automatically-generated API documentation
 
 ## Beta information
 
-There may be breaking changes before the project reaches the v1 milestone.
-
-## Basic usage
-
-Install via NPM
-
-```sh
-npm install --save apexobj
-```
-
-Use as a nodejs module
-
-```js
-const apex = require('apexobj')
-```
-
-Access data about Apex Legends map locations via the properties and methods on the object.
-
-```js
-apex.seasons
-// -> list of seasons for which data is available
-
-apex.currentMaps
-// -> array of PlaylistItem/ScheduledPlaylistItem(s) describing current maps, or null if no data
-
-apex.nextMaps
-// -> as above but with the upcoming map rotations
-
-apex.currentSeason
-// -> a Season object describing the current season inc. dates, available playlists etc
-
-apex.getMapsByDate(date)
-// -> the map for a specific date in ISO format, e.g. 2022-03-22T17:00:00Z
-
-apex.getSeasonByDate(date)
-// -> as above, but for seasons
-```
-
-Returned objects are filterable also have their own properties and methods for convenience:
-
-```js
-const season = apex.seasons.find(season => season.id === 11);
-console.log(`Limited Time Modes for Season ${season.id}${' - ' + season.name}:`, season.LTMs);
-
-const splitTime = season.playlists.find(playlist => playlist.mode === 'Ranked Leagues').splitTime;
-console.log(`The ranked split for Season ${season.id} is at ${splitTime}`)
-```
-
-See [the documentation](https://danfoy.github.io/ApexObj) for full details on available properties and methods.
+There will be many breaking changes before the project reaches the v1 milestone. The shape of the API is not yet set, and porting both from its parent project and from ES6 to TypeScript are highlighting many areas for improvement, with which I intend to be fairly liberal before locking in a v1.0.0.
