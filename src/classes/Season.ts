@@ -4,7 +4,6 @@ import SplitPlaylist from './SplitPlaylist.js';
 import SingleItemPlaylist from './SingleItemPlaylist.js';
 import PlaylistItem from './PlaylistItem.js';
 import BasePlaylist, { Playlist, PlaylistData } from './BasePlaylist.js';
-import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 
 export interface SeasonData {
     id: number;

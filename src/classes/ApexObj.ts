@@ -3,7 +3,7 @@ import BasePlaylist from './BasePlaylist.js';
 import ScheduledPlaylistItem from './ScheduledPlaylistItem.js';
 import Season, { SeasonData } from './Season.js';
 import LegendsArray from './LegendsArray.js';
-import Legend, { LegendData } from './Legend.js';
+import { LegendData } from './Legend.js';
 
 /**
  * This is the base class for the module, and the first port of call for making
