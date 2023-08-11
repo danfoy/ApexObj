@@ -7,9 +7,17 @@ const legends = new LegendsArray(...legendsData);
 
 describe('LegendsArray', function() {
 
-  it('extends Array', function() {
-    expect(Array.isArray(legends)).to.be.true;
+  describe('.constructor', function() {
+    it('extends Array', function() {
+      expect(Array.isArray(legends)).to.be.true;
+    });
+
+    it('matches the length of the input', function() {
+      expect(legends.length).to.equal(legendsData.length);
+    })
   });
+
+
 
   describe('#randomise()', function() {
     it('returns an instance of Legend', function() {

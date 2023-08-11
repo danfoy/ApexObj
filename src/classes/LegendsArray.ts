@@ -10,14 +10,10 @@ export default class LegendsArray extends Array {
     if (typeof legendsData[0] === 'number') {
       if (legendsData[1]) throw new Error("Only accepts LegendData or a single number");
       super(legendsData[0]);
-    } else {
-      const legends = [
-        new Legend(legendsData[0]),
-        ...legendsData.map(legendData => new Legend(legendData))
-      ];
-      super()
-      this.push(...legends);
-    };
+    }
+    const legends = legendsData.map(legendData => new Legend(legendData));
+    super()
+    this.push(...legends);
   };
 
   get random() {
