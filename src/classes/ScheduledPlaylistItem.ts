@@ -3,32 +3,32 @@ import { ParseableDate, parseDate } from '../util/date.js';
 import { Playlist } from './BasePlaylist.js';
 
 interface SchedulingOptions {
-    mapName: string;
-    mapDuration: number;
-    startTime: ParseableDate;
+  mapName: string;
+  mapDuration: number;
+  startTime: ParseableDate;
 };
 
 /**
- * A {@link PlaylistItem} with a designated start and end time.
- */
+* A {@link PlaylistItem} with a designated start and end time.
+*/
 class ScheduledPlaylistItem extends PlaylistItem {
-    startTime: Date;
-    endTime: Date;
+  startTime: Date;
+  endTime: Date;
 
-    constructor({mapName, mapDuration, startTime}: SchedulingOptions, playlist: Playlist) {
-        super({mapName, mapDuration}, playlist);
+  constructor({mapName, mapDuration, startTime}: SchedulingOptions, playlist: Playlist) {
+    super({mapName, mapDuration}, playlist);
 
-        this.startTime = parseDate(startTime);
-        this.endTime = new Date(this.startTime.getTime() + mapDuration);
-    };
+    this.startTime = parseDate(startTime);
+    this.endTime = new Date(this.startTime.getTime() + mapDuration);
+  };
 
-    /**
-     * The time until (or since the end of) this map rotation. Returns a negative
-     * value if the end of this rotation has already passed when called.
-     */
-    get timeRemaining() {
-        return this.endTime.valueOf() - new Date().valueOf();
-    };
+  /**
+  * The time until (or since the end of) this map rotation. Returns a negative
+  * value if the end of this rotation has already passed when called.
+  */
+  get timeRemaining() {
+    return this.endTime.valueOf() - new Date().valueOf();
+  };
 };
 
 export default ScheduledPlaylistItem;
