@@ -8,11 +8,19 @@
     "test": "test"
   },
   "scripts": {
-    "watch": "nodemon ./dist/index.js",
-    "test": "npx mocha",
-    "test:watch": "npx mocha --watch",
-    "build": "npx tsc --build --clean",
-    "build:watch": "npx tsc --watch"
+    "test": "npm run test:lint && npm run test:format && npm run test:compile && npm run test:behaviour && echo 'All tests passed successfully.'",
+    "test:lint": "npx eslint . && echo 'No linting errors detected.'",
+    "test:format": "npx prettier --check .",
+    "test:compile": "npx tsc --noEmit && echo 'No TypeScript compilation errors detected.'",
+    "test:behaviour": "npx mocha --reporter progress",
+    "test:behaviour:watch": "npx mocha --watch",
+    "build": "npm run build:purge && npx tsc --build ",
+    "build:purge": "npx tsc --build --clean",
+    "build:watch": "npx tsc --watch",
+    "standardise:lint": "npx eslint --fix .",
+    "standardise:format": "npx prettier --write .",
+    "standardise:all": "npm run standardise:lint && npm run standardise:format",
+    "prepare": "npm run standardise:all && npm run build && npm test && echo 'Module has been successfully built and tested.'"
   },
   "keywords": [
     "apex",
@@ -30,12 +38,17 @@
   "devDependencies": {
     "@tsconfig/node18": "^18.2.0",
     "@types/node": "^20.4.8",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
     "chai": "^4.3.4",
     "chai-like": "^1.1.1",
     "chai-things": "^0.2.0",
+    "eslint": "^8.46.0",
+    "eslint-config-prettier": "^9.0.0",
     "mocha": "^10.2.0",
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.15",
+    "prettier": "^3.0.1",
     "typescript": "^5.1.6"
   }
 }
